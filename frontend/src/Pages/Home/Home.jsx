@@ -7,7 +7,7 @@ export default function Landing() {
   return (
     <div  className="landing">
 
-     <div className="Hero">
+     {/* <div className="Hero">
           <div className="landingholder">
               <div className="description">
                   <h1>Join The Leading Insurance Company</h1>
@@ -26,11 +26,11 @@ export default function Landing() {
               <input type="text" placeholder='search for jobs'/>
               <button>Search</button>
             </div>
-     </div>
+     </div> */}
 
      {/* // featured jobs list */}
      <div className="featured">
-        <Featuredcard/>
+        {/* <Featuredcard/> */}
      </div>
 
      {/* employyes number dispaly */}
@@ -58,13 +58,13 @@ export default function Landing() {
      {/* vacancy types */}
 
      <div className="vacancytype">
-        <Vacancytype/>
+        {/* <Vacancytype/> */}
      </div>
 
      {/* footer */}
 
      <div className="footer">
-      <Footer/>
+      {/* <Footer/> */}
      </div>
 
      
