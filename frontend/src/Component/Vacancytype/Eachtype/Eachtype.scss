@@ -1,0 +1,62 @@
+.eachtype {
+    // width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.eachholder {
+    background-color: #ffffff;
+    border-radius: 15px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    max-width: 300px;
+    transition: transform 0.3s ease;
+}
+
+.eachholder:hover {
+    transform: translateY(-10px);
+}
+
+.eachholder img {
+    width: 100%;
+    border-radius: 10px;
+}
+
+.type h2 {
+    color: #2c3e50;
+    font-size: 1.5rem;
+    margin: 15px 0 5px;
+    text-align: center;
+}
+
+.type h4 {
+    color: #7f8c8d;
+    font-size: 1rem;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.check {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #3498db;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.check:hover {
+    background-color: #2980b9;
+}
+
+.check img {
+    margin-left: 10px;
+    width: 15px;
+}
