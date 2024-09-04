@@ -1,0 +1,83 @@
+.featured {
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+  }
+  
+  .container {
+    width: 100%;
+    max-width: 800px;
+  }
+  
+  .featuredcomp {
+    display: flex;
+    justify-content: center;
+  }
+  
+  .eachcomp {
+    position: relative;
+    width: 100%;
+    max-width: 300px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+    
+    &:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    }
+  }
+  
+  .upper {
+    background: #f4f4f4;
+    padding: 15px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .upper h3 {
+    margin: 0;
+    font-size: 1.2rem;
+    color: #333;
+  }
+  
+  .aboutjob {
+    padding: 15px;
+  }
+  
+  .aboutjob h3 {
+    margin: 10px 0;
+    font-size: 1rem;
+    color: #555;
+  }
+  
+  .aboutjob span {
+    font-weight: 600;
+    color: #333;
+  }
+  
+  .apply {
+    background: #f4f4f4;
+    padding: 15px;
+    text-align: center;
+    border-top: 1px solid #ddd;
+  }
+  
+  .apply button {
+    background: #4481eb;
+    border: none;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 4px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    
+    &:hover {
+      background: #004c8c;
+    }
+  }
+  

@@ -4,8 +4,10 @@ import About from './Pages/About/About';
 import Contact from './Pages/Contact/Contact';
 import Home from './Pages/Home/Home';
 import Joblist from './Pages/Joblist/Joblist';
-import Login from './Pages/Login/Login';
 import Layout from './Layout';
+import Loginform from './Pages/Loginform/Loginform'
+import Profileset from './Pages/Profileset/Profileset';
+
 
 export default function AppRoutes() {
   return (
@@ -16,7 +18,8 @@ export default function AppRoutes() {
                <Route path="about" element={<About />} />
                <Route path="contact" element={<Contact />} />
                <Route path="joblist" element={<Joblist />} />
-               <Route path="login" element={<Login />} />
+               <Route path='loginform' element={<Loginform/>}/>
+               <Route path='profileset' element={<Profileset/>}/>
             </Route>
         </Routes>    
    </Router>

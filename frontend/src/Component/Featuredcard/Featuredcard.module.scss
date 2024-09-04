@@ -1,0 +1,31 @@
+.Featuredcard {
+       padding: 20px;
+       background-color: #f8f9fa;
+       text-align: center;
+     }
+     
+     .title {
+       font-size: 2rem;
+       font-weight: 600;
+       color: #333;
+       margin-bottom: 20px;
+     }
+     
+     .cardholder {
+       display: flex;
+       flex-wrap: wrap;
+       justify-content: center;
+       gap: 20px;
+     }
+     
+     .cardholder > div {
+       flex: 1 1 300px; /* Adjusts to a minimum width of 300px and grows as needed */
+       max-width: 300px; /* Limits the width of each card */
+       transition: transform 0.3s ease, box-shadow 0.3s ease;
+     }
+     
+     .cardholder > div:hover {
+       transform: translateY(-10px);
+       box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+     }
+     
