@@ -1,6 +1,4 @@
-*{
 
-}
 :root{
     --maincolor:rgb(9, 93, 202);
     --textcolor:rgb(255, 255, 255);
@@ -69,7 +67,7 @@ nav .browse{
   
 
 // button style
- header .nav-btn{
+ header .navbtn{
     padding: 5px;
     cursor: pointer;
     border: none;
@@ -90,11 +88,11 @@ nav .browse{
     header{
         padding: 0rem 2rem;     
     }
-    header .nav-btn{
+    header .navbtn{
         visibility: visible;
         opacity: 1;
     }
-    header .nav-btn-close{
+    header .navbtnclose{
         position: absolute;
         top: 2rem;
         right: 2rem;
@@ -124,7 +122,7 @@ nav .browse{
         color: orangered;
         cursor: pointer;
     }
-    header .responsive_nav{
+    :global(.responsive_nav){
         transform: none;
         display: flex;
         flex-direction: column;

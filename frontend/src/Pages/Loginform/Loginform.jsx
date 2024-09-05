@@ -20,7 +20,7 @@ export default function Loginform() {
                 <div className={styles.signinSingup}>
                     {/* sing in part */}
                     <form className={styles.signinForm}>
-                        <img src="/images/logo.png" alt="" />
+                        <img className={styles.logoimg} src="/images/logo.png" alt="" />
                         <h2 className={styles.title}>Sign in</h2>
                         <div className={styles.inputField}>
                             <i className='fas fa-user'></i>
@@ -52,7 +52,7 @@ export default function Loginform() {
                  
                     {/* sing up part */}
                     <form className={styles.signupForm}>
-                        <img src="/images/logo.png" alt="" />
+                        <img className={styles.logoimg} src="/images/logo.png" alt="" />
                         <h2 className={styles.title}>Sign Up</h2>
                         <div className={styles.inputField}>
                             <i className='fas fa-user'></i>

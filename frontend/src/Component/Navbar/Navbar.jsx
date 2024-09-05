@@ -1,6 +1,6 @@
 import React from 'react'
 import { useRef } from 'react'
-import './Navbar.scss'
+import styles from './Navbar.module.scss'
 import {FaBars , FaTimes } from "react-icons/fa"
 import { useNavigate } from 'react-router-dom'
 export default function Navbar() {
@@ -18,7 +18,7 @@ export default function Navbar() {
 
   return (
     <>
-       <header>
+       <header className={styles.headering}>
 
           <img src="/images/logo.png" alt="logo" />
 
@@ -28,19 +28,20 @@ export default function Navbar() {
                 <a href="/joblist">Joblist</a>
                 <a href="/contact">Contact</a>
 
-                <div className="browse">
+                <div className={styles.browse}>
                     <input type="text" placeholder='search for jobs' />
                     <button onClick={handleNavigation}>Get started</button>
                 </div>
 
-                <button className='nav-btn nav-btn-close' onClick={showNavbar}>
+                <button className={`${styles.navbtn} ${styles.navbtnclose}`} onClick={showNavbar}>
                     <FaTimes/>
                 </button>
            </nav>
 
 
-            <button className='nav-btn'>
+            <button className={styles.navbtn}>
                 <FaBars onClick={showNavbar}/>
+                
             </button>
 
 
