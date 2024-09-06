@@ -1,0 +1,88 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+.card {
+    font-family: 'Poppins', sans-serif;
+    background-color: rgb(255, 255, 255);
+    border: 0.5px solid rgb(223, 223, 223);
+    box-shadow: 2px gray;
+    border-radius: 5px;
+    margin: 5px;
+    width: 270px;
+    flex: 1 1 22%;
+    box-sizing: border-box;
+}
+
+.card .holder {
+    padding: 15px;
+}
+
+.card .holder .head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    justify-content: center;
+     
+}
+
+.card .holder .head h1 {
+    font-size: 15px;
+    font-weight: 600;
+    margin: 0; /* Remove default margin to ensure proper alignment */
+    text-decoration: none;
+}
+
+.card .holder .head h3 {
+    font-size: 10px;
+    font-weight: lighter;
+    margin: 0; /* Remove default margin to ensure proper alignment */
+}
+
+.card .holder .line {
+    height: 1px; /* Adjust the height to be more like an underline */
+    width: 100%; /* Make it span the full width of the container */
+    background-color: rgb(167, 167, 167); /* Line color */
+    margin-top: 10px; /* Space between text and line */
+
+}
+.card .holder .desc {
+    margin: 20px; /* Space around the description */
+    font-size: 14px; /* Increase font size for better readability */
+    font-weight: 400; /* Light to normal weight for readability */
+    line-height: 1.5; /* Increase line height for better readability */
+    text-align: start; /* Align text to the start */
+    color: #333; /* Dark grey color for a professional look */
+
+}
+
+.holder .buttons{
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   gap: 10px;
+}
+
+.holder button {
+    font-family: 'Poppins', sans-serif; /* Ensure consistency with the rest of the text */
+    font-size: 13px; /* Standard button font size */
+    font-weight: 500; /* Slightly bolder text for emphasis */
+    color: white; /* Text color */
+    background-color: rgb(33, 107, 218); /* Primary background color */
+    border: none; /* Remove default border */
+    border-radius: 5px; /* Rounded corners for a modern look */
+    padding: 5px 20px; /* Adequate padding for easy clicking */
+    cursor: pointer; /* Indicates the button is clickable */
+    transition: background-color 0.3s ease, box-shadow 0.3s ease; /* Smooth transition for hover effects */
+    text-align: center; /* Center the text within the button */
+}
+
+.holder button:hover {
+    background-color: rgb(25, 89, 164); /* Darker shade on hover for visual feedback */
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1); /* Subtle shadow on hover for a 3D effect */
+}
+
+.holder button:focus {
+    outline: none; /* Remove default outline */
+    box-shadow: 0 0 0 3px rgba(33, 107, 218, 0.3); /* Focus ring for accessibility */
+}
+
+

@@ -11,7 +11,7 @@ export default function Loginform() {
        activeRef.current.classList.toggle("signupmode")
     }
     const handleNavigation =()=>{
-        navigate('/profileset')
+        navigate('/joblist')
     }
   return (
  <body>

@@ -1,6 +1,7 @@
 import React from 'react'
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import styles from'./Joblist.module.scss'
+import Jobcard from '../../Component/Jobcard/Jobcard';
 export default function Joblist() {
   return (
     <div className={styles.joblist}>
@@ -58,7 +59,14 @@ export default function Joblist() {
 
         <div className={styles.jobcards}>
           <div className={styles.cardholder}>
-                {/* card component */}
+                <Jobcard/>
+                <Jobcard/>
+                <Jobcard/>
+                <Jobcard/>
+                <Jobcard/>
+                <Jobcard/>
+                <Jobcard/>
+                <Jobcard/>      
           </div>
         </div>
         

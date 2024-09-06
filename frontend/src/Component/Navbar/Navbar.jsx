@@ -40,8 +40,7 @@ export default function Navbar() {
 
 
             <button className={styles.navbtn}>
-                <FaBars onClick={showNavbar}/>
-                
+                <FaBars onClick={showNavbar}/>              
             </button>
 
 
