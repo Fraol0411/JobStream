@@ -9,14 +9,14 @@
 .containerrr .headerarea{   
     display: grid;
     place-items: center; /* Centers child elements */
-    background-color: rgb(238, 238, 238);
+    background-color: rgba(183, 214, 231, 0.925);
     border-radius: 5px;
     height: 200px; /* Ensure it has enough height */
     max-width: 100vw;
     margin: 100px 20px 0px 20px ;
 }
 .containerrr .filterarea{
-    background-color: rgb(255, 255, 255);
+    background-color: rgba(255, 255, 255, 0.822);
     border-radius: 5px; 
     width: 80%;
     padding: 40px; 
@@ -72,7 +72,7 @@
 // job card
 
 .jobcards{
-    margin: 100px 20px 0px 20px;
+    margin: 100px 0px 0px 0px;
     background-color: rgb(255, 255, 255);
     width: 100vw;
     height: 100vh;  
@@ -82,15 +82,63 @@
 }
 .jobcards .cardholder{
     position: absolute;
-    height: 80%; // remove letter
-    width: 80%;
-    background-color: rgb(238, 238, 238);
-    top: 37%;
-    left: 50%;
+    height: 90%; // remove letter
+    width: 90%;
+    background-color: rgba(183, 214, 231, 0.925);
+    top: 41%;
+    left: 49%;
     transform: translate(-50%, -50%);
     border-radius: 7px;
 }
 
 // respomsive
+/* Media query for screens less than 1024px */
+@media only screen and (max-width: 1024px) {
+     .containerrr .headerarea{
+        margin: 0px;
+        background-color: rgb(235, 235, 235);
+        display: grid;
+        height: 100%;
+     }
+     .containerrr .filterarea{
+        margin: 0;
+        background-color: #ffffff;
+        height: 95%;
+        width: 95%;
+        
+     }
+     .filterarea .filterby{
+         background-color: rgb(255, 255, 255);
+        display: flex;
+        flex-direction: column;
+        padding: 10px;
+        gap: 10px;
+        align-items: center;
+        justify-content: space-between;
+        height: 70%;
+    }
+
+    .jobcards{
+        margin: 30px 0px 0px 0px;
+        background-color: rgb(235, 235, 235);
+        width: 100vw;
+        height: 100vh;  
+        position: relative;
+        
+        
+    }
+    
+    .jobcards .cardholder{
+        position: absolute;
+         // remove letter
+        width: 95%;
+        background-color: rgb(255, 255, 255);
+        top: 37%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        border-radius: 7px;
+    }
+     
+}
 
 
