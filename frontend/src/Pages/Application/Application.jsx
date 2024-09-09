@@ -1,7 +1,22 @@
 import React, { useState } from 'react';
 import styles from './Application.module.scss';
 
+
 export default function Application() {
+
+
+  // suscesful popup page
+  const [showPopup, setShowPopup] = useState(false);
+
+  const handleViewDetailClick = () => {
+    setShowPopup(true); // Show the popup when button is clicked
+  };
+
+  const handleClosePopup = () => {
+    setShowPopup(false); // Hide the popup when close is clicked
+  };
+
+
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -238,6 +253,8 @@ export default function Application() {
       </form>
       {/* Submit Button */}
       <button className={styles.submitButton} type="submit">Submit Application</button>
+
+      {showPopup && <Succespop onClose={handleClosePopup} />}
     </div>
   );
 }
