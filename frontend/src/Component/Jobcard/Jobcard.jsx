@@ -2,8 +2,11 @@ import React from 'react'
 import {useState} from 'react'
 import styles from './Jobcard.module.scss'
 import JobDetailPopup from '../Jobdeatail/JobDetailPopup';
+import { useNavigate } from 'react-router-dom';
 
 export default function Jobcard({ title, location, description }) {
+
+  const navigate = useNavigate();
 
   const [showPopup, setShowPopup] = useState(false);
 
@@ -15,6 +18,9 @@ export default function Jobcard({ title, location, description }) {
     setShowPopup(false); // Hide the popup when close is clicked
   };
 
+  const hanldleNaviagtion = () =>{
+    navigate('/application')
+  }
   return (
     <div className={styles.card}>
            <div className={styles.holder}>
@@ -28,7 +34,7 @@ export default function Jobcard({ title, location, description }) {
               </div>
               <div className={styles.buttons}>
                 <button onClick={handleViewDetailClick} >View detail</button>
-                <button>Apply Now</button>
+                <button onClick={hanldleNaviagtion}>Apply Now</button>
               </div>
            </div>
 
