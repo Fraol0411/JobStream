@@ -15,7 +15,7 @@ export default function Loginform() {
     }
   return (
  <body>
-        <div className={`${styles.container}`} ref={activeRef}>
+        <div className={`${styles.container} ${styles.sinnupmode}` } ref={activeRef}>
             <div className={styles.formcontainer} >
                 <div className={styles.signinSingup}>
                     {/* sing in part */}
@@ -32,7 +32,7 @@ export default function Loginform() {
                         </div>
                         <input type="submit" value='login' className={`${styles.btn} ${styles.solid}`} />
 
-                        <p className={styles.socialtext}> Or Sing in with social platform</p>
+                        {/* <p className={styles.socialtext}> Or Sing in with social platform</p>
 
                         <div className={styles.socialmedia}>
                             <a href="#" className={styles.socialicons}>
@@ -47,7 +47,7 @@ export default function Loginform() {
                             <a href="#" className={styles.socialicons}>
                                 <i className='fab fa-linkedin-in'/>
                             </a>
-                        </div>
+                        </div> */}
                     </form>
                  
                     {/* sing up part */}
@@ -63,12 +63,30 @@ export default function Loginform() {
                             <input type="email" placeholder='Email' />
                         </div>
                         <div className={styles.inputField}>
+                            <i className='fas fa-envelope'></i>
+                            <input type="email" placeholder='CGPA' />
+                        </div>
+                        <div className={styles.inputField}>
                             <i className='fas fa-lock'></i>
                             <input type="password" placeholder='password' />
                         </div>
+                        <div className={styles.inputField}>
+                            <i className='fas fa-lock'></i>
+                            <input type="password" placeholder='confirm password' />
+                        </div>
+                        <div className={styles.dropdown}>
+                            <i className='fas fa-file'></i>
+                            <label htmlFor="">Applicant</label>
+                            <select name="" id="">
+                                <option value="" disabled selected>Select an option</option>
+                                <option value="fresh_graduate">Fresh Graduate</option>
+                                <option value="external_experience">External Experience</option>
+                                <option value="awash_staff">Awash Staff</option>
+                            </select>
+                        </div>
                         <input onClick={handleNavigation}  type="submit" value='sign up' className={`${styles.btn} ${styles.solid}`} />
 
-                        <p className={styles.socialtext}> Or Sing up with social platform</p>
+                        {/* <p className={styles.socialtext}> Or Sing up with social platform</p>
 
                         <div className={styles.socialmedia}>
                             <a href="#" className={styles.socialicons}>
@@ -83,7 +101,7 @@ export default function Loginform() {
                             <a href="#" className={styles.socialicons}>
                                 <i className='fab fa-linkedin-in'/>
                             </a>
-                        </div>
+                        </div> */}
                     </form>
 
                 </div>
@@ -95,8 +113,7 @@ export default function Loginform() {
                 <div className={styles.content}>
                     <h3>New here ?</h3>
                     <p>
-                    Lorem ipsum, dolor sit amet consectetur adipisicing elit. Debitis,
-                    ex ratione. Aliquid!
+                    Register for Awash Insurance job portal and follow up new vacancy
                     </p>
                     <button onClick={showNavbar} className={`${styles.btn} ${styles.transparent}`} id="sign-up-btn">
                     Sign up
@@ -109,8 +126,7 @@ export default function Loginform() {
                 <div className={styles.content}>
                     <h3>One of Us?</h3>
                     <p>
-                    Lorem ipsum, dolor sit amet consectetur adipisicing elit. Debitis,
-                    ex ratione. Aliquid!
+                    Already enrolled into Awash Insurance Job Portal 
                     </p>
                     <button onClick={showNavbar} className={`${styles.btn} ${styles.transparent}`} id="sign-up-btn">
                     Sign in

@@ -32,7 +32,12 @@ export default function Jobcard({ title, location, description }) {
               </div>
            </div>
 
-           {showPopup && <JobDetailPopup onClose={handleClosePopup} />}
+           {showPopup && (
+              <JobDetailPopup
+              job={{ title, location, description }} // Passing the job object
+               onClose={handleClosePopup}
+                />
+      )}
     </div>
   )
 }

@@ -1,33 +1,40 @@
 .popupBackdrop {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background-color: rgba(0, 0, 0, 0.349); /* Background to dim the page */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  .popup {
-    background-color: white;
-    padding: 20px;
-    border-radius: 8px;
-    max-width: 400px;
-    width: 100%;
-    margin: 20px;
-  }
-  
-  button {
-    margin-top: 20px;
-    padding: 10px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    margin: 10px;
-    text-align: center;
-  }
-  
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.349); /* Background to dim the page */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.popup {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  max-width: 600px;
+  width: 100%;
+  max-height: 80vh; /* Limit height to avoid full-screen overflow */
+  overflow-y: auto; /* Allow vertical scrolling */
+  margin: 20px;
+  height: 70%;
+}
+
+button {
+  margin-top: 20px;
+  padding: 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin: 10px;
+  text-align: center;
+}
+p{
+  font-size: 15px;
+  color: #333;
+  margin-bottom: 15px;
+}

@@ -1,8 +1,9 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useRef } from 'react'
 import styles from './Navbar.module.scss'
 import {FaBars , FaTimes } from "react-icons/fa"
 import { useNavigate } from 'react-router-dom'
+import LoadingSpinner from '../Loaders/LoadingSpinner'
 export default function Navbar() {
      const navigate = useNavigate()
 
@@ -15,6 +16,7 @@ export default function Navbar() {
      const showNavbar = () =>{
         navRef.current.classList.toggle("responsive_nav")
      }
+
 
   return (
     <>
@@ -30,7 +32,9 @@ export default function Navbar() {
 
                 <div className={styles.browse}>
                     <input type="text" placeholder='search for jobs' />
-                    <button onClick={handleNavigation}>Get started</button>
+                    <button onClick={handleNavigation}>
+                        Get Started
+                    </button>
                 </div>
 
                 <button className={`${styles.navbtn} ${styles.navbtnclose}`} onClick={showNavbar}>
