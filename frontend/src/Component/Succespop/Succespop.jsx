@@ -1,7 +1,7 @@
 import React from 'react';
-import styles from './JobDetailPopup.module.scss'; // You can style it
+import styles from './Succespop.module.scss'; // You can style it
 
-export default function JobDetailPopup({ onClose }) {
+export default function Succespop({ onClose }) {
   return (
     <div className={styles.popupBackdrop}>
       <div className={styles.popup}>
