@@ -25,9 +25,9 @@ export default function Navbar() {
           <img src="/images/logo.png" alt="logo" />
 
            <nav ref={navRef}>
-                <a href="/">Home</a>
-                <a href="/about">About</a>
+                <a href="/">Home</a>                
                 <a href="/joblist">Joblist</a>
+                <a href="/profile">Profile</a>
                 <a href="/contact">Contact</a>
 
                 <div className={styles.browse}>

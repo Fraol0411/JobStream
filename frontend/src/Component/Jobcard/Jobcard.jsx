@@ -34,7 +34,7 @@ export default function Jobcard({ title, location, description }) {
               </div>
               <div className={styles.buttons}>
                 <button onClick={handleViewDetailClick} >View detail</button>
-                <button onClick={hanldleNaviagtion}>Apply Now</button>
+                {/* <button onClick={hanldleNaviagtion}>Apply Now</button> */}
               </div>
            </div>
 

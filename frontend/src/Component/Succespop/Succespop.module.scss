@@ -1,4 +1,4 @@
-.popupBackdrop {
+.popupSuccess {
     position: fixed;
     top: 0;
     left: 0;
@@ -10,24 +10,29 @@
     align-items: center;
   }
   
-  .popup {
+  .Succes {
     background-color: white;
     padding: 20px;
     border-radius: 8px;
     max-width: 400px;
     width: 100%;
     margin: 20px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
   }
-  
-  button {
-    margin-top: 20px;
-    padding: 10px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    margin: 10px;
+  .Succes p{
     text-align: center;
   }
+  .Succes i{
+    background-color: rgb(27, 202, 27);
+    color: white;
+    font-weight: bolder;
+    font-size: 28px;
+    padding: 10px;
+    border-radius: 50%;
+  }
+  
   

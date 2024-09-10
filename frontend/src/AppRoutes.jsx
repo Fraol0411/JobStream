@@ -6,9 +6,9 @@ import Home from './Pages/Home/Home';
 import Joblist from './Pages/Joblist/Joblist';
 import Layout from './Layout';
 import Loginform from './Pages/Loginform/Loginform'
-import Profileset from './Pages/Profileset/Profileset';
 import Loading from './Component/Loading/Loading';
 import Application from './Pages/Application/Application';
+import Profile from './Pages/Profile/Profile';
 
 export default function AppRoutes() {
  
@@ -21,8 +21,8 @@ export default function AppRoutes() {
           <Route path="contact" element={<Contact />} />
           <Route path="joblist" element={<Joblist />} />
           <Route path='loginform' element={<Loginform/>}/>
-          <Route path='profileset' element={<Profileset/>}/>
           <Route path='application' element={<Application/>} />
+          <Route path='profile' element={<Profile/>}/>
         </Route>
       </Routes>
     </Router>

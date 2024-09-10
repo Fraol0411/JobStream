@@ -1,8 +1,14 @@
 import React from 'react';
 import styles from './JobDetailPopup.module.scss'; // Ensure you style this appropriately
-
+import { useNavigate } from 'react-router-dom';
 export default function JobDetailPopup({ job, onClose }) {
-  console.log(job)
+
+   const navigate = useNavigate()
+
+  const handleNavigation =()=>{
+    navigate('/application')
+  }
+
   return (
     <div className={styles.popupBackdrop}>
       <div className={styles.popup}>
@@ -21,7 +27,9 @@ export default function JobDetailPopup({ job, onClose }) {
         <p><strong>How to Apply:</strong> Apply by sending your CV to [email@example.com].</p>
         <p><strong>Contact Information:</strong> For more information, contact [Contact Person] at [phone/email].</p>
         <button onClick={onClose}>Close</button>
-        <button onClick={onClose}>Apply Now</button>
+        <button onClick={() => { onClose(); handleNavigation(); }}>
+           Apply Now
+        </button>
       </div>
     </div>
   );
