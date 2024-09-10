@@ -1,70 +1,88 @@
-.formContainer {
-    max-width: 800px;
-    margin: 0 auto;
-    margin-top: 85px;
-    padding: 20px;
-    background-color: #f9f9f9;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  }
-  
-  h2, h3 {
-    text-align: center;
-    margin-bottom: 20px;
-  }
-  
-  form {
+.applicationContainer{
+    margin-top: 90px;
+    max-width: 100vw;
+    background-color: rgb(245, 251, 255);
     display: flex;
     flex-direction: column;
-  }
-  
-  .row {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 20px;
-  }
-  
-  .inputField {
-    position: relative;
-    flex: 1;
-    margin: 0 10px;
-  }
-  
-  input {
-    width: 100%;
-    padding: 10px;
-    padding-left: 35px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-    font-size: 16px;
-    outline: none;
-  }
-  
-  i .customIcon{
-    position: absolute;
-    top: 50%;
-    left: 10px;
-    transform: translateY(-50%);
-    color: #555;
-  }
-  
-  .submitSection {
-    display: flex;
     justify-content: center;
-    margin-top: 30px;
-  }
-  
-  .submitButton {
-    padding: 12px 20px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    font-size: 18px;
-    cursor: pointer;
-  }
-  
-  .submitButton:hover {
-    background-color: #45a049;
-  }
-  
+    align-items: center;
+
+
+}
+
+.applicationForm {
+  padding: 20px;
+  display: flex;
+  flex-direction: row;
+  align-items: self-start;
+  justify-content: center;
+  gap: 20px;
+  width: 90%;
+  background-color: rgb(245, 251, 255);
+}
+form .fieldset{
+  display: flex;
+  flex-direction: column; /* Allows inputs inside fieldset to stack vertically */
+  // flex: 1 1 45%; /* Makes the fieldsets take approximately 45% of the width */
+  max-width: 300px; /* Maximum width */
+  width: 100%;
+  padding: 10px;
+  background-color: rgb(245, 251, 255);
+  border: none;
+  border-radius: 5px;
+  align-items: center;
+  justify-self: center;
+}
+.fieldset legend{
+  font-size: 18px;
+  color: #333;
+  font-weight: 800;
+}
+
+.fieldset .formGroup{
+  max-width: 300px;
+  display: flex;
+  flex-direction: column;
+  width: 90%;
+  margin-bottom: 10px;
+}
+.fieldset .formGroup label{
+  font-size: 13px;
+  color: #333;
+  font-weight: 600;
+}
+
+.fieldset .formGroup textarea{
+  max-width: 300px;
+  width: 90%;
+  margin-bottom: 10px;
+}
+.fieldset .formGroup input {
+  border: none; /* Remove all borders */
+  border-bottom: 1px solid #ccc; /* Add a bottom border */
+  border-right: 1px solid #ccc;
+  border-left: 1x solid #ccc;
+  outline: none; /* Remove the default outline */
+  padding: 8px; /* Add some padding for better spacing */
+  transition: border-color 0.3s ease; /* Smooth transition for border color */
+}
+
+/* Change border color when input is focused */
+.fieldset .formGroup input:focus {
+  border-bottom: 2px solid #007bff; /* Change bottom border color on focus */
+}
+
+
+
+
+
+
+
+// responcive
+
+@media (max-width: 570px){
+    .applicationForm{
+      display: flex;
+      flex-direction: column;
+    }
+}

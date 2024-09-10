@@ -8,6 +8,7 @@ import Layout from './Layout';
 import Loginform from './Pages/Loginform/Loginform'
 import Profileset from './Pages/Profileset/Profileset';
 import Loading from './Component/Loading/Loading';
+import Application from './Pages/Application/Application';
 
 export default function AppRoutes() {
  
@@ -21,6 +22,7 @@ export default function AppRoutes() {
           <Route path="joblist" element={<Joblist />} />
           <Route path='loginform' element={<Loginform/>}/>
           <Route path='profileset' element={<Profileset/>}/>
+          <Route path='application' element={<Application/>} />
         </Route>
       </Routes>
     </Router>
