@@ -18,6 +18,7 @@ export const CreateJobs = async(title, department, dutystation, description, req
            .input('jobtype', sql.VarChar(100),jobtype)
            .input('created_by', sql.VarChar(100),created_by)
            .query(query);
+           console.log(title)
 
     } catch (error) {
         console.error('Error creating a jobs', error);
