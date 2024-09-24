@@ -10,6 +10,6 @@ app.use(bodyParser.json());
 
 //routes
 app.use('/api/auth', authRoutes);
-app.use('/api/jobs', jobsRoutes);
+
 
 export default app;
