@@ -3,6 +3,7 @@ import { register, login } from '../controllers/authControllers.js'; // Ensure t
 
 const router = express.Router();
 
+// Routers
 router.post('/register', register);
 router.post('/login', login);
 
