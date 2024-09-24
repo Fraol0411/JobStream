@@ -2,7 +2,7 @@ import sql from 'mssql';
 import { connectDB } from '../config/db.js';
 
 //Create NEw job in  the database
-export const CreateJobs = async(title, department, dutystation, description, requirements, jobtype, created_by) => {
+export const CreateJobs = async(title, department, dutystation, description, requirements, jobtype,created_by) => {
     try {
         const pool = await connectDB();
         const query= `
@@ -18,7 +18,7 @@ export const CreateJobs = async(title, department, dutystation, description, req
            .input('jobtype', sql.VarChar(100),jobtype)
            .input('created_by', sql.VarChar(100),created_by)
            .query(query);
-           console.log(title)
+           
 
     } catch (error) {
         console.error('Error creating a jobs', error);
@@ -28,3 +28,13 @@ export const CreateJobs = async(title, department, dutystation, description, req
 
 
 // Find all jobs
+
+export const getAllJobs = async (req, res) => {
+    try {
+        const jobs = await pool.query('SELECT * FROM Jobs');
+        console
+        res.json(jobs.rows);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+};
