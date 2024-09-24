@@ -1,31 +1,32 @@
 import React from 'react'
-import './Home.scss'
+import styles from './Home.module.scss';
 import Featuredcard from '../../Component/Featuredcard/Featuredcard'
 import Vacancytype from '../../Component/Vacancytype/Vacancytype'
 import Footer from '../../Component/Footer/Footer'
 export default function Landing() {
   return (
-    <div  className="landing">
+    <div  className={styles.landing}>
 
-     <div className="Hero">
-          <div className="landingholder">
-              <div className="description">
+     <div className={styles.Hero}>
+          <div className={styles.landingholder}>
+              <div className={styles.description}>
                   <h1>Join The Leading Insurance Company</h1>
-                  <img src="/images/vector.png" alt="" />
+                  <img src="/images/interview.png" alt="" />
+                  <button className={styles.btngs}>Get Started</button>
               </div>
-              <div className="imageside">
-                  <div className="circle">
+              <div className={styles.imageside}>
+                  <div className={styles.circle}>
                     <h1>We Flow With You</h1>
                   </div>
-                  <div className="buildingimg">
-                    <img src="/images/buildingimg.png" alt="" />
+                  <div className={styles.buildingimg}>
+                    <img src="/images/womenlogo.png" alt="" />
                   </div>
               </div>
             </div>
-            <div className="inputfield">
+            {/* <div className="inputfield">
               <input type="text" placeholder='search for jobs'/>
               <button>Search</button>
-            </div>
+            </div> */}
      </div>
 
     

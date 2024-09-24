@@ -104,13 +104,15 @@
         margin: 0px;
         background-color: rgb(236, 236, 236);
         height: 40vh;
-        
+        visibility: hidden;
+        height: 0px;
      }
      .containerrr .filterarea{
         margin: 0;
         background-color: #e2e2e2;
         height: auto;
         width: 90%;
+     
         
         
      }

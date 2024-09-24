@@ -6,8 +6,10 @@ export default function Succespop({ onClose }) {
   return (
     <div className={styles.popupSuccess}>
       <div className={styles.Succes}>
-          <p> You have Succefully submitted application to this job </p>
-          <i className="fas fa-check"></i>
+        {/* Close Icon with new styling */}
+        <i className={`${styles.closeIcon} fas fa-xmark`} onClick={onClose}></i>
+        <p>You have successfully submitted the application for this job</p>
+        <i className={`${styles.check} fas fa-check`} ></i>
       </div>
     </div>
   );

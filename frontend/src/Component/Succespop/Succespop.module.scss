@@ -1,38 +1,61 @@
 .popupSuccess {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background-color: rgba(0, 0, 0, 0.349); /* Background to dim the page */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  .Succes {
-    background-color: white;
-    padding: 20px;
-    border-radius: 8px;
-    max-width: 400px;
-    width: 100%;
-    margin: 20px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.349); /* Background to dim the page */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-  }
-  .Succes p{
-    text-align: center;
-  }
-  .Succes i{
-    background-color: rgb(27, 202, 27);
-    color: white;
-    font-weight: bolder;
-    font-size: 28px;
-    padding: 10px;
-    border-radius: 50%;
-  }
-  
-  
+.Succes {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  max-width: 400px;
+  width: 100%;
+  margin: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative; /* Positioning context for the close icon */
+}
+
+.Succes p {
+  text-align: center;
+}
+
+.check {
+  background-color: rgb(27, 202, 27);
+  color: white;
+  font-weight: bolder;
+  font-size: 24px;
+  padding: 10px;
+  border-radius: 50%;
+}
+
+/* Styles for the close (X) icon */
+.closeIcon {
+  position: absolute;
+  top: -10px; /* Adjust position as needed */
+  right: -10px; /* Adjust position as needed */
+  background-color: rgba(255, 255, 255, 0.8); /* White background with opacity */
+  color: black;
+  font-size: 20px;
+  padding: 10px;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2); /* Optional: shadow for better visibility */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: background-color 0.3s ease; /* Smooth transition */
+}
+
+.closeIcon:hover {
+  background-color: rgba(255, 255, 255, 1); /* Change background on hover */
+  color: black;
+}
