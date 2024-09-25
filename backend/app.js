@@ -14,6 +14,8 @@ app.use(bodyParser.json());
 app.use('/api/auth', authRoutes);
 app.use('/api/jobs', jobsRoutes);
 app.use('/api/applications',applicationRoutes);
+// app.use('/api/academic',academicRoutes)
+// app.use('/api/exprience',exprienceRoutes)
 
 
 export default app;
