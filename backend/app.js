@@ -2,6 +2,7 @@ import express, { application } from 'express'
 import authRoutes from './routes/authRoutes.js'; // Default import
 import jobsRoutes from './routes/jobsRoutes.js';
 import applicationRoutes from './routes/applicationsRoutes.js'
+import academicRoutes from './routes/academicRoutes.js'
 import bodyParser from 'body-parser';
 
 const app = express();
@@ -14,7 +15,7 @@ app.use(bodyParser.json());
 app.use('/api/auth', authRoutes);
 app.use('/api/jobs', jobsRoutes);
 app.use('/api/applications',applicationRoutes);
-// app.use('/api/academic',academicRoutes)
+app.use('/api/academic',academicRoutes)
 // app.use('/api/exprience',exprienceRoutes)
 
 
