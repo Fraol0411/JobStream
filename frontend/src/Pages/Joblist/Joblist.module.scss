@@ -6,6 +6,14 @@
 .containerrr{
 
 }
+.loader{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20vh;
+    flex-direction: column;
+    gap: 30px;
+}
 .containerrr .headerarea{   
     display: grid;
     place-items: center; /* Centers child elements */

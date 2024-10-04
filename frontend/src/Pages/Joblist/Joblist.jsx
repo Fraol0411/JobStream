@@ -2,71 +2,48 @@ import React from 'react'
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import styles from'./Joblist.module.scss'
 import Jobcard from '../../Component/Jobcard/Jobcard';
-export default function Joblist() {
+import { useQuery } from 'react-query';
+import { ClimbingBoxLoader } from 'react-spinners';
+import { CircleLoader } from 'react-spinners';
 
-  const jobs = [
-    {
-      id: 1,
-      title: "Branch Manager",
-      location: "Addis Ababa",
-      description: "Branch manager needed for Addis Ababa Gotera branch. Must have a minimum of 4+ years of experience.",
-    },
-    {
-      id: 2,
-      title: "Software Engineer",
-      location: "Bahir Dar",
-      description: "We are looking for a software engineer proficient in JavaScript, React, and Node.js. Minimum 3+ years of experience.",
-    },
-    {
-      id: 3,
-      title: "Sales Executive",
-      location: "Adama",
-      description: "Sales executive needed for our new branch in Adama. Must have great communication and negotiation skills.",
-    },
-    {
-      id: 4,
-      title: "Marketing Specialist",
-      location: "Hawassa",
-      description: "Seeking a marketing specialist with experience in digital marketing strategies and SEO. 2+ years of experience required.",
-    },
-    {
-      id: 5,
-      title: "Human Resources Manager",
-      location: "Dire Dawa",
-      description: "HR manager needed to oversee recruitment and employee welfare. 5+ years of experience in HR is a must.",
-    },
-    {
-      id: 6,
-      title: "Data Analyst",
-      location: "Mekelle",
-      description: "Looking for a data analyst to help the company analyze and interpret data trends. Proficiency in Python and SQL required.",
-    },
-    {
-      id: 7,
-      title: "Project Manager",
-      location: "Gondar",
-      description: "Experienced project manager needed to lead large-scale company initiatives. PMP certification preferred.",
-    },
-    {
-      id: 8,
-      title: "Customer Support Specialist",
-      location: "Jimma",
-      description: "Customer support specialist required for our call center in Jimma. Excellent communication skills are essential.",
-    },
-    {
-      id: 9,
-      title: "Financial Analyst",
-      location: "Harar",
-      description: "Seeking a financial analyst with experience in financial modeling and forecasting. 3+ years of experience required.",
-    },
-    {
-      id: 10,
-      title: "UX/UI Designer",
-      location: "Addis Ababa",
-      description: "We are hiring a UX/UI designer to improve our digital products. Experience with Figma or Adobe XD is a plus.",
-    }
-  ];
+
+// Fetch job data from the backend
+const fetchJobs = async () => {
+  const res = await fetch('http://localhost:5000/api/jobs/alljobs');
+  console.log("check")
+  console.log(res)
+  if (!res.ok) {
+    throw new Error('Failed to fetch jobs');
+  }
+
+    // Simulate a delay
+    await new Promise((resolve) => setTimeout(resolve, 2000)); // 2-second delay
+
+
+  return res.json();
+};
+
+export default function Joblist() {
   
+  // Use React Query to fetch the job data
+  const { data, error, isLoading } = useQuery({
+    queryKey: ['jobs'],    // The key for this query
+    queryFn: fetchJobs      // The function to fetch the data
+  });
+
+  if (isLoading) {
+    return (
+      <div className={styles.loader}>
+        <CircleLoader size={105} color={"#123abc"} />
+        <p>featching available jobs </p>
+      </div>
+    );
+  }
+  if (error) {
+    return <div>Error fetching jobs: {error.message}</div>;
+  }
+  
+
 
   return (
     <div className={styles.joblist}>
@@ -125,11 +102,11 @@ export default function Joblist() {
         <div className={styles.jobcards}>
           <div className={styles.cardholder}>
             {
-              jobs.map((job)=>(
+              data.map((job)=>(
                 <Jobcard
                 key={job.id}
                 title={job.title}
-                location={job.location}
+                location={job.dutystation}
                 description={job.description}
                 />
               ))

@@ -13,7 +13,8 @@ import cors from 'cors';
 const app = express();
 
 // Use CORS middleware
-app.use(cors());
+app.use(cors({ origin: 'http://localhost:5173' })); // Allow requests from your frontend
+
 
 
 
