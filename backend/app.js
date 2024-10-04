@@ -5,12 +5,27 @@ import applicationRoutes from './routes/applicationsRoutes.js'
 import academicRoutes from './routes/academicRoutes.js'
 import exprienceRoutes from './routes/exprienceRoutes.js'
 import bodyParser from 'body-parser';
+import cors from 'cors';
+
+
+
 
 const app = express();
+
+// Use CORS middleware
+app.use(cors());
+
+
 
 //middlewares
 app.use(express.json());
 app.use(bodyParser.json());
+
+app.use(cors({
+    origin: 'http://localhost:5173', // Replace with your React app's URL
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true, // Enable credentials if needed
+}));
 
 //routes
 app.use('/api/auth', authRoutes);
