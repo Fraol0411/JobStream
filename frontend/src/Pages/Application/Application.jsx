@@ -25,17 +25,37 @@ export default function Application() {
     phone: '',
     coverLetter: '',
     resume: null,
-    linkedin: '',
-    website: '',
-    experienceLevel: '',
-    workAuthorization: '',
+
+  });
+
+  const [workexperience, setWorkexperience] = useState({
     workExperiences: [
       { company: '', position: '', from: '', to: '' },
     ],
+  })
+
+  const [academy, setAcademy] = useState({
     academicBackground: [
       { university: '', completedYear: '', certificate: '' },
     ],
-  });
+  })
+
+    // Temporary state for the current work experience
+    const [currentExperience, setCurrentExperience] = useState({
+      company: '',
+      position: '',
+      from: '',
+      to: '',
+    });
+      // Temporary state for the current academic background
+    const [currentAcademic, setCurrentAcademic] = useState({
+      university: '',
+      completedYear: '',
+      certificate: '',
+    });
+
+
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -45,40 +65,59 @@ export default function Application() {
   const handleFileChange = (e) => {
     setFormData({ ...formData, resume: e.target.files[0] });
   };
-
-  const handleWorkExperienceChange = (index, e) => {
-    const updatedWorkExperiences = formData.workExperiences.map((exp, i) =>
-      i === index ? { ...exp, [e.target.name]: e.target.value } : exp
-    );
-    setFormData({ ...formData, workExperiences: updatedWorkExperiences });
+  const handleFileChangeCoverletter = (e) => {
+    setFormData({ ...formData, coverLetter: e.target.files[0] });
   };
 
-  const addWorkExperience = () => {
-    setFormData({
-      ...formData,
-      workExperiences: [...formData.workExperiences, { company: '', position: '', from: '', to: '' }],
+
+
+
+// Handle current work experience change
+const handleExperienceChange = (e) => {
+  const { name, value } = e.target;
+  setCurrentExperience({ ...currentExperience, [name]: value });
+};
+
+// Add the current work experience to the list and reset the fields
+const addWorkExperience = () => {
+  setWorkexperience({
+    ...workexperience,
+    workExperiences: [...formData.workExperiences, currentExperience],
+  });
+  // Clear the current experience fields
+  setCurrentExperience({ company: '', position: '', from: '', to: '' });
+};
+
+
+
+
+  // Handle current academic background change
+  const handleAcademicChange = (e) => {
+    const { name, value } = e.target;
+    setCurrentAcademic({ ...currentAcademic, [name]: value });
+  };
+
+  // Add the current academic background to the list and reset the fields
+  const addAcademicBackground = () => {
+    setAcademy({
+      ...academy,
+      academicBackground: [...formData.academicBackground, currentAcademic],
     });
+    // Clear the current academic fields
+    setCurrentAcademic({ university: '', completedYear: '', certificate: '' });
   };
 
-  const handleAcademicChange = (index, e) => {
-    const updatedAcademicBackground = formData.academicBackground.map((edu, i) =>
-      i === index ? { ...edu, [e.target.name]: e.target.value } : edu
-    );
-    setFormData({ ...formData, academicBackground: updatedAcademicBackground });
-  };
 
-  const addAcademicEntry = () => {
-    setFormData({
-      ...formData,
-      academicBackground: [...formData.academicBackground, { university: '', completedYear: '', certificate: '' }],
-    });
-  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log('Application Submitted:', formData);
   };
 
+
+
+  //consoling the result
+  console.log(formData)
   return (
     <div className={styles.applicationContainer}>
       <h1>Job Application</h1>
@@ -136,92 +175,151 @@ export default function Application() {
         </fieldset>
 
 
-           {/* Academic Background */}
+
+
+            {/* Academic Background */}
         <fieldset className={styles.fieldset}>
           <legend>Academic Background</legend>
-          {formData.academicBackground.map((education, index) => (
-            <div key={index} className={styles.formGroup}>
-              
-              <label htmlFor={`highestlevel-${index}`}>Certificate</label>
-              <select name="" id="">
-                   <option value="">Bsc</option>
-                   <option value="">Msc</option>
-                   <option value="">Phd</option>
-              </select>
+          <div className={styles.formGroup}>
+            <label htmlFor="university">University</label>
+            <input
+              type="text"
+              id="university"
+              name="university"
+              value={currentAcademic.university}
+              onChange={handleAcademicChange}
+              required
+            />
 
-              <label htmlFor={`university-${index}`}>University</label>
-              <input
-                type="text"
-                id={`university-${index}`}
-                name="university"
-                value={education.university}
-                onChange={(e) => handleAcademicChange(index, e)}
-                required
-              />
+            <label htmlFor="completedYear">Completed Year</label>
+            <input
+              type="number"
+              id="completedYear"
+              name="completedYear"
+              value={currentAcademic.completedYear}
+              onChange={handleAcademicChange}
+              required
+            />
 
-              <label htmlFor={`completedYear-${index}`}>Year Completed</label>
-              <input
-                type="number"
-                id={`completedYear-${index}`}
-                name="completedYear"
-                value={education.completedYear}
-                onChange={(e) => handleAcademicChange(index, e)}
-                required
-              />
-
-            </div>
-          ))}
-
+            <label htmlFor="certificate">Certificate</label>
+            <input
+              type="text"
+              id="certificate"
+              name="certificate"
+              value={currentAcademic.certificate}
+              onChange={handleAcademicChange}
+              required
+            />
+          </div>
+          <button
+            type="button"
+            className={styles.addButton}
+            onClick={addAcademicBackground}
+          >
+            Add Academic Background
+          </button>
         </fieldset>
 
-        {/* Work Experience */}
-        <fieldset className={styles.fieldset}>
+        {/* Previous Academic Background */}
+        {academy.academicBackground.length > 0 && (
+          <fieldset className={styles.fieldset}>
+            <legend>Previous Academic Background</legend>
+            {academy.academicBackground.map((acad, index) => (
+              <div key={index} className={styles.previousAcademic}>
+                <p>
+                  <strong>University:</strong> {acad.university}
+                </p>
+                <p>
+                  <strong>Completed Year:</strong> {acad.completedYear}
+                </p>
+                <p>
+                  <strong>Certificate:</strong> {acad.certificate}
+                </p>
+              </div>
+            ))}
+          </fieldset>
+        )}
+
+
+
+
+    {/* Work Experience */}
+    <fieldset className={styles.fieldset}>
           <legend>Work Experience</legend>
-          {formData.workExperiences.map((experience, index) => (
-            <div key={index} className={styles.formGroup}>
-              <label htmlFor={`company-${index}`}>Company Name</label>
-              <input
-                type="text"
-                id={`company-${index}`}
-                name="company"
-                value={experience.company}
-                onChange={(e) => handleWorkExperienceChange(index, e)}
-                required
-              />
-              
-              <label htmlFor={`position-${index}`}>Position</label>
-              <input
-                type="text"
-                id={`position-${index}`}
-                name="position"
-                value={experience.position}
-                onChange={(e) => handleWorkExperienceChange(index, e)}
-                required
-              />
+          <div className={styles.formGroup}>
+            <label htmlFor="company">Company Name</label>
+            <input
+              type="text"
+              id="company"
+              name="company"
+              value={currentExperience.company}
+              onChange={handleExperienceChange}
+              required
+            />
 
-              <label htmlFor={`from-${index}`}>From</label>
-              <input
-                type="month"
-                id={`from-${index}`}
-                name="from"
-                value={experience.from}
-                onChange={(e) => handleWorkExperienceChange(index, e)}
-                required
-              />
+            <label htmlFor="position">Position</label>
+            <input
+              type="text"
+              id="position"
+              name="position"
+              value={currentExperience.position}
+              onChange={handleExperienceChange}
+              required
+            />
 
-              <label htmlFor={`to-${index}`}>To</label>
-              <input
-                type="month"
-                id={`to-${index}`}
-                name="to"
-                value={experience.to}
-                onChange={(e) => handleWorkExperienceChange(index, e)}
-                required
-              />
-            </div>
-          ))}
-          <button type="button" className={styles.addButton} onClick={addWorkExperience}>Add More Experience</button>
+            <label htmlFor="from">From</label>
+            <input
+              type="month"
+              id="from"
+              name="from"
+              value={currentExperience.from}
+              onChange={handleExperienceChange}
+              required
+            />
+
+            <label htmlFor="to">To</label>
+            <input
+              type="month"
+              id="to"
+              name="to"
+              value={currentExperience.to}
+              onChange={handleExperienceChange}
+              required
+            />
+          </div>
+          <button
+            type="button"
+            className={styles.addButton}
+            onClick={addWorkExperience}
+          >
+            Add Experience
+          </button>
         </fieldset>
+
+        {/* Previous Work Experience */}
+        {workexperience.workExperiences.length > 0 && (
+          <fieldset className={styles.fieldset}>
+            <legend>Previous Work Experiences</legend>
+            {workexperience.workExperiences.map((exp, index) => (
+              <div key={index} className={styles.previousExperience}>
+                <p>
+                  <strong>Company:</strong> {exp.company}
+                </p>
+                <p>
+                  <strong>Position:</strong> {exp.position}
+                </p>
+                <p>
+                  <strong>From:</strong> {exp.from}
+                </p>
+                <p>
+                  <strong>To:</strong> {exp.to}
+                </p>
+              </div>
+            ))}
+          </fieldset>
+        )}
+
+
 
         {/* Resume and Cover Letter */}
         <fieldset className={styles.fieldset}>
@@ -242,10 +340,10 @@ export default function Application() {
             <label htmlFor="resume">Upload Cover letter (PDF or DOC)</label>
             <input
               type="file"
-              id="resume"
-              name="resume"
+              id="coverletter"
+              name="coverletter"
               accept=".pdf, .doc, .docx"
-              onChange={handleFileChange}
+              onChange={handleFileChangeCoverletter}
               required
             />
           </div>
