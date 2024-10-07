@@ -4,7 +4,7 @@ import styles from './Jobcard.module.scss'
 import JobDetailPopup from '../Jobdeatail/JobDetailPopup';
 import { useNavigate } from 'react-router-dom';
 
-export default function Jobcard({ title, location, description }) {
+export default function Jobcard({ title, location, description,department,requirment, jobtype,status}) {
 
   const navigate = useNavigate();
 
@@ -40,7 +40,7 @@ export default function Jobcard({ title, location, description }) {
 
            {showPopup && (
               <JobDetailPopup
-              job={{ title, location, description }} // Passing the job object
+              job={{  title, location, description,department,requirment, jobtype,status}} // Passing the job object
                onClose={handleClosePopup}
                 />
       )}

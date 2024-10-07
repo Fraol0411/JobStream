@@ -7,7 +7,7 @@ const Layout = () => {
   const location = useLocation();
 
   // List of routes where the Navbar should not be displayed
-  const hideNavbarRoutes = ['/loginform'];
+  const hideNavbarRoutes = ['/'];
 
   return (
     <div>

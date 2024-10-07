@@ -61,7 +61,7 @@ export default function LoginForm() {
         onSuccess: (data) => {
             console.log('Login successful:', data);
             // Handle successful login (e.g., redirect, save token)
-            navigate('/joblist');
+            navigate('/home');
         },
         onError: (error) => {
             setErrorMessage(error.message);

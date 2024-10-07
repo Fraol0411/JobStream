@@ -16,11 +16,11 @@ export default function AppRoutes() {
     <Router>
       <Routes>
         <Route path="/" element={<Layout />}>
-          <Route index element={<Home />} />
+          <Route index element={<Loginform />} />
           <Route path="about" element={<About />} />
           <Route path="contact" element={<Contact />} />
           <Route path="joblist" element={<Joblist />} />
-          <Route path='loginform' element={<Loginform/>}/>
+          <Route path='home' element={<Home/>}/>
           <Route path='application' element={<Application/>} />
           <Route path='profile' element={<Profile/>}/>
         </Route>

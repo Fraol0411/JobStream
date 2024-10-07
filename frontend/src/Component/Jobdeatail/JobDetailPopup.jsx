@@ -15,8 +15,8 @@ export default function JobDetailPopup({ job, onClose }) {
         <h2>{job.title}</h2>
         <p><strong>Location:</strong> {job.location}</p>
         <p><strong>Job Description:</strong> {job.description}</p>
-        <p><strong>Company Overview:</strong> A brief description of the company here.</p>
-        <p><strong>Salary Range:</strong> Attractive salary based on experience.</p>
+        <p><strong>Requirments:</strong> {job.requirment}</p>
+        <p><strong>Salary Range:</strong> Attractive salary</p>
         <p><strong>Job Type:</strong> Full-time</p>
         <p><strong>Experience Required:</strong> Minimum 4 years.</p>
         <p><strong>Qualifications:</strong> Relevant qualifications required.</p>

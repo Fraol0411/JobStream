@@ -66,19 +66,6 @@ export default function Joblist() {
                       </div>
 
                       <div className={styles.typedrop}>
-                        <span>Level: </span>
-                        <div className={styles.selectdropdown}>
-                          <select name="" id="">
-                            <option value="">All</option>
-                            <option value="">Senior</option>
-                            <option value="">Joniur</option>
-                            <option value="">Contrat</option>
-                          </select>
-                        </div>
-                      
-                      </div>
-
-                      <div className={styles.typedrop}>
                         <span>Role: </span>
                         <div className={styles.selectdropdown}>
                           <select name="" id="">
@@ -108,6 +95,10 @@ export default function Joblist() {
                 title={job.title}
                 location={job.dutystation}
                 description={job.description}
+                department={job.department}
+                requirment={job.requirment}
+                jobtype={job.jobtype}
+                status={job.status}
                 />
               ))
             }   
