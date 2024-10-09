@@ -22,18 +22,18 @@ const submitApplication = async(formData) =>{
 };
 
 // function to handle application api
-const submitAcademic = async(academy) =>{
-  console.log(academy)
+const submitAcademic = async (academy) => {
+  console.log('academy api',academy.completedYear)
   const response = await fetch('http://localhost:5000/api/academic/', {
-       method:'POST',
-       headers: {
-        'Content-Type':'application/json',
-       },
-
-       body: JSON.stringify(academy),
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(academy),
   });
-  if(!response.ok){
-    throw new Error('submitting failed')
+
+  if (!response.ok) {
+    throw new Error('Submitting academic background failed');
   }
   return response.json();
 };
@@ -99,7 +99,7 @@ export default function Application() {
 
 
   const [workexperience, setWorkexperience] = useState({
-      applicantion_id:1004,
+      application_id:1004,
       company: null,
       position: '',
       from: '',
@@ -110,7 +110,7 @@ export default function Application() {
     applicantion_id:1004,
     highestlevel: '',
     university: '',
-    completedYear: '',
+    completed_year: 2022,
     cgpa: '',
     field: '',
     certificate: '',
@@ -120,16 +120,17 @@ export default function Application() {
     // Handler for academic background changes
     const handleAcademicChange = (e) => {
       const { name, value } = e.target;
-      setAcademic((prev) => ({
+      setAcademy((prev) => ({
         ...prev,
         [name]: value,
       }));
     };
+
   
     // Handler for work experience changes
     const handleExperienceChange = (e) => {
       const { name, value } = e.target;
-      setCurrentExperience((prev) => ({
+      setWorkexperience((prev) => ({
         ...prev,
         [name]: value,
       }));
@@ -154,7 +155,7 @@ export default function Application() {
     completedYear: '',
     cgpa: '',
     field: '',
-    certificate: '',
+
   });
 
 
@@ -207,17 +208,17 @@ const addWorkExperience = () => {
 
   // Add the current academic background to the list and reset the fields
   const addAcademicBackground = () => {
-    setAcademy({
-      ...academy,
-      academicBackground: [...academy.academicBackground, currentAcademic],
-    });
+    // setAcademy({
+    //   ...academy,
+    //   academicBackground: [...academy.academicBackground, currentAcademic],
+    // });
     // Clear the current academic fields
 
-    submitAcademic();
+    submitAcademic(academy);
     setCurrentAcademic({ university: '', completedYear: '', certificate: '' });
   };
 
-  console.log('academydaat',academy)
+
 
   const handleSubmit = (e) => {
     e.preventDefault(); // prevent the default form submission behavior
@@ -239,8 +240,6 @@ const addWorkExperience = () => {
   }
 
 
-  //consoling the result
-  console.log(formData)
   return (
     <div className={styles.applicationContainer}>
       <h1>Job Application</h1>
@@ -366,7 +365,7 @@ const addWorkExperience = () => {
                 <select
                   id="highestlevel"
                   name="highestlevel"
-                  value={currentAcademic.highestlevel}
+                  value={academy.highestlevel}
                   onChange={handleAcademicChange}
                   required
                 >
@@ -382,7 +381,7 @@ const addWorkExperience = () => {
                   type="text"
                   id="university"
                   name="university"
-                  value={currentAcademic.university}
+                  value={academy.university}
                   onChange={handleAcademicChange}
                   required
                 />
@@ -392,7 +391,7 @@ const addWorkExperience = () => {
                   type="number"
                   id="completedYear"
                   name="completedYear"
-                  value={currentAcademic.completedYear}
+                  value={academy.completedYear}
                   onChange={handleAcademicChange}
                   required
                 />
@@ -403,7 +402,7 @@ const addWorkExperience = () => {
                   step="0.01"
                   id="cgpa"
                   name="cgpa"
-                  value={currentAcademic.cgpa}
+                  value={academy.cgpa}
                   onChange={handleAcademicChange}
                   required
                 />
@@ -413,7 +412,7 @@ const addWorkExperience = () => {
                   type="text"
                   id="field"
                   name="field"
-                  value={currentAcademic.field}
+                  value={academy.field}
                   onChange={handleAcademicChange}
                   required
                 />
