@@ -91,14 +91,21 @@ export default function Joblist() {
             {
               data.map((job)=>(
                 <Jobcard
-                key={job.id}
+                id={job.job_id}
                 title={job.title}
-                location={job.dutystation}
-                description={job.description}
                 department={job.department}
-                requirment={job.requirment}
+                dutystation={job.dutystation}
+                description={job.description}
+                requirements={job.requirements}
                 jobtype={job.jobtype}
                 status={job.status}
+                created_by={job.created_by}
+                salary={job.salary}
+                qualification={job.qualification}
+                responsibilities={job.responsibilities}
+                deadline={job.deadline}
+                contact={job.contact}
+                benefits={job.benefits}
                 />
               ))
             }   

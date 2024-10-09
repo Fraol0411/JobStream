@@ -2,10 +2,10 @@ import { createAcademic, getAcademicByApplicationId } from '../models/academicMo
 
 // Handle creating a new academic background
 export const createAcademicEntry = async (req, res) => {
-  const { application_id, highestlevel, university, cgpa, completed_year} = req.body;
+  const { application_id, highestlevel, university, cgpa, completed_year,field} = req.body;
 
   try {
-    await createAcademic(application_id, highestlevel, university, cgpa, completed_year);
+    await createAcademic(application_id, highestlevel, university, cgpa, completed_year,field);
     res.status(201).json({ message: 'Academic background created successfully' });
   } catch (error) {
     console.error('Error creating academic background:', error);

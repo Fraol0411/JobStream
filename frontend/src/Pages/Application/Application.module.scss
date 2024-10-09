@@ -72,6 +72,30 @@ form .fieldset{
   border-bottom: 2px solid #007bff; /* Change bottom border color on focus */
 }
 
+.fieldset legend{
+  font-size: 15px;
+}
+.previousAcademic{
+  display: flex;
+  gap: 15px;
+  p{
+    font-size: 13px;
+  }
+  p strong{
+    font-size: 14px;
+  }
+}
+
+.previousExperience{
+  display: flex;
+  gap: 8px;
+  p{
+    font-size: 13px;
+  }
+  p strong{
+    font-size: 14px;
+  }
+}
 
 
 

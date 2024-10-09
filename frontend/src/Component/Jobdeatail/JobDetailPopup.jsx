@@ -5,27 +5,26 @@ export default function JobDetailPopup({ job, onClose }) {
 
    const navigate = useNavigate()
 
-  const handleNavigation =()=>{
-    navigate('/application')
-  }
-
+   const handleNavigation = () => {
+    // Navigate to application form with the job.id passed as a parameter
+    navigate(`/application/${job.id}`);
+  };
+console.log(job.id)
   return (
     <div className={styles.popupBackdrop}>
       <div className={styles.popup}>
         <h2>{job.title}</h2>
-        <p><strong>Location:</strong> {job.location}</p>
+        <p><strong>Location:</strong> {job.dutystation}</p>
         <p><strong>Job Description:</strong> {job.description}</p>
-        <p><strong>Requirments:</strong> {job.requirment}</p>
-        <p><strong>Salary Range:</strong> Attractive salary</p>
-        <p><strong>Job Type:</strong> Full-time</p>
-        <p><strong>Experience Required:</strong> Minimum 4 years.</p>
-        <p><strong>Qualifications:</strong> Relevant qualifications required.</p>
-        <p><strong>Responsibilities:</strong> Key tasks and duties of the role.</p>
-        <p><strong>Skills Required:</strong> Leadership, management skills, etc.</p>
-        <p><strong>Application Deadline:</strong> Date if applicable.</p>
-        <p><strong>Benefits:</strong> Health insurance, bonuses, etc.</p>
-        <p><strong>How to Apply:</strong> Apply by sending your CV to [email@example.com].</p>
-        <p><strong>Contact Information:</strong> For more information, contact [Contact Person] at [phone/email].</p>
+        <p><strong>Requirments:</strong> {job.requirements}</p>
+        <p><strong>Salary Range:</strong> {job.salary}</p>
+        <p><strong>Job Type:</strong> {job.jobtype}</p>
+        <p><strong>Qualifications:</strong> {job.qualification}</p>
+        <p><strong>Responsibilities:</strong> {job.responsibilities}</p>
+        <p><strong>Application Deadline:</strong> {job.deadline}</p>
+        <p><strong>Benefits:</strong> {job.benefits}</p>
+        <p><strong>Contact Information:</strong> {job.contact}</p>
+        <p><strong>Status</strong> {job.status}</p>
         <button onClick={onClose}>Close</button>
         <button onClick={() => { onClose(); handleNavigation(); }}>
            Apply Now

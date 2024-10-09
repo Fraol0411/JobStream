@@ -21,7 +21,7 @@ export default function AppRoutes() {
           <Route path="contact" element={<Contact />} />
           <Route path="joblist" element={<Joblist />} />
           <Route path='home' element={<Home/>}/>
-          <Route path='application' element={<Application/>} />
+          <Route path='application/:id' element={<Application/>} />
           <Route path='profile' element={<Profile/>}/>
         </Route>
       </Routes>

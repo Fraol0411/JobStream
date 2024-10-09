@@ -4,7 +4,22 @@ import styles from './Jobcard.module.scss'
 import JobDetailPopup from '../Jobdeatail/JobDetailPopup';
 import { useNavigate } from 'react-router-dom';
 
-export default function Jobcard({ title, location, description,department,requirment, jobtype,status}) {
+export default function Jobcard({  
+  id,
+  title, 
+  department, 
+  dutystation, 
+  description, 
+  requirements, 
+  jobtype, 
+  status, 
+  created_by, 
+  salary, 
+  qualification, 
+  responsibilities, 
+  deadline, 
+  contact, 
+  benefits }) {
 
   const navigate = useNavigate();
 
@@ -26,10 +41,12 @@ export default function Jobcard({ title, location, description,department,requir
            <div className={styles.holder}>
               <div className={styles.head}>
                  <h1>{title}</h1>
-                 <h3>{location}</h3>
+                 <h3>{dutystation}</h3>
+
               </div>
-              <div className={styles.line}> </div>
+              
               <div className={styles.desc}>
+               <p><strong>department: </strong>{department}</p> 
                {description}
               </div>
               <div className={styles.buttons}>
@@ -40,7 +57,22 @@ export default function Jobcard({ title, location, description,department,requir
 
            {showPopup && (
               <JobDetailPopup
-              job={{  title, location, description,department,requirment, jobtype,status}} // Passing the job object
+              job={{   
+                id,
+                title, 
+                department, 
+                dutystation, 
+                description, 
+                requirements, 
+                jobtype, 
+                status, 
+                created_by, 
+                salary, 
+                qualification, 
+                responsibilities, 
+                deadline, 
+                contact, 
+                benefits }} // Passing the job object
                onClose={handleClosePopup}
                 />
       )}
