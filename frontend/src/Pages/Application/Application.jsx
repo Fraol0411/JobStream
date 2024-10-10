@@ -23,7 +23,7 @@ const submitApplication = async(formData) =>{
 
 // function to handle application api
 const submitAcademic = async (academy) => {
-  console.log('academy api',academy.completedYear)
+  console.log('academy api',academy.application_id)
   const response = await fetch('http://localhost:5000/api/academic/', {
     method: 'POST',
     headers: {
