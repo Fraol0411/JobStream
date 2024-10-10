@@ -52,34 +52,55 @@
 ////-----------------------------------////
 
 // Creating new applications
+import { application } from 'express';
 import { createApplication, getapplicationwithID } from '../models/applicationsModels.js';
 
 export const createNewApplication = async (req, res) => {
-   const { job_id, applicant_id, firstname, middlename, lastname, phone, email, status } = req.body;
-
-   console.log("Files received:", req.files);
-   console.log("Request body:", req.body);
-
-   // Ensure files are correctly processed with null checks
-   const cover_letter = req.files?.cover_letter ? req.files.cover_letter[0].path : null;
-   const resume = req.files?.resume ? req.files.resume[0].path : null;
-   const handwritten_letter = req.files?.handwritten_letter ? req.files.handwritten_letter[0].path : null;
-
-   try {
-      // Validate if required fields are present
-      if (!job_id || !applicant_id || !firstname || !middlename || !lastname || !phone || !email ) {
-         return res.status(400).json({ message: 'All required fields must be filled.' });
-         
-      }
-      console.log("is there cover letter")
-      await createApplication(job_id, applicant_id, firstname, middlename, lastname, phone, email, cover_letter, resume, handwritten_letter, status);
-      res.status(201).json({ message: 'Application submitted successfully' });
-   } catch (error) {
-      console.error('Error submitting application:', error);
-      res.status(500).json({ message: 'Server error while submitting application' });
-   }
-};
-
+    const { job_id, applicant_id, firstname, middlename, lastname, phone, email, status } = req.body;
+ 
+    console.log("Files received:", req.files);
+    console.log("Request body:", req.body);
+ 
+    // Ensure files are correctly processed with null checks
+    const cover_letter = req.files?.cover_letter ? req.files.cover_letter[0].path : null;
+    const resume = req.files?.resume ? req.files.resume[0].path : null;
+    const handwritten_letter = req.files?.handwritten_letter ? req.files.handwritten_letter[0].path : null;
+ 
+    try {
+       // Validate if required fields are present
+       if (!job_id || !applicant_id || !firstname || !middlename || !lastname || !phone || !email) {
+          return res.status(400).json({ message: 'All required fields must be filled.' });
+       }
+ 
+       console.log("Is there a cover letter");
+ 
+       // Insert the application into the database and return the new application details
+       const newApplication = await createApplication(
+          job_id, 
+          applicant_id, 
+          firstname, 
+          middlename, 
+          lastname, 
+          phone, 
+          email, 
+          cover_letter, 
+          resume, 
+          handwritten_letter, 
+          status
+       );
+ 
+       // Return the newly created application data as response
+       res.status(201).json({
+          message: 'Application submitted successfully',
+          application: res.newApplication  // Send the newly created application details
+       });
+      console.log(application)
+    } catch (error) {
+       console.error('Error submitting application:', error);
+       res.status(500).json({ message: 'Server error while submitting application' });
+    }
+ };
+ 
 
 
 // Get applications with job ID

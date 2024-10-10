@@ -8,10 +8,6 @@ const submitApplication = async(formData) =>{
 
   const response = await fetch('http://localhost:5000/api/applications/createnew', {
        method:'POST',
-      //  headers: {
-      //   'Content-Type':'application/json',
-      //  },
-      //  body: JSON.stringify(formData),
       body:formData,
   });
   console.log(formData)
@@ -81,22 +77,6 @@ export default function Application() {
     navigate('/joblist')
   };
 
-
-  // const [formData, setFormData] = useState({
-  //   job_id:id,
-  //   applicant_id:4011,
-  //   firstname: '',
-  //   middlename:'',
-  //   lastname: '',
-  //   phone: '',
-  //   email: '',
-  //   cover_letter: '',
-  //   resume: '',
-  //   handwritten_letter:'',
-  //   status:'submitted'
-
-  // });
-
   const [job_id,setJob_id]=useState(id)
   const [applicant_id,setApplicant_id]=useState(4011)
   const [firstname,setFirstname]=useState('')
@@ -151,28 +131,6 @@ export default function Application() {
     };
 
 
-
-
-
-
-  //   // Temporary state for the current work experience
-  //   const [currentExperience, setCurrentExperience] = useState({
-  //     company: null,
-  //     position: '',
-  //     from: '',
-  //     to: '',
-  //   });
-  //     // Temporary state for the current academic background
-  // const [currentAcademic, setCurrentAcademic] = useState({
-  //   highestlevel: '',
-  //   university: '',
-  //   completedYear: '',
-  //   cgpa: '',
-  //   field: '',
-  // });
-
-
-
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
@@ -190,29 +148,12 @@ export default function Application() {
   }
 
 
-
-
-// // Handle current work experience change
-// const handleExperienceChange = (e) => {
-//   const { name, value } = e.target;
-//   setCurrentExperience({ ...currentExperience, [name]: value });
-// };
-
 // Add the current work experience to the list and reset the fields
 const addWorkExperience = () => {
   submitExprience(workexperience);
   setWorkexperience({ company: '', position: '', from: '', to: '' });
 };
 
-
-
-
-  // // Handle current academic background change
-  // const handleAcademicChange = (e) => {
-  //   const { name, value } = e.target;
-  //   setCurrentAcademic({ ...currentAcademic, [name]: value });
-
-  // };
 
   // Add the current academic background to the list and reset the fields
   const addAcademicBackground = () => {
@@ -226,35 +167,6 @@ const addWorkExperience = () => {
     setAcademy({ university: '', completedYear: '', certificate: '' });
     
   };
-
-  // const handleSubmit = (e) => {
-  //   e.preventDefault(); // prevent the default form submission behavior
-
-
-  //   const data = new FormData();
-
-  //   Object.keys(formData).forEach(key => {
-  //     data.append(key, formData[key]);
-  //   });
-     
-  //     // Append files
-  //     data.append('resume', formData.resume);
-  //     data.append('cover_letter', formData.cover_letter);
-  //     data.append('handwritten_letter', formData.handwritten_letter);
-
-  //    console.log("data value",data)
-  //   // Call submitApplication with formData
-  //   submitApplication(data)
-
-
-  //     .then(() => {
-  //       // Show the success popup on successful submission
-        
-  //     })
-  //     .catch((error) => {
-  //       console.error('Error submitting the application:', error);
-  //     });
-  // };
 
   
  const handleSubmit = (e) =>{
@@ -278,25 +190,17 @@ const addWorkExperience = () => {
   formData.append("handwritten_letter", handwritten_letter);
   
   // Optionally set the status if you want to use it
-  formData.append("status", status);
-
-
-     
+  formData.append("status", status);    
     // Call submitApplication with formData
     submitApplication(formData)
-
-
       .then(() => {
-        // Show the success popup on successful submission
-        
+        // Show the success popup on successful submission       
       })
       .catch((error) => {
         console.error('Error submitting the application:', error);
       });
 
-
  }
-
 
   const handlePopup = (e) =>{
     setShowPopup(true);
