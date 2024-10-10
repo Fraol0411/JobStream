@@ -6,6 +6,8 @@ import academicRoutes from './routes/academicRoutes.js'
 import exprienceRoutes from './routes/exprienceRoutes.js'
 import bodyParser from 'body-parser';
 import cors from 'cors';
+import multer from 'multer';
+import path from 'path'
 
 
 
@@ -14,6 +16,8 @@ const app = express();
 
 // Use CORS middleware
 app.use(cors({ origin: 'http://localhost:5173' })); // Allow requests from your frontend
+
+
 
 
 
@@ -34,6 +38,8 @@ app.use('/api/jobs', jobsRoutes);
 app.use('/api/applications',applicationRoutes);
 app.use('/api/academic',academicRoutes)
 app.use('/api/exprience',exprienceRoutes)
+
+
 
 
 export default app;

@@ -8,11 +8,11 @@ const submitApplication = async(formData) =>{
 
   const response = await fetch('http://localhost:5000/api/applications/createnew', {
        method:'POST',
-       headers: {
-        'Content-Type':'application/json',
-       },
-
-       body: JSON.stringify(formData),
+      //  headers: {
+      //   'Content-Type':'application/json',
+      //  },
+      //  body: JSON.stringify(formData),
+      body:formData,
   });
   console.log(formData)
   if(!response.ok){
@@ -23,6 +23,7 @@ const submitApplication = async(formData) =>{
 
 // function to handle application api
 const submitAcademic = async (academy) => {
+  console.log(academy)
   console.log('academy api',academy.application_id)
   const response = await fetch('http://localhost:5000/api/academic/', {
     method: 'POST',
@@ -40,7 +41,7 @@ const submitAcademic = async (academy) => {
 
 // function to handle application api
 const submitExprience= async(workexperience) =>{
-
+   console.log(workexperience)
   const response = await fetch('http://localhost:5000/api/exprience', {
        method:'POST',
        headers: {
@@ -81,41 +82,54 @@ export default function Application() {
   };
 
 
-  const [formData, setFormData] = useState({
-    job_id:id,
-    applicant_id:4011,
-    firstname: '',
-    middlename:'',
-    lastname: '',
-    phone: '',
-    email: '',
-    cover_letter: 'null',
-    resume: 'null',
-    handwritten_letter:'null',
-    status:'submitted'
+  // const [formData, setFormData] = useState({
+  //   job_id:id,
+  //   applicant_id:4011,
+  //   firstname: '',
+  //   middlename:'',
+  //   lastname: '',
+  //   phone: '',
+  //   email: '',
+  //   cover_letter: '',
+  //   resume: '',
+  //   handwritten_letter:'',
+  //   status:'submitted'
 
-  });
+  // });
 
+  const [job_id,setJob_id]=useState(id)
+  const [applicant_id,setApplicant_id]=useState(4011)
+  const [firstname,setFirstname]=useState('')
+  const [middlename,setMiddlename]=useState('')
+  const [lastname,setLastname]=useState('')
+  const [phone,setPhone]=useState('')
+  const [email,setEmail]=useState('')
+  const [cover_letter,setCover_letter]=useState('')
+  const [resume,setResume]=useState('')
+  const [handwritten_letter,setHandwritten_letter]=useState('')
+  const [status,setStatus]=useState('submitted')
 
 
   const [workexperience, setWorkexperience] = useState({
       application_id:1004,
       company: null,
       position: '',
-      from: '',
-      to: '',
+      from_date: '',
+      to_date: '',
   })
 
   const [academy, setAcademy] = useState({
-    applicantion_id:1004,
+    application_id:1004,
     highestlevel: '',
     university: '',
-    completed_year: 2022,
+    completed_year: '',
     cgpa: '',
     field: '',
-    certificate: '',
   })
 
+  console.log(workexperience)
+
+  console.log(academy)
 
     // Handler for academic background changes
     const handleAcademicChange = (e) => {
@@ -141,22 +155,21 @@ export default function Application() {
 
 
 
-    // Temporary state for the current work experience
-    const [currentExperience, setCurrentExperience] = useState({
-      company: null,
-      position: '',
-      from: '',
-      to: '',
-    });
-      // Temporary state for the current academic background
-  const [currentAcademic, setCurrentAcademic] = useState({
-    highestlevel: '',
-    university: '',
-    completedYear: '',
-    cgpa: '',
-    field: '',
-
-  });
+  //   // Temporary state for the current work experience
+  //   const [currentExperience, setCurrentExperience] = useState({
+  //     company: null,
+  //     position: '',
+  //     from: '',
+  //     to: '',
+  //   });
+  //     // Temporary state for the current academic background
+  // const [currentAcademic, setCurrentAcademic] = useState({
+  //   highestlevel: '',
+  //   university: '',
+  //   completedYear: '',
+  //   cgpa: '',
+  //   field: '',
+  // });
 
 
 
@@ -187,13 +200,8 @@ export default function Application() {
 
 // Add the current work experience to the list and reset the fields
 const addWorkExperience = () => {
-  setWorkexperience({
-    ...workexperience,
-    workExperiences: [...workexperience.workExperiences, currentExperience],
-  });
-  // Clear the current experience fields
-  submitExprience();
-  setCurrentExperience({ company: '', position: '', from: '', to: '' });
+  submitExprience(workexperience);
+  setWorkexperience({ company: '', position: '', from: '', to: '' });
 };
 
 
@@ -215,16 +223,69 @@ const addWorkExperience = () => {
     // Clear the current academic fields
 
     submitAcademic(academy);
-    setCurrentAcademic({ university: '', completedYear: '', certificate: '' });
+    setAcademy({ university: '', completedYear: '', certificate: '' });
+    
   };
 
+  // const handleSubmit = (e) => {
+  //   e.preventDefault(); // prevent the default form submission behavior
 
 
-  const handleSubmit = (e) => {
-    e.preventDefault(); // prevent the default form submission behavior
+  //   const data = new FormData();
+
+  //   Object.keys(formData).forEach(key => {
+  //     data.append(key, formData[key]);
+  //   });
+     
+  //     // Append files
+  //     data.append('resume', formData.resume);
+  //     data.append('cover_letter', formData.cover_letter);
+  //     data.append('handwritten_letter', formData.handwritten_letter);
+
+  //    console.log("data value",data)
+  //   // Call submitApplication with formData
+  //   submitApplication(data)
+
+
+  //     .then(() => {
+  //       // Show the success popup on successful submission
+        
+  //     })
+  //     .catch((error) => {
+  //       console.error('Error submitting the application:', error);
+  //     });
+  // };
+
   
+ const handleSubmit = (e) =>{
+
+  e.preventDefault();
+
+  const formData = new FormData();
+    
+  // Append the state values to the FormData object
+  formData.append("job_id", job_id);
+  formData.append("applicant_id", applicant_id);
+  formData.append("firstname", firstname);
+  formData.append("middlename", middlename);
+  formData.append("lastname", lastname);
+  formData.append("phone", phone);
+  formData.append("email", email);
+  
+  // Append the files (assuming they're File objects)
+  formData.append("cover_letter", cover_letter);
+  formData.append("resume", resume);
+  formData.append("handwritten_letter", handwritten_letter);
+  
+  // Optionally set the status if you want to use it
+  formData.append("status", status);
+
+
+     
     // Call submitApplication with formData
     submitApplication(formData)
+
+
       .then(() => {
         // Show the success popup on successful submission
         
@@ -232,7 +293,9 @@ const addWorkExperience = () => {
       .catch((error) => {
         console.error('Error submitting the application:', error);
       });
-  };
+
+
+ }
 
 
   const handlePopup = (e) =>{
@@ -245,7 +308,7 @@ const addWorkExperience = () => {
       <h1>Job Application</h1>
       <form className={styles.applicationForm}>
         Personal Information
-        {/* <fieldset className={styles.fieldset}>
+        <fieldset className={styles.fieldset}>
           <legend>Personal Information</legend>
           <div className={styles.formGroup}>
             <label htmlFor="firstName">First Name</label>
@@ -253,8 +316,8 @@ const addWorkExperience = () => {
               type="text"
               id="firstname"
               name="firstname"
-              value={formData.firstname}
-              onChange={handleChange}
+              // value={formData.firstname}
+              onChange={(e)=> setFirstname(e.target.value)}
               required
             />
           </div>
@@ -265,8 +328,8 @@ const addWorkExperience = () => {
               type="text"
               id="middlename"
               name="middlename"
-              value={formData.middlename}
-              onChange={handleChange}
+              // value={formData.middlename}
+              onChange={(e)=> setMiddlename(e.target.value)}
               required
             />
           </div>
@@ -277,8 +340,8 @@ const addWorkExperience = () => {
               type="text"
               id="lastname"
               name="lastname"
-              value={formData.lastname}
-              onChange={handleChange}
+              // value={formData.lastname}
+              onChange={(e)=> setLastname(e.target.value)}
               required
             />
           </div>
@@ -289,8 +352,8 @@ const addWorkExperience = () => {
               type="email"
               id="email"
               name="email"
-              value={formData.email}
-              onChange={handleChange}
+              // value={formData.email}
+              onChange={(e)=> setPhone(e.target.value)}
               required
             />
           </div>
@@ -301,8 +364,8 @@ const addWorkExperience = () => {
               type="tel"
               id="phone"
               name="phone"
-              value={formData.phone}
-              onChange={handleChange}
+              // value={formData.phone}
+              onChange={(e)=> setEmail(e.target.value)}
               required
             />
           </div>
@@ -310,7 +373,7 @@ const addWorkExperience = () => {
 
 
         {/* Resume and Cover Letter */}
-        {/* <fieldset className={styles.fieldset}>
+         <fieldset className={styles.fieldset}>
           <legend>Resume and Cover Letter</legend>
           <div className={styles.formGroup}>
             <label htmlFor="resume">Upload Resume (PDF or DOC)</label>
@@ -319,7 +382,7 @@ const addWorkExperience = () => {
               id="resume"
               name="resume"
               accept=".pdf, .doc, .docx"
-              onChange={handleFileChange}
+              onChange={(e)=> setCover_letter(e.target.files[0])}
               required
             />
           </div>
@@ -331,7 +394,7 @@ const addWorkExperience = () => {
               id="coverletter"
               name="coverletter"
               accept=".pdf, .doc, .docx"
-              onChange={handleFileChangeCoverletter}
+              onChange={(e)=> setResume(e.target.files[0])}
               required
             />
           </div>
@@ -343,7 +406,7 @@ const addWorkExperience = () => {
               id="handwritten"
               name="handwritten"
               accept=".pdf, .doc, .docx"
-              onChange={handleFileChangeHandwritten}
+              onChange={(e)=> setHandwritten_letter(e.target.files[0])}
               required
             />
           </div>
@@ -351,7 +414,7 @@ const addWorkExperience = () => {
 
          <button  className={styles.submitButton} onClick={handleSubmit} type="submit">Add Personal Details</button>
 
-        </fieldset>  */}
+        </fieldset>  
 
 
 
@@ -389,9 +452,9 @@ const addWorkExperience = () => {
                 <label htmlFor="completedYear">Completed Year</label>
                 <input
                   type="number"
-                  id="completedYear"
-                  name="completedYear"
-                  value={academy.completedYear}
+                  id="completed_year"
+                  name="completed_year"
+                  value={academy.completed_year}
                   onChange={handleAcademicChange}
                   required
                 />
@@ -457,7 +520,7 @@ const addWorkExperience = () => {
               type="text"
               id="company"
               name="company"
-              value={currentExperience.company}
+              value={workexperience.company}
               onChange={handleExperienceChange}
               required
             />
@@ -467,7 +530,7 @@ const addWorkExperience = () => {
               type="text"
               id="position"
               name="position"
-              value={currentExperience.position}
+              value={workexperience.position}
               onChange={handleExperienceChange}
               required
             />
@@ -475,9 +538,9 @@ const addWorkExperience = () => {
             <label htmlFor="from">From</label>
             <input
               type="month"
-              id="from"
-              name="from"
-              value={currentExperience.from}
+              id="from_date"
+              name="from_date"
+              value={workexperience.from_date}
               onChange={handleExperienceChange}
               required
             />
@@ -485,9 +548,9 @@ const addWorkExperience = () => {
             <label htmlFor="to">To</label>
             <input
               type="month"
-              id="to"
-              name="to"
-              value={currentExperience.to}
+              id="to_date"
+              name="to_date"
+              value={workexperience.to_date}
               onChange={handleExperienceChange}
               required
             />

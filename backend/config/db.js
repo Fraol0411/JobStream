@@ -1,28 +1,3 @@
-// import sql from 'mssql';  // Default import from CommonJS module
-
-// const config = {
-//     user: 'sa',
-//     password: 'Sql@0411',
-//     server: 'localhost', // Replace with your server name
-//     database: 'JobBoardDB',
-//     port: 1433,
-//     options: {
-//         encrypt: false, // Use encryption if needed
-//         enableArithAbort: true // Helps to manage certain arithmetic errors
-//     }
-// };
-
-// export const connectDB = async () => {
-//     try {
-//         await sql.connect(config);
-//         console.log('Connected to SQL Database');
-//     } catch (error) {
-//         console.error('Database connection failed:', error);
-//         process.exit(1);
-//     }
-// };
-
-
 import sql from 'mssql';
 
 const config = {
