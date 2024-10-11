@@ -1,77 +1,85 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react';
+import { motion } from 'framer-motion'; // Import framer-motion
 import styles from './Home.module.scss';
-import Featuredcard from '../../Component/Featuredcard/Featuredcard'
-import Vacancytype from '../../Component/Vacancytype/Vacancytype'
-import Footer from '../../Component/Footer/Footer'
+import Carousel from 'react-bootstrap/Carousel'; // Make sure to install react-bootstrap
+
 export default function Landing() {
+  const descriptions = [
+    "Discover your dream job.",
+    "Join our team of talented professionals.",
+    "Unlock new career opportunities.",
+    "Transform your future with us.",
+  ];
+
+  const [currentDescriptionIndex, setCurrentDescriptionIndex] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentDescriptionIndex((prevIndex) =>
+        prevIndex === descriptions.length - 1 ? 0 : prevIndex + 1
+      );
+    }, 3000); // Change description every 3 seconds
+
+    return () => clearInterval(interval); // Cleanup on unmount
+  }, [descriptions.length]);
+
+  // Animation variants
+  const animationVariants = {
+    hidden: { opacity: 0, x: -200 }, // Slide in from left
+    visible: { opacity: 1, x: 0 }, // Center
+  };
+  const animationVariantsy = {
+   hidden: { opacity: 0, y: -200 }, // Slide in from left
+   visible: { opacity: 1, y: 0 }, // Center
+ };
+
   return (
-    <div  className={styles.landing}>
+    <div className={styles.landing}>
+      <motion.div
+        className={styles.description}
+        initial="hidden"
+        animate="visible"
+        variants={animationVariants}
+        transition={{ duration: 1}} // Adjust duration as needed
+      >
+        <h1>join awash insurance <span> {descriptions[currentDescriptionIndex]}</span> </h1>
+        <button className={styles.checkJobsButton}>
+          Check All Available Jobs
+        </button>
+      </motion.div>
 
-     <div className={styles.Hero}>
-          <div className={styles.landingholder}>
-              <div className={styles.description}>
-                  <h1>Join The Leading Insurance Company</h1>
-                  <img src="/images/interview.png" alt="" />
-                  <button className={styles.btngs}>Get Started</button>
-              </div>
-              <div className={styles.imageside}>
-                  <div className={styles.circle}>
-                    <h1>We Flow With You</h1>
-                  </div>
-                  <div className={styles.buildingimg}>
-                    <img src="/images/womenlogo.png" alt="" />
-                  </div>
-              </div>
-            </div>
-            {/* <div className="inputfield">
-              <input type="text" placeholder='search for jobs'/>
-              <button>Search</button>
-            </div> */}
-     </div>
-
-    
-
-
-
-
-    
-     {/* <div className="featured">
-        <Featuredcard/>
-     </div>
-
-    
-     <div className="employes">
-        <div className="container">
-           <div className="one">
-              <img src="/images/one.png" alt="" />
-              <h3>4k</h3>
-              <h3>Fulltime</h3>
-           </div>
-           <div className="two">
-              <img src="/images/two.png" alt="" />
-              <h3>2k</h3>
-              <h3>parttime</h3>
-           </div>
-           <div className="three">
-              <img src="/images/three.png" alt="" />
-              <h3>24Hr</h3>
-              <h3>Helpdesk</h3>
-           </div>
-
-        </div>
-     </div>
-
-    
-
-     <div className="vacancytype">
-        <Vacancytype/>
-     </div>
-
-
-     <div className="footer">
-      <Footer/>
-     </div> */}
-
+      <motion.div
+        className={styles.carousel}
+        initial="hidden"
+        animate="visible"
+        variants={animationVariantsy}
+        transition={{ duration: 1 }} // Adjust duration as needed
+        style={{ marginLeft: 'auto' }} // Align carousel to the right
+      >
+        <Carousel>
+          <Carousel.Item>
+            <img
+              className="d-block w-100"
+              src="image1.jpg" // Replace with your image source
+              alt="First slide"
+            />
+          </Carousel.Item>
+          <Carousel.Item>
+            <img
+              className="d-block w-100"
+              src="image2.jpg" // Replace with your image source
+              alt="Second slide"
+            />
+          </Carousel.Item>
+          <Carousel.Item>
+            <img
+              className="d-block w-100"
+              src="image3.jpg" // Replace with your image source
+              alt="Third slide"
+            />
+          </Carousel.Item>
+        </Carousel>
+      </motion.div>
     </div>
-  )
+  );
 }

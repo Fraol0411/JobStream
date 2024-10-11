@@ -4,23 +4,44 @@ import { useNavigate } from 'react-router-dom';
 import { useMutation } from 'react-query'; 
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import styles from './Login.module.scss';
-
+import { useUser } from '../../UserContext';
 // Function to handle login API request
-const loginUser = async (loginData) => {
-    const response = await fetch('http://localhost:5000/api/auth/login', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(loginData),
-    });
 
-    if (!response.ok) {
-        throw new Error('Login failed');
+
+const loginUser = async (loginData, setUser) => {
+
+    try {
+        const response = await fetch('http://localhost:5000/api/auth/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(loginData),
+        });
+
+        if (!response.ok) {
+            throw new Error('Login failed: ' + response.statusText);
+        }
+
+        const data = await response.json(); // Get the response data
+        console.log('login data', data.user);
+
+        if (data.user) {
+            // Set the user data in context
+          // Assuming 'data.user' contains the user object
+            console.log('reached here')
+        } else {
+            throw new Error('User data is missing in response');
+        }
+
+        return data.user; // Return data if needed for further use
+    } catch (error) {
+        console.error('Error during login:', error);
+        throw error; // Re-throw the error for further handling
     }
-
-    return response.json();
 };
+
+
 
 // Function to handle registration API request
 const registerUser = async (registerData) => {
@@ -46,7 +67,7 @@ export default function LoginForm() {
 
     const navigate = useNavigate();
     const activeRef = useRef();
-    
+    const { setUser } = useUser();
     
     
     // State variables for form inputs and errors
@@ -58,11 +79,15 @@ export default function LoginForm() {
 
     // Handle login mutation
     const loginMutation = useMutation(loginUser, {
+        
         onSuccess: (data) => {
             console.log('Login successful:', data);
             // Handle successful login (e.g., redirect, save token)
+            setUser(data);
+            localStorage.setItem('user', JSON.stringify(data)); 
             navigate('/home');
         },
+        
         onError: (error) => {
             setErrorMessage(error.message);
         },

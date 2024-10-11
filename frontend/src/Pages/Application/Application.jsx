@@ -2,19 +2,36 @@ import React, { useState } from 'react';
 import styles from './Application.module.scss';
 import Succespop from '../../Component/Succespop/Succespop'
 import { useNavigate, useParams } from 'react-router-dom';
+import { useUser } from '../../UserContext';
 
 // function to handle application api
-const submitApplication = async(formData) =>{
+const submitApplication = async (formData) => {
+  try {
+    const response = await fetch('http://localhost:5000/api/applications/createnew', {
+      method: 'POST',
+      body: formData,
+    });
 
-  const response = await fetch('http://localhost:5000/api/applications/createnew', {
-       method:'POST',
-      body:formData,
-  });
-  console.log(formData)
-  if(!response.ok){
-    throw new Error('submitting failed')
+    // Check if the response was successful
+    if (!response.ok) {
+      throw new Error('Submitting failed');
+    }
+
+    // Parse the JSON response body
+    const data = await response.json();
+    console.log('Response Data:', data);  // This will log the response data
+
+    // Destructure application_id from the response data
+    const { application: { application_id } } = data;
+    console.log('Application ID:', application_id);  // Log the application_id
+
+    // You can now use the application_id for further logic
+    return application_id;  // Return the application_id for further use
+
+  } catch (error) {
+    console.error('Error:', error);
+    throw error;  // Re-throw the error for further handling
   }
-  return response.json();
 };
 
 // function to handle application api
@@ -58,8 +75,8 @@ const submitExprience= async(workexperience) =>{
 
 export default function Application() {
    const navigate = useNavigate()
-
-
+   const { user } = useUser();
+  console.log('usr from context',user)
      // Get the id from the URL
   const { id } = useParams();
 
@@ -78,7 +95,7 @@ export default function Application() {
   };
 
   const [job_id,setJob_id]=useState(id)
-  const [applicant_id,setApplicant_id]=useState(4011)
+  const [applicant_id,setApplicant_id]=useState(user.user_id)
   const [firstname,setFirstname]=useState('')
   const [middlename,setMiddlename]=useState('')
   const [lastname,setLastname]=useState('')
@@ -91,7 +108,7 @@ export default function Application() {
 
 
   const [workexperience, setWorkexperience] = useState({
-      application_id:1004,
+      application_id:'',
       company: null,
       position: '',
       from_date: '',
@@ -99,7 +116,7 @@ export default function Application() {
   })
 
   const [academy, setAcademy] = useState({
-    application_id:1004,
+    application_id:'',
     highestlevel: '',
     university: '',
     completed_year: '',
@@ -169,38 +186,43 @@ const addWorkExperience = () => {
   };
 
   
- const handleSubmit = (e) =>{
-
-  e.preventDefault();
-
-  const formData = new FormData();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+  
+    const formData = new FormData();
+      
+    // Append the state values to the FormData object
+    formData.append("job_id", job_id);
+    formData.append("applicant_id", applicant_id);
+    formData.append("firstname", firstname);
+    formData.append("middlename", middlename);
+    formData.append("lastname", lastname);
+    formData.append("phone", phone);
+    formData.append("email", email);
     
-  // Append the state values to the FormData object
-  formData.append("job_id", job_id);
-  formData.append("applicant_id", applicant_id);
-  formData.append("firstname", firstname);
-  formData.append("middlename", middlename);
-  formData.append("lastname", lastname);
-  formData.append("phone", phone);
-  formData.append("email", email);
+    // Append the files (assuming they're File objects)
+    formData.append("cover_letter", cover_letter);
+    formData.append("resume", resume);
+    formData.append("handwritten_letter", handwritten_letter);
+    
+    // Optionally set the status if you want to use it
+    formData.append("status", status);
   
-  // Append the files (assuming they're File objects)
-  formData.append("cover_letter", cover_letter);
-  formData.append("resume", resume);
-  formData.append("handwritten_letter", handwritten_letter);
-  
-  // Optionally set the status if you want to use it
-  formData.append("status", status);    
-    // Call submitApplication with formData
-    submitApplication(formData)
-      .then(() => {
-        // Show the success popup on successful submission       
-      })
-      .catch((error) => {
-        console.error('Error submitting the application:', error);
-      });
+    try {
+      // Call submitApplication with formData
+      const application_id = await submitApplication(formData);
+      
+      console.log('Application submitted successfully. Application ID:', application_id); // Log the application ID
 
- }
+          // Update the work experience and academy states with the new application_id
+    setWorkexperience((prev) => ({ ...prev, application_id }));
+    setAcademy((prev) => ({ ...prev, application_id }));
+      
+    } catch (error) {
+      console.error('Error submitting the application:', error);
+    }
+  };
+  
 
   const handlePopup = (e) =>{
     setShowPopup(true);

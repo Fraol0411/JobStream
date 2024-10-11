@@ -51,7 +51,10 @@
 
 ////-----------------------------------////
 
+
+
 // Creating new applications
+
 import { application } from 'express';
 import { createApplication, getapplicationwithID } from '../models/applicationsModels.js';
 
@@ -75,7 +78,7 @@ export const createNewApplication = async (req, res) => {
        console.log("Is there a cover letter");
  
        // Insert the application into the database and return the new application details
-       const newApplication = await createApplication(
+       const application = await createApplication(
           job_id, 
           applicant_id, 
           firstname, 
@@ -90,9 +93,9 @@ export const createNewApplication = async (req, res) => {
        );
  
        // Return the newly created application data as response
-       res.status(201).json({
+          res.status(201).json({
           message: 'Application submitted successfully',
-          application: res.newApplication  // Send the newly created application details
+          application: application  // Send the newly created application details
        });
       console.log(application)
     } catch (error) {
