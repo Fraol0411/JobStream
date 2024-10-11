@@ -8,17 +8,23 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 import multer from 'multer';
 import path from 'path'
+import corsMiddleware from './middlewares/cors.js';
 
-
+import { fileURLToPath } from 'url';
 
 
 const app = express();
 
-// Use CORS middleware
-app.use(cors({ origin: 'http://localhost:5173' })); // Allow requests from your frontend
+// Use the CORS middleware
+app.use(corsMiddleware);
 
 
+// Get the directory name of the current module
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
+// Serve static files from the "uploads" directory
+app.use('/uploads', express.static(path.join(__dirname, '')));
 
 
 
@@ -26,11 +32,7 @@ app.use(cors({ origin: 'http://localhost:5173' })); // Allow requests from your 
 app.use(express.json());
 app.use(bodyParser.json());
 
-app.use(cors({
-    origin: 'http://localhost:5173', // Replace with your React app's URL
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-    credentials: true, // Enable credentials if needed
-}));
+
 
 //routes
 app.use('/api/auth', authRoutes);

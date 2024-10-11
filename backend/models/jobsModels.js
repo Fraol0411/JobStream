@@ -2,27 +2,37 @@ import sql from 'mssql';
 import { connectDB } from '../config/db.js';
 
 //Create NEw job in  the database
-export const CreateJobs = async(title, department, dutystation, description, requirements, jobtype,status,created_by) => {
+//Create NEw job in  the database
+export const CreateJobs = async (
+    title,department,dutystation,description,requirements,jobtype,status,created_by,salary,qualification,
+    responsibilities,deadline,contact,benefits
+) => {
     try {
         const pool = await connectDB();
-        const query= `
-           INSERT INTO Jobs (title, department, dutystation, description, requirements, jobtype,status, created_by)
-           VALUES(@title, @department, @dutystation, @description, @requirements, @jobtype,@status ,@created_by)
+        const query = `
+            INSERT INTO Jobs (title, department, dutystation, description, requirements, jobtype, status, created_by, salary, qualification, responsibilities, deadline, contact, benefits)
+            VALUES (@title, @department, @dutystation, @description, @requirements, @jobtype, @status, @created_by, @salary, @qualification, @responsibilities, @deadline, @contact, @benefits)
         `;
+        
         return await pool.request()
-           .input('title', sql.VarChar(100),title)
-           .input('department', sql.VarChar(1000),department)
-           .input('dutystation', sql.VarChar(100),dutystation)
-           .input('description', sql.VarChar(1000),description)
-           .input('requirements', sql.VarChar(1000),requirements)
-           .input('jobtype', sql.VarChar(100),jobtype)
-           .input('status', sql.VarChar(100),status)
-           .input('created_by', sql.Int(100),created_by)
-           .query(query);
-           
+            .input('title', sql.VarChar(100), title)
+            .input('department', sql.VarChar(100), department) // Adjusted length to 100
+            .input('dutystation', sql.VarChar(100), dutystation)
+            .input('description', sql.Text, description) // Use TEXT for larger descriptions
+            .input('requirements', sql.Text, requirements) // Use TEXT for larger requirements
+            .input('jobtype', sql.VarChar(100), jobtype)
+            .input('status', sql.VarChar(10), status) // Adjusted length to 10 to fit active/closed
+            .input('created_by', sql.Int, created_by) // No need for length with INT
+            .input('salary', sql.VarChar(200), salary) // Use DECIMAL for salary
+            .input('qualification', sql.VarChar(100), qualification) // Adjusted length to 100
+            .input('responsibilities', sql.Text, responsibilities) // Use TEXT for larger text
+            .input('deadline', sql.DateTime, deadline) // Use DATETIME for deadline
+            .input('contact', sql.VarChar(100), contact) // Adjusted length to 100
+            .input('benefits', sql.Text, benefits) // Use TEXT for larger text
+            .query(query);
 
     } catch (error) {
-        console.error('Error creating a jobs', error);
+        console.error('Error creating a job', error);
         throw error;
     }
 }

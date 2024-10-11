@@ -3,17 +3,22 @@ import { CreateJobs, getAllJobs, getjobwithID } from "../models/jobsModels.js";
 
 
 // Handle Jobs Creation
-export const createNewjob = async(req,res)=>{
-    const { title, department, dutystation, description, requirements, jobtype,status, created_by } = req.body;
+export const createNewjob = async (req, res) => {
+    const {  title,department, dutystation, description, requirements, jobtype, status, 
+        created_by,salary,qualification,  responsibilities,deadline,   contact, benefits        
+    } = req.body;
 
     try {
-        await CreateJobs(title, department, dutystation, description, requirements, jobtype,status, created_by);
-        res.status(201).json({message: 'new job succefully created'})
+        await CreateJobs(
+            title, department,  dutystation,  description,  requirements,  jobtype,  status, 
+            created_by, salary, qualification,  responsibilities, deadline,  contact, benefits
+        );
+        res.status(201).json({ message: 'New job successfully created' });
     } catch (error) {
-        console.error("Error Creating Jobs",error);
-        res.status(500).json({message:'server error during creating the job'})
+        console.error("Error Creating Jobs", error);
+        res.status(500).json({ message: 'Server error during creating the job' });
     }
-}
+};
 
 
 // Fetch all jobs

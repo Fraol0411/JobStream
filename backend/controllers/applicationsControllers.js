@@ -56,7 +56,7 @@
 // Creating new applications
 
 import { application } from 'express';
-import { createApplication, getapplicationwithID } from '../models/applicationsModels.js';
+import { createApplication, getapplicationwithAppID, getapplicationwithID } from '../models/applicationsModels.js';
 
 export const createNewApplication = async (req, res) => {
     const { job_id, applicant_id, firstname, middlename, lastname, phone, email, status } = req.body;
@@ -122,3 +122,18 @@ export const getapplicationByid = async (req, res) => {
     }
 };
 
+//get applications with job id
+export const getapplicationByapplicationid = async(req,res) =>{
+   const { id } = req.params; // Extract ID from request parameters
+
+   try {
+       const application = await getapplicationwithAppID(id); // Call the model function
+       if (!application) {
+           return res.status(404).json({ message: 'applicaion not found' });
+       }
+       res.status(200).json(application); // Return the job object
+   } catch (error) {
+       console.error("Error fetching job:", error);
+       res.status(500).json({ message: 'Server error during fetching the job' });
+   }
+}

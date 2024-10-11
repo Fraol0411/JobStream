@@ -81,3 +81,18 @@ export const getapplicationwithID = async (job_id)=>{
         throw error;
     }
 }
+
+
+// get application by application_id
+export const getapplicationwithAppID = async (application_id)=>{
+    try {
+      const pool = await connectDB();
+      const result = await pool.request()
+          .input('application_id', sql.Int, application_id)
+          .query('SELECT * FROM Applications WHERE application_id = @application_id');
+      return result.recordset; // Return the job object
+    } catch (error) {
+        console.error('Error fetching application by job_ID:', error);
+        throw error;
+    }
+}
