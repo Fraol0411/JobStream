@@ -14,47 +14,28 @@ import { useQuery } from '@tanstack/react-query';
 
 
 
-// Function to fetch application by ID using fetch
-const fetchApplicationById = async (applicationId) => {
-  const response = await fetch(`http://localhost:5000/api/applications/application/${applicationId}`);
-  
-  // Handle errors if the response is not OK
-  if (!response.ok) {
-    throw new Error('Failed to fetch application data');
-  }
-  
-  const data = await response.json();
-  return data;
-};
 
-// Function to fetch application by ID using fetch
-const Experience = async (applicationId) => {
+// Function to fetch experience data
+const fetchExperience = async (applicationId) => {
   const response = await fetch(`http://localhost:5000/api/exprience/${applicationId}`);
   
-  // Handle errors if the response is not OK
   if (!response.ok) {
-    throw new Error('Failed to fetch application data');
+    throw new Error('Failed to fetch experience data');
   }
   
-  const data = await response.json();
-  console.log('aexprience',data)
-  return data;
+  return response.json();
 };
 
-// Function to fetch application by ID using fetch
-const Academic = async (applicationId) => {
+// Function to fetch academic data
+const fetchAcademic = async (applicationId) => {
   const response = await fetch(`http://localhost:5000/api/academic/${applicationId}`);
   
-  // Handle errors if the response is not OK
   if (!response.ok) {
-    throw new Error('Failed to fetch application data');
+    throw new Error('Failed to fetch academic data');
   }
   
-  const data = await response.json();
-  console.log('academy',data)
-  return data;
+  return response.json();
 };
-
 
 
 
@@ -70,26 +51,32 @@ const Progress = () => {
 
   const applicationId = applicant.application_id;
 
-  // Fetch application details
-  const { data: applicationDetails, isLoading, isError } = useQuery({
-    queryKey: ['application', applicationId],
-    queryFn: () => fetchApplicationById(applicationId),
+  // Fetch experience data
+  const { data: experienceData, isLoading: isExperienceLoading, isError: isExperienceError } = useQuery({
+    queryKey: ['experience', applicationId],
+    queryFn: () => fetchExperience(applicationId),
     enabled: !!applicationId,
   });
 
-  // Loading state
-  if (isLoading) {
+  // Fetch academic data
+  const { data: academicData, isLoading: isAcademicLoading, isError: isAcademicError } = useQuery({
+    queryKey: ['academic', applicationId],
+    queryFn: () => fetchAcademic(applicationId),
+    enabled: !!applicationId,
+  });
+
+
+  console.log('academic data',academicData)
+  console.log('exprience data',experienceData)
+  // Loading states
+  if (isExperienceLoading || isAcademicLoading) {
     return <p>Loading applicant data...</p>;
   }
 
-  // Error state
-  if (isError) {
+  // Error states
+  if (isExperienceError || isAcademicError) {
     return <p>Error fetching applicant data.</p>;
   }
-
-  console.log(Academic(applicationId));
-  Experience(applicationId);
-
 
 
   
@@ -122,49 +109,73 @@ const Progress = () => {
   
   return (
     <CRow>
-      <CCol xs={12}>
-        <CCard className="mb-4">
-          <CCardHeader>Applicant Details</CCardHeader>
-          <CCardBody>
-            <CListGroup>
+    <CCol xs={12}>
+      <CCard className="mb-4">
+        <CCardHeader>Applicant Details</CCardHeader>
+        <CCardBody>
+          <CListGroup>
+            <CListGroupItem>
+              <strong>Name:</strong> {`${applicant.firstname} ${applicant.middlename} ${applicant.lastname}`}
+            </CListGroupItem>
+            <CListGroupItem>
+              <strong>Email:</strong> {applicant.email}
+            </CListGroupItem>
+            <CListGroupItem>
+              <strong>Phone:</strong> {applicant.phone}
+            </CListGroupItem>
+            <CListGroupItem>
+              <strong>Resume:</strong> 
+              <a href={resumePath} target="_blank" rel="noopener noreferrer">
+                Download Resume
+              </a>
+            </CListGroupItem>
+            <CListGroupItem>
+              <strong>Cover Letter:</strong> 
+              <a href={coverLetterPath} target="_blank" rel="noopener noreferrer">
+                Download Cover Letter
+              </a>
+            </CListGroupItem>
+            <CListGroupItem>
+              <strong>Handwritten Letter:</strong> 
+              <a href={handwrittenLetterPath} target="_blank" rel="noopener noreferrer">
+                Download Handwritten Letter
+              </a>
+            </CListGroupItem>
+              {/* Render Academic Data */}
               <CListGroupItem>
-                <strong>Name:</strong> {`${applicant.firstname} ${applicant.middlename} ${applicant.lastname}`}
+                <strong>Education:</strong>
+                {academicData && academicData.length > 0 ? (
+                  <ul>
+                    {academicData.map((edu) => (
+                      <li key={edu.education_id}>
+                        {`${edu.highestlevel} from ${edu.university} (CGPA: ${edu.cgpa})`}
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  'No education data available'
+                )}
               </CListGroupItem>
+              {/* Render Experience Data */}
               <CListGroupItem>
-                <strong>Email:</strong> {applicant.email}
+                <strong>Experience:</strong>
+                {experienceData && experienceData.data.length > 0 ? (
+                  <ul>
+                    {experienceData.data.map((exp) => (
+                      <li key={exp.experience_id}>
+                        {`${exp.position} at ${exp.company} (From: ${new Date(exp.from_date).toLocaleDateString()})`}
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  'No experience data available'
+                )}
               </CListGroupItem>
-              <CListGroupItem>
-                <strong>Phone:</strong> {applicant.phone}
-              </CListGroupItem>
-              <CListGroupItem>
-                <strong>Resume:</strong> 
-                <a href={resumePath} target="_blank" rel="noopener noreferrer">
-                  Download Resume
-                </a>
-              </CListGroupItem>
-              <CListGroupItem>
-                <strong>Cover Letter:</strong> 
-                <a href={coverLetterPath} target="_blank" rel="noopener noreferrer">
-                  Download Cover Letter
-                </a>
-              </CListGroupItem>
-              <CListGroupItem>
-                <strong>Handwritten Letter:</strong> 
-                <a href={handwrittenLetterPath} target="_blank" rel="noopener noreferrer">
-                  Download Handwritten Letter
-                </a>
-              </CListGroupItem>
-              <CListGroupItem>
-                <strong>Education:</strong> {applicant.education}
-              </CListGroupItem>
-              <CListGroupItem>
-                <strong>Experience:</strong> {applicant.experience}
-              </CListGroupItem>
-            </CListGroup>
-          </CCardBody>
-        </CCard>
-      </CCol>
-    </CRow>
+          </CListGroup>
+        </CCardBody>
+      </CCard>
+    </CCol>
+  </CRow>
   );
 };
 
