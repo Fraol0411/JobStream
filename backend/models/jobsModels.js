@@ -65,3 +65,24 @@ export const getjobwithID = async (job_id)=>{
         throw error;
     }
 }
+
+
+// Find a user by job-ID
+export const getjobwithNAME = async (title) => {
+  try {
+    const pool = await connectDB(); // Make sure this returns a valid connection
+    const result = await pool.request()
+      .input('title', sql.VarChar, title)
+      .query('SELECT * FROM Jobs WHERE title = @title'); // Ensure 'title' is the correct column name
+
+    if (result.recordset.length === 0) {
+      console.log('No job found with the given name');
+      return null; // No job found, return null or handle as needed
+    }
+
+    return result.recordset[0]; // Return the job object if found
+  } catch (error) {
+    console.error('Error fetching job by name:', error);
+    throw error;
+  }
+};

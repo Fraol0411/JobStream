@@ -8,7 +8,7 @@ export default function Navbar() {
      const navigate = useNavigate()
 
      const handleNavigation  = () =>{
-          navigate('/loginform')
+          navigate('/')
      }
  
      const navRef = useRef()
@@ -25,7 +25,7 @@ export default function Navbar() {
           <img src="/images/logo.png" alt="logo" />
 
            <nav ref={navRef}>
-                <a href="/">Home</a>                
+                <a href="/home">Home</a>                
                 <a href="/joblist">Joblist</a>
                 <a href="/profile">Profile</a>
                 <a href="/contact">Contact</a>

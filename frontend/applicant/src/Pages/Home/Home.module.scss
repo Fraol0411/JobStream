@@ -174,75 +174,173 @@
 
 
 
-.landing {
-  background-color: orangered;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 40px 20px;
-  height: 100vh; // Full viewport height
-  background: linear-gradient(to right, #f8f9fa, #e9ecef); // Soft gradient background
-  overflow: hidden; // Prevent overflow during animation
+// .landing {
+//   background-color: orangered;
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
+//   padding: 40px 20px;
+//   height: 100vh; // Full viewport height
+//   background: linear-gradient(to right, #f8f9fa, #e9ecef); // Soft gradient background
+//   overflow: hidden; // Prevent overflow during animation
+   
 
-  @media (max-width: 768px) {
-    flex-direction: column; // Stack on smaller screens
-    height: auto; // Adjust height for smaller screens
-    padding: 20px; // Reduce padding
-  }
+//   @media (max-width: 768px) {
+//     flex-direction: column; // Stack on smaller screens
+//     height: auto; // Adjust height for smaller screens
+//     padding: 20px; // Reduce padding
+//   }
+// }
+
+// .description {
+//   background-color: green;
+//   flex: 1;
+//   max-width: 500px; // Limit width for description
+//   h1 {
+//     font-size: 2.5rem;
+//     font-weight: bold;
+//     margin-bottom: 10px;
+//     color: #007bff; // Primary color
+//   }
+//   h2 {
+//     font-size: 1.5rem;
+//     margin: 20px 0;
+//     color: #495057; // Secondary text color
+//   }
+// }
+
+// .descriptionText {
+//   font-weight: 400; // Lighter weight for description text
+//   color: #6c757d; // Muted text color
+//   transition: color 0.3s ease; // Smooth transition for color change
+
+//   span {
+//     font-weight: 600; // Bold highlight for changing text
+//     color: #28a745; // Success color
+//   }
+// }
+
+// .checkJobsButton {
+//   padding: 12px 24px;
+//   background-color: #007bff; // Bootstrap primary color
+//   color: white;
+//   border: none;
+//   border-radius: 5px;
+//   font-size: 1rem;
+//   cursor: pointer;
+//   transition: background-color 0.3s ease; // Smooth transition
+
+//   &:hover {
+//     background-color: #0056b3; // Darker shade on hover
+//   }
+// }
+
+// .carousel {
+//   background-color: red;
+//   flex: 1;
+//   max-width: 600px; // Limit width for carousel
+//   margin-left: auto; // Align carousel to the right
+//   border-radius: 10px; // Rounded corners for carousel
+
+//   img {
+//     border-radius: 10px; // Round image corners
+//     height: auto; // Maintain aspect ratio
+//   }
+// }
+
+
+.landing {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 50px;
+  background-color: #f4f4f4; /* Light background for the landing section */
+  height: 100vh;
+  margin-top: 80px;
 }
 
 .description {
-  background-color: green;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   flex: 1;
-  max-width: 500px; // Limit width for description
+  color: #333;
+  font-family: 'Poppins', sans-serif;
+
   h1 {
-    font-size: 2.5rem;
-    font-weight: bold;
-    margin-bottom: 10px;
-    color: #007bff; // Primary color
+    font-size: 3rem;
+    line-height: 1.2;
+    color: #00274d; /* Dark blue color for heading */
+    span {
+      color: #4682f0; /* Highlighted part in a bright color (e.g., Coral) */
+    }
   }
-  h2 {
-    font-size: 1.5rem;
-    margin: 20px 0;
-    color: #495057; // Secondary text color
-  }
-}
 
-.descriptionText {
-  font-weight: 400; // Lighter weight for description text
-  color: #6c757d; // Muted text color
-  transition: color 0.3s ease; // Smooth transition for color change
-
-  span {
-    font-weight: 600; // Bold highlight for changing text
-    color: #28a745; // Success color
-  }
-}
-
-.checkJobsButton {
-  padding: 12px 24px;
-  background-color: #007bff; // Bootstrap primary color
-  color: white;
-  border: none;
-  border-radius: 5px;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: background-color 0.3s ease; // Smooth transition
-
-  &:hover {
-    background-color: #0056b3; // Darker shade on hover
+  .checkJobsButton {
+    margin-top: 20px;
+    padding: 15px 30px;
+    font-size: 1.2rem;
+    background-color: #3280da;
+    border: none;
+    border-radius: 50px;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+    
+    &:hover {
+      background-color: #1d66ec; /* Slightly darker color on hover */
+    }
   }
 }
 
 .carousel {
-  background-color: red;
   flex: 1;
-  max-width: 600px; // Limit width for carousel
-  margin-left: auto; // Align carousel to the right
-  border-radius: 10px; // Rounded corners for carousel
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  
+  .carouselitem img {
+    width: 650px;
+    height: 650px;
+    object-fit: cover;
+    border-radius: 50%; /* Circular background for the images */
+    // border: 10px solid #ff7f50; /* Border around the image matching the button color */
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15); /* Shadow to give depth */
+    background-color: #3280da;
+    padding: 50px;
+  }
 
-  img {
-    border-radius: 10px; // Round image corners
-    height: auto; // Maintain aspect ratio
+  .carousel-control-prev,
+  .carousel-control-next {
+    display: none; /* Hide default controls to match custom styling */
+  }
+}
+
+/* Media Queries for responsiveness */
+@media (max-width: 768px) {
+  .landing {
+    flex-direction: column;
+    text-align: center;
+  }
+  .description{
+    margin-top: 120px;
+  }
+  .carousel {
+    visibility: hidden;
+    margin-top: 30px;
+  }
+
+  .description h1 {
+    font-size: 2rem;
+  }
+
+  .checkJobsButton {
+    font-size: 1rem;
+    padding: 10px 20px;
+  }
+
+  .carousel-item img {
+    width: 200px;
+    height: 200px;
   }
 }
