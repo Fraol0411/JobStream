@@ -1,4 +1,4 @@
-import { CreateJobs, getAllJobs, getjobwithID, getjobwithNAME } from "../models/jobsModels.js";
+import { CreateJobs, getAllJobs, getjobwithID, getjobwithNAME, getjobwithTYPE } from "../models/jobsModels.js";
 
 
 
@@ -51,12 +51,29 @@ export const getjobByid = async(req,res) =>{
 
 
 
-//Fetch Specific Jobs with their job ID
+//Fetch Specific Jobs with their job NAME
 export const getjobByname = async(req,res) =>{
-    const { name } = req.params; // Extract ID from request parameters
-
+    const { title } = req.params; // Extract ID from request parameters
+    console.log('titilee',title)
     try {
-        const job = await getjobwithNAME(name); // Call the model function
+        const job = await getjobwithNAME(title); // Call the model function
+        if (!job) {
+            return res.status(404).json({ message: 'Job not found' });
+        }
+        res.status(200).json(job); // Return the job object
+    } catch (error) {
+        console.error("Error fetching job:", error);
+        res.status(500).json({ message: 'Server error during fetching the job' });
+    }
+}
+
+
+//Fetch Specific Jobs with their job TYPE
+export const getjobBytype = async(req,res) =>{
+    const { type } = req.params; // Extract ID from request parameters
+    console.log('type', type)
+    try {
+        const job = await getjobwithTYPE(type); // Call the model function
         if (!job) {
             return res.status(404).json({ message: 'Job not found' });
         }

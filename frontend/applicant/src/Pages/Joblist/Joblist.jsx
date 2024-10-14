@@ -5,10 +5,12 @@ import Jobcard from '../../Component/Jobcard/Jobcard';
 import { useQuery } from 'react-query';
 import { ClimbingBoxLoader } from 'react-spinners';
 import { CircleLoader } from 'react-spinners';
+import { useUser } from '../../UserContext';
 
 
 // Fetch job data from the backend
 const fetchJobs = async () => {
+  // console.log('first or letter',user)
   const res = await fetch('http://localhost:5000/api/jobs/alljobs');
   console.log("check")
   console.log(res)
@@ -25,6 +27,9 @@ const fetchJobs = async () => {
 
 export default function Joblist() {
   
+  const { user } = useUser();
+  console.log('global user',user)
+
   // Use React Query to fetch the job data
   const { data, error, isLoading } = useQuery({
     queryKey: ['jobs'],    // The key for this query
@@ -48,7 +53,7 @@ export default function Joblist() {
   return (
     <div className={styles.joblist}>
       <div className={styles.containerrr}>
-        <div className={styles.headerarea}>
+        {/* <div className={styles.headerarea}>
 
           <div className={styles.filterarea}>
              
@@ -84,7 +89,7 @@ export default function Joblist() {
                  
                 </div>
           </div>
-        </div>
+        </div> */}
 
         <div className={styles.jobcards}>
           <div className={styles.cardholder}>

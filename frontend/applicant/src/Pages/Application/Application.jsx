@@ -231,9 +231,9 @@ const addWorkExperience = () => {
 
   return (
     <div className={styles.applicationContainer}>
-      <h1>Job Application</h1>
+
       <form className={styles.applicationForm}>
-        Personal Information
+
         <fieldset className={styles.fieldset}>
           <legend>Personal Information</legend>
           <div className={styles.formGroup}>

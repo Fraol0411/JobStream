@@ -9,7 +9,6 @@ import { useUser } from '../../UserContext';
 
 
 const loginUser = async (loginData, setUser) => {
-
     try {
         const response = await fetch('http://localhost:5000/api/auth/login', {
             method: 'POST',

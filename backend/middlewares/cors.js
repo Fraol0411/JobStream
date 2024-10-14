@@ -3,6 +3,7 @@
 const allowedOrigins = [
     'http://localhost:3000',
     'http://localhost:5173',
+    'http://10.1.12.40:5173'
   ];
   
   const corsMiddleware = (req, res, next) => {
@@ -25,3 +26,5 @@ const allowedOrigins = [
   
   export default corsMiddleware;
   
+
+ 
