@@ -5,6 +5,7 @@ import 'core-js';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import App from './App';
 import store from './store';
+import { UserProvider } from './UserContext';
 
 // Create a Query Client
 const queryClient = new QueryClient();
@@ -13,7 +14,10 @@ const queryClient = new QueryClient();
 createRoot(document.getElementById('root')).render(
   <Provider store={store}>
     <QueryClientProvider client={queryClient}>
-      <App />
+      <UserProvider>
+         <App />
+      </UserProvider>
     </QueryClientProvider>
   </Provider>,
 );
+ 

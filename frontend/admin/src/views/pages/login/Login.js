@@ -90,6 +90,7 @@
 
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useUser } from '../../../UserContext';
 import {
   CButton,
   CCard,
@@ -111,6 +112,7 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  const { setUser } = useUser();
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -125,6 +127,7 @@ const Login = () => {
       });
 
       const data = await response.json();
+      setUser(data.user);
        console.log(data.user.role)
       if (response.ok) {
         // Check if the role is admin

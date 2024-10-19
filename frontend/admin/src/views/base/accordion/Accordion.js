@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useUser } from '../../../../../applicant/src/UserContext';
 import {
   CCard,
   CCardBody,
@@ -13,21 +14,27 @@ import {
 } from '@coreui/react';
 
 const Accordion = () => {
+
+
+
   const [jobDetails, setJobDetails] = useState({
     title: '',
     department: '',
     dutystation: '',
     description: '',
     requirements: '',
-    salary:'',
+    salary: '',
     qualification: '',
     responsibilities: '',
     deadline: '',
     contact: '',
     benefits: '',
-  });
+});
 
    console.log(jobDetails)
+  //  console.log(user)
+
+
   const handleChange = (e) => {
     const { id, value } = e.target;
     setJobDetails({ ...jobDetails, [id]: value });
@@ -36,15 +43,17 @@ const Accordion = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     // Add default job type
+
     const jobData = {
       ...jobDetails,
       jobtype: 'Awash Staff', // Set default job type
       status: 'active', // Assuming you want to set the status as active by default
-      created_by: 3005, // Set the creator's user ID (you may want to fetch this dynamically)
+      created_by: 5012 // Set the creator's user ID (you may want to fetch this dynamically)
     };
+    console.log(jobData)
 
     try {
-      console.log(jobDetails)
+      
       const response = await fetch('http://localhost:5000/api/jobs/createjobs', {
         method: 'POST',
         headers: {
@@ -63,7 +72,7 @@ const Accordion = () => {
           dutystation: '',
           description: '',
           requirements: '',
-          qualification: '',
+          qualifications: '',
           responsibilities: '',
           skills: '',
           benefits: '',
@@ -129,13 +138,13 @@ const Accordion = () => {
               <CRow className="mt-3">
                 <CCol md={12}>
                   <CFormLabel htmlFor="skills">Salary</CFormLabel>
-                  <CFormInput type="text" id="salary" placeholder="Enter benefits" value={jobDetails.salary} onChange={handleChange} />
+                  <CFormTextarea  id="salary" rows="4" placeholder="Enter benefits" value={jobDetails.salary} onChange={handleChange} />
                 </CCol>
               </CRow>
               <CRow className="mt-3">
                 <CCol md={6}>
                   <CFormLabel htmlFor="benefits">Benefits</CFormLabel>
-                  <CFormInput type="text" id="benefits" placeholder="Enter benefits" value={jobDetails.benefits} onChange={handleChange} />
+                  <CFormTextarea  id="benefits" rows="4" placeholder="Enter benefits" value={jobDetails.benefits} onChange={handleChange} />
                 </CCol>
               </CRow>
               <CRow className="mt-3">

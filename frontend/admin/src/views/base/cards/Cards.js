@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useUser } from '../../../../../applicant/src/UserContext';
 import {
   CCard,
   CCardBody,
@@ -13,6 +14,7 @@ import {
 } from '@coreui/react';
 
 const Accordion = () => {
+
   const [jobDetails, setJobDetails] = useState({
     title: '',
     department: '',
@@ -20,7 +22,7 @@ const Accordion = () => {
     description: '',
     requirements: '',
     salary:'',
-    qualifications: '',
+    qualification: '',
     responsibilities: '',
     deadline: '',
     contact: '',
@@ -42,7 +44,7 @@ const Accordion = () => {
       ...jobDetails,
       jobtype: 'Fresh Graduate', // Set default job type
       status: 'active', // Assuming you want to set the status as active by default
-      created_by: 3005, // Set the creator's user ID (you may want to fetch this dynamically)
+      created_by: 5012, // Set the creator's user ID (you may want to fetch this dynamically)
     };
 
     try {
@@ -118,7 +120,7 @@ const Accordion = () => {
               <CRow className="mt-3">
                 <CCol md={12}>
                   <CFormLabel htmlFor="qualifications">Job Qualifications</CFormLabel>
-                  <CFormTextarea id="qualifications" rows="4" placeholder="Enter job qualifications" value={jobDetails.qualifications} onChange={handleChange} />
+                  <CFormTextarea id="qualification" rows="4" placeholder="Enter job qualifications" value={jobDetails.qualification} onChange={handleChange} />
                 </CCol>
               </CRow>
               <CRow className="mt-3">

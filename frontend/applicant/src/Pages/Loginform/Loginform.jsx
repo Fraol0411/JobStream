@@ -73,8 +73,11 @@ export default function LoginForm() {
     const [loginData, setLoginData] = useState({ email: '', password: '' });
     const [registerData, setRegisterData] = useState({ username: '', password: '', email: '',role:'applicant', applyfor: '' });
     const [errorMessage, setErrorMessage] = useState('');
+    const confirmPassword = useRef(null);
 
     
+
+    console.log(registerData)
 
     // Handle login mutation
     const loginMutation = useMutation(loginUser, {
@@ -92,12 +95,13 @@ export default function LoginForm() {
         },
     });
 
+    
     // Handle registration mutation
     const registerMutation = useMutation(registerUser, {
         onSuccess: (data) => {
             console.log('Registration successful:', data);
             // Handle successful registration (e.g., redirect, display success message)
-            navigate('/loginform');
+            navigate('/');
             window.location.reload();
         },
         onError: (error) => {
@@ -118,9 +122,16 @@ export default function LoginForm() {
     // Handle registration submission
     const handleRegister = (e) => {
         e.preventDefault();
-        registerMutation.mutate(registerData); // Call registration mutation
-    };
 
+        const confirmPass = confirmPassword.current.value;
+        
+        if (confirmPass !== registerData.password) {
+            setErrorMessage("Passwords do not match");
+            return;
+        }
+
+        registerMutation.mutate(registerData);
+    };
     return (
         <div className={`${styles.container} ${styles.sinnupmode}`} ref={activeRef}>
             <div className={styles.formcontainer}>
@@ -187,8 +198,8 @@ export default function LoginForm() {
                             <input 
                                 type="password" 
                                 placeholder='Confirm Password' 
-                                value={registerData.confirmPassword}
-                                onChange={(e) => setRegisterData({ ...registerData, confirmPassword: e.target.value })} 
+                                id="name" 
+                                ref={confirmPassword}
                             />
                         </div>
                         <div className={styles.dropdown}>
@@ -197,13 +208,15 @@ export default function LoginForm() {
                             <select 
                                 value={registerData.applicantType}
                                 onChange={(e) => setRegisterData({ ...registerData, applyfor: e.target.value })}>
-                                <option value="" disabled>Select an option</option>
+                                {/* <option value="" disabled>Select an option</option> */}
+                                <option value=''>Select from below</option>
                                 <option value="Fresh Graduate">Fresh Graduate</option>
                                 <option value="External applicant">External Applicant</option>
                                 <option value="Awash staff">Awash Staff</option>
                             </select>
                         </div>
                         <input type="submit" value='Sign Up' className={`${styles.btn} ${styles.solid}`} />
+                        <p>{errorMessage}</p>
                     </form>
                 </div>
             </div>

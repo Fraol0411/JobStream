@@ -8,8 +8,9 @@ import {
   CRow,
   CListGroup,
   CListGroupItem,
+  CButton,
 } from '@coreui/react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 
 
@@ -39,8 +40,9 @@ const fetchAcademic = async (applicationId) => {
 
 
 
-const Progress = () => {
-
+const Progress = (jobId) => {
+  console.log('from params',jobId)
+  const navigate =useNavigate()
   const location = useLocation();
   const { applicant } = location.state || {}; // Get the applicant from the state
 
@@ -105,6 +107,10 @@ const Progress = () => {
 
   console.log('Cleaned Resume File Name path:', resumePath);
 
+  const handlenavigate = () => {
+    // navigate(`/base/list-groups/${jobId}`);
+  };
+  
 
   
   return (
@@ -171,6 +177,18 @@ const Progress = () => {
                   'No experience data available'
                 )}
               </CListGroupItem>
+              <CListGroupItem >
+                 <CButton type="submit" color="primary" style={{ marginRight: '10px' }}>
+                    Process Further
+                  </CButton>
+
+                  <CButton type="submit" color="primary" style={{ marginRight: '10px' }}>
+                      Remove from applicant list
+                  </CButton>
+              </CListGroupItem>
+                   <CButton type="submit" color="primary" style={{ marginRight: '10px' }} onClick={handlenavigate}>
+                       Back to applicant list
+                  </CButton>
           </CListGroup>
         </CCardBody>
       </CCard>
