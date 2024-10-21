@@ -33,9 +33,14 @@ const ListGroups = () => {
       if (!response.ok) {
         throw new Error('Failed to fetch applications');
       }
-
+  
       const data = await response.json();
-      setApplicants(data);  // Set fetched applicants to state
+  
+      // Filter the applications where status is "submitted"
+      const submittedApplicants = data.filter(applicant => applicant.status === 'submitted');
+  
+      // Set only the submitted applicants to state
+      setApplicants(submittedApplicants);
     } catch (error) {
       setError(error.message);
     } finally {
@@ -59,8 +64,8 @@ const ListGroups = () => {
     return <CBadge color={color}>{status}</CBadge>;
   };
 
-  const handleNavigate = (applicant,jobId) => {
-    navigate('/base/progress', { state: { applicant,jobId } });
+  const handleNavigate = (applicant) => {
+    navigate('/base/progress', { state: { applicant} });
   };
   
 
@@ -85,14 +90,14 @@ const ListGroups = () => {
                 applicants.map((applicant, index) => (
                   <CListGroupItem
                     key={index}
-                    onClick={() => handleNavigate(applicant,jobId)}
+                    onClick={() => handleNavigate(applicant)}
                     className="d-flex justify-content-between align-items-center"
                   >
                     <div>
                     <strong>{`${applicant.firstname} ${applicant.lastname}`}</strong>
                       <div className="text-muted small">Applied on: {applicant.applied_at}</div>
                     </div>
-                    {renderStatusBadge(applicant.email)}
+                    {renderStatusBadge(applicant.status)}
                   </CListGroupItem>
                 ))
               ) : (

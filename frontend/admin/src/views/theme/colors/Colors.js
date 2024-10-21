@@ -101,7 +101,7 @@ const activeJobs = async () => {
 const Colors = () => {
   const navigate = useNavigate(); // Initialize useNavigate
 
-
+  const currentDate = new Date(); // Get the current date
   const { data, error, isLoading } = useQuery({
     queryKey: ['jobs'],
     queryFn: activeJobs,
@@ -123,6 +123,10 @@ const Colors = () => {
   
   console.log("Job data:", data); // Make sure this logs the data after successful fetch
   
+  const filteredData = data.filter(item => new Date(item.deadline) > currentDate);
+  console.log('filterdata',filteredData)
+  
+
 
   // Function to handle row click
 // Function to handle row click and pass job_id to list-groups component
@@ -149,7 +153,7 @@ const handleRowClick = (job_id) => {
               </CTableRow>
             </CTableHead>
             <CTableBody>
-              {data.map((vacancy) => (
+              {filteredData.map((vacancy) => (
                   <CTableRow key={vacancy.id} onClick={() => handleRowClick(vacancy.job_id)} style={{ cursor: 'pointer' }}>
                       <CTableDataCell>{vacancy.title}</CTableDataCell>
                       <CTableDataCell>{vacancy.department}</CTableDataCell>

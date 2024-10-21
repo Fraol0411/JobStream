@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import {
   CCard,
   CCardBody,
@@ -38,13 +38,32 @@ const fetchAcademic = async (applicationId) => {
   return response.json();
 };
 
+// Function to update the application status (general-purpose function)
+const updateApplicationStatus = async (applicationId, status) => {
+  const response = await fetch(`http://localhost:5000/api/applications/${applicationId}/status`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ status }),
+  });
 
+  if (!response.ok) {
+    throw new Error('Failed to update application status');
+  }
+
+  return response.json();
+};
 
 const Progress = (jobId) => {
-  console.log('from params',jobId)
+
   const navigate =useNavigate()
   const location = useLocation();
   const { applicant } = location.state || {}; // Get the applicant from the state
+
+  const [activeButton, setActiveButton] = useState(null);
+
+  console.log('from params',applicant.job_id)
 
   // If applicant data is not available, show a message
   if (!applicant) {
@@ -67,9 +86,6 @@ const Progress = (jobId) => {
     enabled: !!applicationId,
   });
 
-
-  console.log('academic data',academicData)
-  console.log('exprience data',experienceData)
   // Loading states
   if (isExperienceLoading || isAcademicLoading) {
     return <p>Loading applicant data...</p>;
@@ -80,39 +96,50 @@ const Progress = (jobId) => {
     return <p>Error fetching applicant data.</p>;
   }
 
-
-  
-
-  // Debugging: Log the original paths
-  console.log('Resume Path:', applicant.resume);
-  console.log('Cover Letter Path:', applicant.cover_letter);
-  console.log('Handwritten Letter Path:', applicant.handwritten_letter);
-
   // Clean up file paths using split
   const resumeFileName = applicant.resume.split('public/uploads/').pop(); // Get the filename
   const coverLetterFileName = applicant.cover_letter.split('public/uploads/').pop();
   const handwrittenLetterFileName = applicant.handwritten_letter.split('public/uploads/').pop();
-
-  // Debugging: Log the cleaned filenames
-  console.log('Cleaned Resume File Name:', resumeFileName);
-  console.log('Cleaned Cover Letter File Name:', coverLetterFileName);
-  console.log('Cleaned Handwritten Letter File Name:', handwrittenLetterFileName);
 
   // Construct URLs for uploaded files
   const resumePath = `http://localhost:5000/uploads/${resumeFileName}`;
   const coverLetterPath = `http://localhost:5000/uploads/${coverLetterFileName}`;
   const handwrittenLetterPath = `http://localhost:5000/uploads/${handwrittenLetterFileName}`;
 
-
-
   console.log('Cleaned Resume File Name path:', resumePath);
 
   const handlenavigate = () => {
-    // navigate(`/base/list-groups/${jobId}`);
+    navigate(`/base/list-groups?job_id=${applicant.job_id}`);
   };
-  
+
+
+
+    // Function to handle "Process Further" action
+    const handleProcessFurther = async () => {
+      try {
+        const result = await updateApplicationStatus(applicationId, 'further');
+        console.log('Application status updated to In Progress', result);
+        // You can handle additional UI updates or navigation here if needed
+        setActiveButton('process');
+      } catch (error) {
+        console.error('Error updating application status:', error);
+      }
+    };
+
 
   
+    // Function to handle "Remove from applicant list" action
+    const handleRemoveApplicant = async () => {
+      try {
+        const result = await updateApplicationStatus(applicationId, 'rejected');
+        console.log('Application status updated to Removed', result);
+        // You can handle additional UI updates or navigation here if needed
+        setActiveButton('remove');
+      } catch (error) {
+        console.error('Error updating application status:', error);
+      }
+    };
+
   return (
     <CRow>
     <CCol xs={12}>
@@ -178,15 +205,25 @@ const Progress = (jobId) => {
                 )}
               </CListGroupItem>
               <CListGroupItem >
-                 <CButton type="submit" color="primary" style={{ marginRight: '10px' }}>
+              <CButton
+                    onClick={handleProcessFurther}
+                    type="submit"
+                    color={activeButton === 'process' ? 'danger' : 'primary'}  // Red if active, blue if not
+                    style={{ marginRight: '10px' }}
+                  >
                     Process Further
                   </CButton>
 
-                  <CButton type="submit" color="primary" style={{ marginRight: '10px' }}>
-                      Remove from applicant list
+                  <CButton
+                    onClick={handleRemoveApplicant}
+                    type="submit"
+                    color={activeButton === 'remove' ? 'danger' : 'primary'}  // Red if active, blue if not
+                    style={{ marginRight: '10px' }}
+                  >
+                    Remove from applicant list
                   </CButton>
               </CListGroupItem>
-                   <CButton type="submit" color="primary" style={{ marginRight: '10px' }} onClick={handlenavigate}>
+                   <CButton  type="submit" color="primary" style={{ marginRight: '10px' }} onClick={handlenavigate}>
                        Back to applicant list
                   </CButton>
           </CListGroup>

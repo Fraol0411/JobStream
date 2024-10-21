@@ -1,12 +1,12 @@
 import express from 'express';
-import { createNewApplication, getapplicationByapplicationid, getapplicationByid } from '../controllers/applicationsControllers.js';
+import { createNewApplication,  getapplicationByid, updateApplicationStatus } from '../controllers/applicationsControllers.js';
 import uploads from '../middlewares/uploads.js';
 
 
 const router = express.Router();
 
 
-router.get('/application/:id',getapplicationByapplicationid)
+// router.get('/application/:id',getapplicationByapplicationid)
 // router.post('/createnew', uploads, createNewApplication)
 
 // Apply the uploads middleware for handling multiple files
@@ -18,6 +18,9 @@ router.post('/createnew', uploads.fields([
 
 
 router.get('/:id',getapplicationByid)
+
+// Add a route for updating the application status
+router.put('/:application_id/status', updateApplicationStatus);
 
 export default router;
 

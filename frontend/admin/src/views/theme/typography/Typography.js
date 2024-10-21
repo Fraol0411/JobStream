@@ -17,16 +17,25 @@ import {
 } from '@coreui/react';
 import { rgbToHex } from '@coreui/utils';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate from react-router-dom
+import { CircleLoader } from 'react-spinners';
+import { useQuery } from '@tanstack/react-query';
+
+
 
 const ThemeView = () => {
+
   const [color, setColor] = useState('rgb(255, 255, 255)');
   const ref = createRef();
+
+
 
   useEffect(() => {
     const el = ref.current.parentNode.firstChild;
     const varColor = window.getComputedStyle(el).getPropertyValue('background-color');
     setColor(varColor);
   }, [ref]);
+
+  
 
   return (
     <table className="table w-100" ref={ref}>
@@ -60,27 +69,75 @@ ThemeColor.propTypes = {
   className: PropTypes.string,
 };
 
+
+
+// Fetch job data from the backend
+const activeJobs = async () => {
+  try {
+    const res = await fetch('http://localhost:5000/api/jobs/alljobs');
+    
+    // Log the entire response for debugging
+    console.log("Response: ", res);
+
+    // If response is not okay, log the error
+    if (!res.ok) {
+      console.error('Failed to fetch jobs', res.status);
+      throw new Error('Failed to fetch jobs');
+    }
+
+    // Ensure the response is JSON
+    const data = await res.json();
+    console.log("Fetched Data: ", data);
+    return data;
+    
+  } catch (error) {
+    console.error("Error fetching jobs: ", error);
+    throw error;  // Ensure React Query can handle this error
+  }
+};
+
+
+
+
 const Colors = () => {
   const navigate = useNavigate(); // Initialize useNavigate
 
-  // Sample data for job vacancies
-  const vacancies = [
-    { id: 1, title: 'Software Developer', department: 'IT', location: 'New York', status: 'Active', check:'VIew' },
-    { id: 2, title: 'Product Manager', department: 'Management', location: 'San Francisco', status: 'Active' , check:'VIew' },
-    { id: 3, title: 'UI/UX Designer', department: 'Design', location: 'Los Angeles', status: 'Active' , check:'VIew'},
-    { id: 4, title: 'Data Analyst', department: 'Analytics', location: 'Chicago', status: 'Active', check:'VIew' },
-    { id: 5, title: 'DevOps Engineer', department: 'IT', location: 'Seattle', status: 'Active', check:'VIew' },
-    { id: 6, title: 'Marketing Specialist', department: 'Marketing', location: 'Boston', status: 'Active' , check:'VIew'},
-    { id: 7, title: 'HR Manager', department: 'HR', location: 'Austin', status: 'Active' , check:'VIew'},
-    { id: 8, title: 'Sales Executive', department: 'Sales', location: 'Denver', status: 'Active' , check:'VIew' },
-    { id: 9, title: 'Customer Support', department: 'Support', location: 'Houston', status: 'Active' , check:'VIew'},
-    { id: 10, title: 'Network Engineer', department: 'IT', location: 'Phoenix', status: 'Active' , check:'VIew'},
-  ];
+
+  const { data, error, isLoading } = useQuery({
+    queryKey: ['jobs'],
+    queryFn: activeJobs,
+    refetchOnWindowFocus: false,  // Disable refetching on window focus
+  });
+
+  const currentDate = new Date(); // Get the current date
+  
+  if (isLoading) {
+    return (
+      <div className=''>
+        <CircleLoader size={105} color={"#123abc"} />
+        <p>Fetching available jobs...</p>
+      </div>
+    );
+  }
+  
+  if (error) {
+    return <div>Error fetching jobs: {error.message}</div>;
+  }
+  
+  console.log("Job data:", data); // Make sure this logs the data after successful fetch
+  
+
+  
+const filteredData = data.filter(item => new Date(item.deadline) < currentDate);
+console.log('filterdata',filteredData)
 
   // Function to handle row click
-  const handleRowClick = () => {
-    navigate('/base/list-groups');
-  };
+// Function to handle row click and pass job_id to list-groups component
+const handleRowClick = (job_id) => {
+  console.log(job_id)
+  navigate(`/base/list-groups?job_id=${job_id}`);
+};
+
 
   return (
     <>
@@ -91,28 +148,29 @@ const Colors = () => {
           <CTable align="middle" hover responsive>
             <CTableHead>
               <CTableRow>
-                <CTableHeaderCell scope="col">#</CTableHeaderCell>
                 <CTableHeaderCell scope="col">Job Title</CTableHeaderCell>
                 <CTableHeaderCell scope="col">Department</CTableHeaderCell>
+                <CTableHeaderCell scope="col">Description</CTableHeaderCell>
                 <CTableHeaderCell scope="col">Location</CTableHeaderCell>
                 <CTableHeaderCell scope="col">Status</CTableHeaderCell>
               </CTableRow>
             </CTableHead>
             <CTableBody>
-              {vacancies.map((vacancy) => (
-                <CTableRow key={vacancy.id} onClick={handleRowClick} style={{ cursor: 'pointer' }}>
-                  <CTableDataCell>{vacancy.id}</CTableDataCell>
-                  <CTableDataCell>{vacancy.title}</CTableDataCell>
-                  <CTableDataCell>{vacancy.department}</CTableDataCell>
-                  <CTableDataCell>{vacancy.location}</CTableDataCell>
-                  <CTableDataCell>
-                    <CBadge color="success">{vacancy.status}</CBadge>
-                  </CTableDataCell>
-                  <CTableDataCell>
-                    <CBadge color="danger">{vacancy.check}</CBadge>
-                  </CTableDataCell>
-                </CTableRow>
+
+              {filteredData.map((vacancy) => (
+                  <CTableRow key={vacancy.id} onClick={() => handleRowClick(vacancy.job_id)} style={{ cursor: 'pointer' }}>
+                      <CTableDataCell>{vacancy.title}</CTableDataCell>
+                      <CTableDataCell>{vacancy.department}</CTableDataCell>
+                      <CTableDataCell>{vacancy.description}</CTableDataCell>
+                      <CTableDataCell>{vacancy.dutystation}</CTableDataCell>
+                      <CTableDataCell>
+                        <CBadge style={{ backgroundColor: 'white', color: 'black' }}>
+                          {vacancy.status}
+                        </CBadge>
+                      </CTableDataCell>
+                  </CTableRow>
               ))}
+
             </CTableBody>
           </CTable>
         </CCardBody>

@@ -56,7 +56,7 @@
 // Creating new applications
 
 import { application } from 'express';
-import { createApplication, getapplicationwithAppID, getapplicationwithID } from '../models/applicationsModels.js';
+import { createApplication, getapplicationwithID, updateApplicationStatusInDB } from '../models/applicationsModels.js';
 
 export const createNewApplication = async (req, res) => {
     const { job_id, applicant_id, firstname, middlename, lastname, phone, email, status } = req.body;
@@ -122,18 +122,50 @@ export const getapplicationByid = async (req, res) => {
     }
 };
 
-//get applications with job id
-export const getapplicationByapplicationid = async(req,res) =>{
-   const { id } = req.params; // Extract ID from request parameters
+// //get applications with job id
+// export const getapplicationByapplicationid = async(req,res) =>{
+//    const { id } = req.params; // Extract ID from request parameters
 
-   try {
-       const application = await getapplicationwithAppID(id); // Call the model function
-       if (!application) {
-           return res.status(404).json({ message: 'applicaion not found' });
-       }
-       res.status(200).json(application); // Return the job object
-   } catch (error) {
-       console.error("Error fetching job:", error);
-       res.status(500).json({ message: 'Server error during fetching the job' });
-   }
-}
+//    try {
+//        const application = await getapplicationwithAppID(id); // Call the model function
+//        if (!application) {
+//            return res.status(404).json({ message: 'applicaion not found' });
+//        }
+//        res.status(200).json(application); // Return the job object
+//    } catch (error) {
+//        console.error("Error fetching job:", error);
+//        res.status(500).json({ message: 'Server error during fetching the job' });
+//    }
+// }
+
+
+// Controller for updating application status
+export const updateApplicationStatus = async (req, res) => {
+    const { application_id } = req.params; // Extract application ID from request parameters
+    const { status } = req.body;           // Extract status from the request body
+
+    try {
+        // Validate if the status is provided
+        if (!status) {
+            return res.status(400).json({ message: 'Status is required.' });
+        }
+
+        // Update the application status in the database
+        const updatedApplication = await updateApplicationStatusInDB(application_id, status);
+        
+        console.log('here ??',updatedApplication )
+        // If the application is not found
+        if (!updatedApplication) {
+            return res.status(404).json({ message: 'Application not found.' });
+        }
+
+        // Send success response with the updated application details
+        res.status(200).json({
+            message: 'Application status updated successfully',
+            application: updatedApplication,
+        });
+    } catch (error) {
+        console.error('Error updating application status:', error);
+        res.status(500).json({ message: 'Server error while updating application status' });
+    }
+};
