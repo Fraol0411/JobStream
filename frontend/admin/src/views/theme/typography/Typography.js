@@ -133,10 +133,12 @@ console.log('filterdata',filteredData)
 
   // Function to handle row click
 // Function to handle row click and pass job_id to list-groups component
-const handleRowClick = (job_id) => {
-  console.log(job_id)
-  navigate(`/base/list-groups?job_id=${job_id}`);
+const handleRowClick = (job_id, sourceComponent) => {
+  console.log(job_id);
+  // Add sourceComponent to the URL as a query parameter
+  navigate(`/base/list-groups?job_id=${job_id}&source=${sourceComponent}`);
 };
+
 
 
   return (
@@ -158,7 +160,7 @@ const handleRowClick = (job_id) => {
             <CTableBody>
 
               {filteredData.map((vacancy) => (
-                  <CTableRow key={vacancy.id} onClick={() => handleRowClick(vacancy.job_id)} style={{ cursor: 'pointer' }}>
+                  <CTableRow key={vacancy.id} onClick={() => handleRowClick(vacancy.job_id,'closed')} style={{ cursor: 'pointer' }}>
                       <CTableDataCell>{vacancy.title}</CTableDataCell>
                       <CTableDataCell>{vacancy.department}</CTableDataCell>
                       <CTableDataCell>{vacancy.description}</CTableDataCell>

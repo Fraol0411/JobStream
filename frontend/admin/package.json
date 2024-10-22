@@ -40,7 +40,8 @@
     "react-router-dom": "^6.23.1",
     "react-spinners": "^0.14.1",
     "redux": "5.0.1",
-    "simplebar-react": "^3.2.5"
+    "simplebar-react": "^3.2.5",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^4.3.1",
@@ -55,5 +56,5 @@
     "sass": "^1.77.5",
     "vite": "^5.2.13"
   },
-    "proxy": "http://localhost:600"
+  "proxy": "http://localhost:600"
 }

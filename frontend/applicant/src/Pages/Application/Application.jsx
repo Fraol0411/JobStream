@@ -279,7 +279,7 @@ const addWorkExperience = () => {
               id="email"
               name="email"
               // value={formData.email}
-              onChange={(e)=> setPhone(e.target.value)}
+              onChange={(e)=> setEmail(e.target.value)}
               required
             />
           </div>
@@ -291,7 +291,7 @@ const addWorkExperience = () => {
               id="phone"
               name="phone"
               // value={formData.phone}
-              onChange={(e)=> setEmail(e.target.value)}
+              onChange={(e)=> setPhone(e.target.value)}
               required
             />
           </div>

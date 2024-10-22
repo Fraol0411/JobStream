@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import {
   CBadge,
+  CButton,
   CCard,
   CCardBody,
   CCardHeader,
@@ -10,6 +11,8 @@ import {
   CRow,
 } from '@coreui/react';
 import { useNavigate, useLocation } from 'react-router-dom';
+
+import * as XLSX from 'xlsx';
 
 const ListGroups = () => {
   const [applicants, setApplicants] = useState([]);
@@ -22,24 +25,31 @@ const ListGroups = () => {
   
   const searchParams = new URLSearchParams(location.search);
   const jobId = searchParams.get('job_id'); // Capture the job_id from the URL query params
+  const sourceComponent = searchParams.get('source')
   console.log('job id for ',jobId)
+  console.log('source component ',sourceComponent)
   const navigate = useNavigate();
 
   // Function to fetch applications for the specific job
   const fetchApplications = async (jobId) => {
     try {
       const response = await fetch(`http://localhost:5000/api/applications/${jobId}`);
-      
+  
       if (!response.ok) {
         throw new Error('Failed to fetch applications');
       }
   
       const data = await response.json();
   
-      // Filter the applications where status is "submitted"
-      const submittedApplicants = data.filter(applicant => applicant.status === 'submitted');
+      // Filter applications based on the sourceComponent
+      let submittedApplicants;
+      if (sourceComponent === 'closed') {
+        submittedApplicants = data.filter(applicant => applicant.status === 'further');
+      } else {
+        submittedApplicants = data.filter(applicant => applicant.status === 'submitted');
+      }
   
-      // Set only the submitted applicants to state
+      // Set only the filtered applicants to state
       setApplicants(submittedApplicants);
     } catch (error) {
       setError(error.message);
@@ -47,6 +57,7 @@ const ListGroups = () => {
       setIsLoading(false);
     }
   };
+  
 
   useEffect(() => {
     if (jobId) {
@@ -77,6 +88,27 @@ const ListGroups = () => {
     return <p>Error fetching applications: {error}</p>;
   }
 
+
+   // Function to export applicants to Excel
+   const exportToExcel = (data) => {
+    const exportData = data.map(applicant => ({
+      Firstname: applicant.firstname,
+      Middlename: applicant.middlename,
+      Lastname: applicant.lastname,
+      Email: applicant.email,
+      Phone: applicant.phone,
+      AppliedAt: applicant.applied_at,
+    }));
+
+    const worksheet = XLSX.utils.json_to_sheet(exportData);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Applicants');
+    XLSX.writeFile(workbook, 'submitted_applicants.xlsx');
+  };
+
+
+
+
   return (
     <CRow>
       <CCol xs={12}>
@@ -84,7 +116,15 @@ const ListGroups = () => {
           <CCardHeader>
             Applicants List
           </CCardHeader>
+
           <CCardBody>
+          <CButton
+              color="primary"
+              onClick={() => exportToExcel(applicants)}
+              style={{ marginBottom: '20px' }}
+            >
+              Export Submitted Applicants
+            </CButton>
             <CListGroup>
               {applicants.length > 0 ? (
                 applicants.map((applicant, index) => (
@@ -94,7 +134,7 @@ const ListGroups = () => {
                     className="d-flex justify-content-between align-items-center"
                   >
                     <div>
-                    <strong>{`${applicant.firstname} ${applicant.lastname}`}</strong>
+                    <strong>{`${applicant.firstname} ${applicant.middlename} ${applicant.lastname}`}</strong>
                       <div className="text-muted small">Applied on: {applicant.applied_at}</div>
                     </div>
                     {renderStatusBadge(applicant.status)}
