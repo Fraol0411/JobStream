@@ -1,113 +1,210 @@
-.applicationContainer{
-    margin-top: 80px;
-    max-width: 100vw;
-   
-    background-color: rgb(245, 251, 255);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+// .applicationContainer {
+//   margin-top: 80px;
+//   max-width: 100vw;
+//   height: 93vh;
 
+//   background-color: rgb(245, 251, 255);
+//   display: flex;
+//   flex-direction: column;
+//   justify-content: center;
+//   align-items: center;
+//   overflow-y: auto;
+// }
 
-}
+// .applicationForm {
+//   padding: 20px;
+//   display: flex;
+//   flex-direction: row;
+//   align-items: self-start;
+//   justify-content: center;
+//   gap: 20px;
+//   width: 90%;
+//   background-color: rgb(245, 251, 255);
+// }
+// form .fieldset {
+//   display: flex;
+//   flex-direction: column; /* Allows inputs inside fieldset to stack vertically */
+//   // flex: 1 1 45%; /* Makes the fieldsets take approximately 45% of the width */
+//   max-width: 300px; /* Maximum width */
+//   width: 100%;
+//   padding: 10px;
+//   background-color: rgb(245, 251, 255);
+//   border: none;
+//   border-radius: 5px;
+//   align-items: center;
+//   justify-self: center;
+// }
+// .fieldset legend {
+//   font-size: 18px;
+//   color: #333;
+//   font-weight: 800;
+// }
 
-.applicationForm {
-  padding: 20px;
+// .fieldset .formGroup {
+//   max-width: 300px;
+//   display: flex;
+//   flex-direction: column;
+//   width: 90%;
+//   margin-bottom: 10px;
+// }
+// .fieldset .formGroup label {
+//   font-size: 13px;
+//   color: #333;
+//   font-weight: 600;
+// }
+
+// .fieldset .formGroup textarea {
+//   max-width: 300px;
+//   width: 90%;
+//   margin-bottom: 10px;
+// }
+// .fieldset .formGroup input {
+//   border: none; /* Remove all borders */
+//   border-bottom: 1px solid #ccc; /* Add a bottom border */
+//   border-right: 1px solid #ccc;
+//   border-left: 1x solid #ccc;
+//   outline: none; /* Remove the default outline */
+//   padding: 8px; /* Add some padding for better spacing */
+//   transition: border-color 0.3s ease; /* Smooth transition for border color */
+// }
+
+// /* Change border color when input is focused */
+// .fieldset .formGroup input:focus {
+//   border-bottom: 2px solid #007bff; /* Change bottom border color on focus */
+// }
+
+// .fieldset legend {
+//   font-size: 15px;
+// }
+// .previousAcademic {
+//   display: flex;
+//   gap: 15px;
+//   p {
+//     font-size: 13px;
+//   }
+//   p strong {
+//     font-size: 14px;
+//   }
+// }
+
+// .previousExperience {
+//   display: flex;
+//   gap: 8px;
+//   p {
+//     font-size: 13px;
+//   }
+//   p strong {
+//     font-size: 14px;
+//   }
+// }
+
+// // responcive
+
+// @media (max-width: 570px) {
+//   .applicationForm {
+//     display: flex;
+//     flex-direction: column;
+//   }
+// }
+
+.applicationContainer {
+  margin-top: 80px;
   display: flex;
-  flex-direction: row;
-  align-items: self-start;
   justify-content: center;
-  gap: 20px;
-  width: 90%;
-  background-color: rgb(245, 251, 255);
-}
-form .fieldset{
-  display: flex;
-  flex-direction: column; /* Allows inputs inside fieldset to stack vertically */
-  // flex: 1 1 45%; /* Makes the fieldsets take approximately 45% of the width */
-  max-width: 300px; /* Maximum width */
-  width: 100%;
-  padding: 10px;
-  background-color: rgb(245, 251, 255);
-  border: none;
-  border-radius: 5px;
   align-items: center;
-  justify-self: center;
+  flex-direction: column;
 }
-.fieldset legend{
-  font-size: 18px;
-  color: #333;
-  font-weight: 800;
-}
-
-.fieldset .formGroup{
-  max-width: 300px;
+.applicationForm {
   display: flex;
   flex-direction: column;
-  width: 90%;
-  margin-bottom: 10px;
+  gap: 50px;
 }
-.fieldset .formGroup label{
-  font-size: 13px;
-  color: #333;
-  font-weight: 600;
-}
-
-.fieldset .formGroup textarea{
-  max-width: 300px;
-  width: 90%;
-  margin-bottom: 10px;
-}
-.fieldset .formGroup input {
-  border: none; /* Remove all borders */
-  border-bottom: 1px solid #ccc; /* Add a bottom border */
-  border-right: 1px solid #ccc;
-  border-left: 1x solid #ccc;
-  outline: none; /* Remove the default outline */
-  padding: 8px; /* Add some padding for better spacing */
-  transition: border-color 0.3s ease; /* Smooth transition for border color */
-}
-
-/* Change border color when input is focused */
-.fieldset .formGroup input:focus {
-  border-bottom: 2px solid #007bff; /* Change bottom border color on focus */
-}
-
-.fieldset legend{
-  font-size: 15px;
-}
-.previousAcademic{
+.personal {
+  margin-top: 40px;
   display: flex;
-  gap: 15px;
-  p{
-    font-size: 13px;
-  }
-  p strong{
-    font-size: 14px;
-  }
-}
+  flex-direction: column;
 
-.previousExperience{
+  // padding: 50px;
+  border-radius: 5px;
+  width: 1000px;
+}
+.personasub {
   display: flex;
-  gap: 8px;
-  p{
-    font-size: 13px;
-  }
-  p strong{
-    font-size: 14px;
-  }
+  // flex-direction: column;
+  gap: 50px;
 }
 
+.fieldset {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
 
+.submitButton {
+  margin-top: 20px;
+  border-radius: 6px;
+  width: 1000px;
+}
 
+.fieldforacademy {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 
+  width: 1000px;
+}
 
+.fieldsetforwork {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 
-// responcive
+  width: 1000px;
+}
+.submitfinalButton {
+  margin-top: 20px;
+  border-radius: 6px;
+  width: 1000px;
+  background-color: orangered;
+  margin-bottom: 50px;
+}
+.textfiledd {
+  width: 600px;
+}
 
-@media (max-width: 570px){
-    .applicationForm{
-      display: flex;
-      flex-direction: column;
-    }
+@media (max-width: 570px) {
+  .submitButton,
+  .fieldsetforwork,
+  .fieldforacademy,
+  .submitfinalButton,
+  .personal,
+  .personasub,
+  .applicationForm {
+    padding: 0px;
+    width: 340px;
+    margin: 0px;
+    gap: 10px;
+  }
+
+  .applicationContainer {
+    margin-top: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
+  .submitfinalButton {
+    padding: 5px;
+    margin-top: 10px;
+    margin-bottom: 30px;
+  }
+  .submitButton {
+    padding: 5px;
+    margin-bottom: 50px;
+  }
+  .personasub {
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+  }
 }
