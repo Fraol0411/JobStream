@@ -90,7 +90,7 @@ export default function Application() {
   const [message, setMessage] = useState("");
   const [messageacc, setMessageacc] = useState("");
   const [messageexp, setMessageexp] = useState("");
-  const [error, setError] = useState("");
+
   // Get the id from the URL
   const { id } = useParams();
 
@@ -176,6 +176,22 @@ export default function Application() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Check for null or empty values
+    if (
+      !job_id ||
+      !applicant_id ||
+      !firstname ||
+      !lastname ||
+      !phone ||
+      !email ||
+      !cover_letter ||
+      !resume ||
+      !handwritten_letter
+    ) {
+      setMessage("Please fill out all required fields."); // Set an error message
+      return; // Stop execution if any required field is missing
+    }
 
     const formData = new FormData();
 
@@ -368,7 +384,7 @@ export default function Application() {
                   id="coverletter"
                   name="coverletter"
                   accept=".pdf, .doc, .docx"
-                  onChange={(e) => setResume(e.target.files[0])}
+                  onChange={(e) => setCover_letter(e.target.files[0])}
                   required
                   style={commonInputStyle}
                 />
@@ -392,6 +408,7 @@ export default function Application() {
             </fieldset>
           </div>
           <p>{message}</p>
+
           <button
             className={styles.submitButton}
             onClick={handleSubmit}
@@ -399,7 +416,6 @@ export default function Application() {
           >
             Add Personal Details
           </button>
-          <p>{message}</p>
         </fieldset>
 
         {/* Academic Background */}

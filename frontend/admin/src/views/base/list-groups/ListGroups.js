@@ -75,7 +75,10 @@ const ListGroups = () => {
   }
 
   const handleNavigate = (applicant) => {
-    navigate('/base/progress', { state: { applicant } })
+    if (sourceComponent === 'closed') {
+    } else {
+      navigate('/base/progress', { state: { applicant } })
+    }
   }
 
   if (isLoading) {
