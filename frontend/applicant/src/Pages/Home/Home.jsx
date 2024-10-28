@@ -1,12 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion'; // Import framer-motion
-import styles from './Home.module.scss';
-import Carousel from 'react-bootstrap/Carousel'; // Make sure to install react-bootstrap
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import { motion } from "framer-motion"; // Import framer-motion
+import styles from "./Home.module.scss";
+import Carousel from "react-bootstrap/Carousel"; // Make sure to install react-bootstrap
+import { useNavigate } from "react-router-dom";
 
 export default function Landing() {
-
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const descriptions = [
     "Discover your dream job.",
@@ -33,12 +32,12 @@ export default function Landing() {
     visible: { opacity: 1, x: 0 }, // Center
   };
   const animationVariantsy = {
-   hidden: { opacity: 0, y: -200 }, // Slide in from left
-   visible: { opacity: 1.5, y: 0 }, // Center
- };
-  const handleNAvigate = () =>{
-     navigate('/joblist')
-  }
+    hidden: { opacity: 0, y: -200 }, // Slide in from left
+    visible: { opacity: 1.5, y: 0 }, // Center
+  };
+  const handleNAvigate = () => {
+    navigate("/joblist");
+  };
   return (
     <div className={styles.landing}>
       <motion.div
@@ -46,11 +45,12 @@ export default function Landing() {
         initial="hidden"
         animate="visible"
         variants={animationVariants}
-        transition={{ duration: 1}} // Adjust duration as needed
+        transition={{ duration: 1 }} // Adjust duration as needed
       >
-        <h1>join awash insurance <span>
-           {descriptions[currentDescriptionIndex]}</span> 
-           </h1>
+        <h1>
+          join awash insurance{" "}
+          <span>{descriptions[currentDescriptionIndex]}</span>
+        </h1>
         <button onClick={handleNAvigate} className={styles.checkJobsButton}>
           Check All Available Jobs
         </button>
@@ -62,31 +62,17 @@ export default function Landing() {
         animate="visible"
         variants={animationVariantsy}
         transition={{ duration: 1 }} // Adjust duration as needed
-        style={{ marginLeft: 'auto' }} // Align carousel to the right
+        style={{ marginLeft: "auto" }} // Align carousel to the right
       >
-        <Carousel>
-          <Carousel.Item className={styles.carouselitem}>
+        <div>
+          <div className={styles.carouselitem}>
             <img
               className="d-block w-100"
               src="/images/womenlogo.png" // Replace with your image source
               alt="First slide"
             />
-          </Carousel.Item >
-          {/* <Carousel.Item className={styles.carouselitem}>
-            <img
-              className="d-block w-100"
-              src="/images/buildingimg.png" // Replace with your image source
-              alt="Second slide"
-            />
-          </Carousel.Item>
-          <Carousel.Item className={styles.carouselitem}>
-            <img
-              className="d-block w-100"
-              src="/images/interview.png" // Replace with your image source
-              alt="Third slide"
-            />
-          </Carousel.Item> */}
-        </Carousel>
+          </div>
+        </div>
       </motion.div>
     </div>
   );

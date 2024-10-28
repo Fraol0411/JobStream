@@ -142,8 +142,13 @@
 
 .submitButton {
   margin-top: 20px;
-  border-radius: 6px;
+  border-radius: 3px;
   width: 1000px;
+  background-color: rgb(40, 147, 218);
+  margin-bottom: 50px;
+  border: 0.8px solid rgb(247, 247, 247);
+  padding: 5px;
+  color: white;
 }
 
 .fieldforacademy {
@@ -163,13 +168,35 @@
 }
 .submitfinalButton {
   margin-top: 20px;
-  border-radius: 6px;
+  border-radius: 3px;
   width: 1000px;
-  background-color: orangered;
+  background-color: rgb(253, 175, 59);
   margin-bottom: 50px;
+  border: 0.8px solid rgb(247, 247, 247);
+  padding: 5px;
+  color: white;
 }
 .textfiledd {
   width: 600px;
+}
+
+.formGroup {
+  position: relative;
+}
+
+.mandatory-indicator {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  position: absolute;
+  top: 16px; /* Adjust to align with the input field */
+  right: 10px;
+  background-color: red;
+  transition: background-color 0.3s ease;
+}
+
+.mandatory-indicator.filled {
+  background-color: green;
 }
 
 @media (max-width: 570px) {

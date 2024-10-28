@@ -87,6 +87,10 @@ export default function Application() {
   const navigate = useNavigate();
   const { user } = useUser();
   console.log("usr from context", user);
+  const [message, setMessage] = useState("");
+  const [messageacc, setMessageacc] = useState("");
+  const [messageexp, setMessageexp] = useState("");
+  const [error, setError] = useState("");
   // Get the id from the URL
   const { id } = useParams();
 
@@ -158,12 +162,16 @@ export default function Application() {
   const addWorkExperience = () => {
     submitExprience(workexperience);
     setWorkexperience({ company: "", position: "", from: "", to: "" });
+    setMessageexp("work exprience added succesfully | add more(optional)");
   };
 
   // Add the current academic background to the list and reset the fields
   const addAcademicBackground = () => {
     submitAcademic(academy);
     setAcademy({ university: "", completedYear: "", certificate: "" });
+    setMessageacc(
+      "accademic background added succesfully | add more(optional)"
+    );
   };
 
   const handleSubmit = async (e) => {
@@ -196,6 +204,8 @@ export default function Application() {
         "Application submitted successfully. Application ID:",
         application_id
       ); // Log the application ID
+
+      setMessage("personal detail added succesfully");
 
       // Update the work experience and academy states with the new application_id
       setWorkexperience((prev) => ({ ...prev, application_id }));
@@ -245,6 +255,7 @@ export default function Application() {
           <div className={styles.personasub}>
             <fieldset className={styles.fieldset}>
               <legend>Personal Information</legend>
+
               <div className={styles.formGroup}>
                 <TextField
                   label="First Name"
@@ -255,6 +266,11 @@ export default function Application() {
                   required
                   style={{ width: "340px" }}
                 />
+                <div
+                  className={`${styles.mandatoryIndicator} ${
+                    firstname ? styles.filled : ""
+                  }`}
+                ></div>
               </div>
 
               <div className={styles.formGroup}>
@@ -266,6 +282,11 @@ export default function Application() {
                   onChange={(e) => setMiddlename(e.target.value)}
                   required
                 />
+                <div
+                  className={`${styles.mandatoryIndicator} ${
+                    middlename ? styles.filled : ""
+                  }`}
+                ></div>
               </div>
 
               <div className={styles.formGroup}>
@@ -277,6 +298,11 @@ export default function Application() {
                   onChange={(e) => setLastname(e.target.value)}
                   required
                 />
+                <div
+                  className={`${styles.mandatoryIndicator} ${
+                    lastname ? styles.filled : ""
+                  }`}
+                ></div>
               </div>
 
               <div className={styles.formGroup}>
@@ -289,6 +315,11 @@ export default function Application() {
                   onChange={(e) => setEmail(e.target.value)}
                   required
                 />
+                <div
+                  className={`${styles.mandatoryIndicator} ${
+                    email ? styles.filled : ""
+                  }`}
+                ></div>
               </div>
 
               <div className={styles.formGroup}>
@@ -301,6 +332,11 @@ export default function Application() {
                   onChange={(e) => setPhone(e.target.value)}
                   required
                 />
+                <div
+                  className={`${styles.mandatoryIndicator} ${
+                    phone ? styles.filled : ""
+                  }`}
+                ></div>
               </div>
             </fieldset>
 
@@ -355,6 +391,7 @@ export default function Application() {
               </div>
             </fieldset>
           </div>
+          <p>{message}</p>
           <button
             className={styles.submitButton}
             onClick={handleSubmit}
@@ -362,6 +399,7 @@ export default function Application() {
           >
             Add Personal Details
           </button>
+          <p>{message}</p>
         </fieldset>
 
         {/* Academic Background */}
@@ -442,6 +480,7 @@ export default function Application() {
               margin="normal"
             />
           </div>
+          <p>{messageacc}</p>
           <button
             type="button"
             className={styles.submitButton}
@@ -510,7 +549,7 @@ export default function Application() {
                 shrink: true,
               }}
             />
-
+            <p>{messageexp}</p>
             <button
               type="button"
               className={styles.submitButton}

@@ -1,135 +1,191 @@
-
-:root{
-    --maincolor:rgb(9, 93, 202);
-    --textcolor:rgb(255, 255, 255);
-    --textcolor2:black;
+:root {
+  --maincolor: rgb(9, 93, 202);
+  --textcolor: rgb(255, 255, 255);
+  --textcolor2: black;
 }
 
-header{
-    z-index: 1000;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    border: 0.2px solid rgb(207, 207, 207);
-    border-radius: 10px;
-    color: var(--textcolor);
-    padding: 0rem 2rem;
-    height: 80px;
-    // background: linear-gradient(to right, rgb(255, 255, 255) 30%, rgb(235, 235, 235) 70%);
-    background-color: #f4f4f4;
+header {
+  z-index: 1000;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: 0.8px solid rgb(236, 236, 236);
+  //   border-radius: 10px;
+  color: var(--textcolor);
+  padding: 0rem 2rem;
+  height: 80px;
+  // background: linear-gradient(to right, rgb(255, 255, 255) 30%, rgb(235, 235, 235) 70%);
+  background-color: #ffffff;
 }
 
-header img{
-    height: 70px;
+header img {
+  height: 70px;
 }
 
-nav{
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
-nav a{
-    text-decoration: none;
-    color: var(--textcolor2);
-    padding: 0rem 2rem;
+nav a {
+  text-decoration: none;
+  color: var(--textcolor2);
+  color: rgb(61, 61, 61);
+  padding: 0rem 2rem;
+  font-size: 18px;
 }
-nav a:hover{
-    color: rgb(23, 31, 28);
+nav a:hover {
+  color: rgb(145, 145, 145);
 }
 
 // stylign search
-nav .browse{
-    padding-left: 70px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 2rem;
+nav .browse {
+  padding-left: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
 }
-.browse input{
-    border: none;
-    border-radius: 5px;
-    padding: 8px;
+// .browse input {
+//   border: none;
+//   border-radius: 5px;
+//   padding: 8px;
+// }
+// .browse input:focus {
+//   outline: none;
+//   border: none;
+// }
+// .browse button {
+//   border: none;
+//   border-radius: 5px;
+//   padding: 8px;
+//   background-color: rgb(43, 76, 138);
+//   color: white;
+// }
+
+/* Styling for the input field */
+.browse input {
+  border: 1px solid rgba(43, 76, 138, 0.2); /* subtle border */
+  border-radius: 8px; /* smoother corners */
+  padding: 10px;
+  font-size: 1rem;
+  transition: box-shadow 0.3s ease, border 0.3s ease; /* smooth transition */
+  width: 500px;
 }
+
+/* Focus effect for the input */
 .browse input:focus {
-    outline: none;  
-    border: none;   
-  }
-.browse button{
-    border: none;
-    border-radius: 5px;
-    padding: 8px;
-    background-color: rgb(43, 76, 138);
-    color: white;
+  outline: none;
+  border: 1px solid rgba(43, 76, 138, 0.6); /* accent border on focus */
+  box-shadow: 0 0 5px rgba(43, 76, 138, 0.3); /* subtle shadow */
 }
-  
+
+/* Styling for the button */
+.browse button {
+  border: none;
+  border-radius: 8px;
+  padding: 10px 15px;
+  background-color: rgb(66, 127, 240);
+  color: white;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* button shadow */
+  width: 200px;
+}
+
+/* Hover effect for the button */
+.browse button:hover {
+  background-color: rgb(35, 65, 120);
+  transform: translateY(-2px); /* slight lift effect */
+}
+
+/* Active effect for the button */
+.browse button:active {
+  background-color: rgb(29, 55, 105);
+  transform: translateY(1px); /* slight press effect */
+}
 
 // button style
- header .navbtn{
-    padding: 5px;
-    cursor: pointer;
-    border: none;
-    outline: hidden;
-    background: transparent;
-    visibility: hidden;
-    color: var(--textcolor2);
-    opacity: 0;
-    font-size: 2rem;
-    color: white;
+header .navbtn {
+  padding: 5px;
+  cursor: pointer;
+  border: none;
+  outline: hidden;
+  background: transparent;
+  visibility: hidden;
+  color: var(--textcolor2);
+  opacity: 0;
+  font-size: 2rem;
+  color: rgb(17, 128, 231);
+  font-weight: bolder;
+}
+
+// responsive design
+@media only screen and (max-width: 1024px) {
+  header {
+    padding: 0rem 2rem;
+  }
+  header .navbtn {
+    visibility: visible;
+    opacity: 1;
+  }
+  header .navbtnclose {
+    position: absolute;
+    top: 2rem;
+    right: 2rem;
+    color: rgb(245, 245, 245);
     font-weight: bolder;
-
- }
-
-
- // responsive design
- @media only screen and (max-width:1024px) {
-    header{
-        padding: 0rem 2rem;     
-    }
-    header .navbtn{
-        visibility: visible;
-        opacity: 1;
-    }
-    header .navbtnclose{
-        position: absolute;
-        top: 2rem;
-        right: 2rem;
-        color: white;
-        font-weight: bolder;
-    }
-    header nav{
-        position: fixed;
-        top: 0;
-        left: 0;
-        height: 100%;
-        width: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 1.5rem;
-        background-color: var(--maincolor);
-        transition: 1s;
-        transform: translateY(-100vh);
-    }
-    header nav a{
-        color: white;
-        font-size: 1.5rem;
-        cursor: pointer;
-    }    
-    header nav a:hover{
-        color: orangered;
-        cursor: pointer;
-    }
-    :global(.responsive_nav){
-        transform: none;
-        display: flex;
-        flex-direction: column;
-    }
-    header img{
-        height: 70px;
-        width: 200px;
-    }
- }
+  }
+  header nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+    background-color: var(--maincolor);
+    transition: 1s;
+    transform: translateY(-100vh);
+  }
+  header nav a {
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+  }
+  header nav a:hover {
+    color: orangered;
+    cursor: pointer;
+  }
+  :global(.responsive_nav) {
+    transform: none;
+    display: flex;
+    flex-direction: column;
+  }
+  header img {
+    height: 70px;
+    width: 200px;
+  }
+  .browse {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  .browse input {
+    width: 300px;
+    margin-right: 40px;
+  }
+  .browse button {
+    width: 300px;
+    margin-right: 40px;
+    background-color: rgb(25, 147, 247);
+  }
+}
