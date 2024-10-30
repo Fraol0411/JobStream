@@ -33,7 +33,7 @@ const ListGroups = () => {
   // Function to fetch applications for the specific job
   const fetchApplications = async (jobId) => {
     try {
-      const response = await fetch(`http://localhost:5000/api/applications/${jobId}`)
+      const response = await fetch(`http://10.1.12.40:5000/api/applications/${jobId}`)
 
       if (!response.ok) {
         throw new Error('Failed to fetch applications')

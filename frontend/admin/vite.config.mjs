@@ -5,7 +5,6 @@ import autoprefixer from 'autoprefixer'
 
 export default defineConfig(() => {
   return {
-
     base: './',
     build: {
       outDir: 'build',
@@ -39,14 +38,11 @@ export default defineConfig(() => {
         },
       ],
 
-      
       extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json', '.scss'],
     },
     server: {
-      port: 3000,
-      proxy: {
-        // https://vitejs.dev/config/server-options.html
-      },
+      host: '0.0.0.0', // This makes Vite listen on all available network interfaces
+      port: 3000, // You can use any port you'd like
     },
   }
 })

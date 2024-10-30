@@ -17,7 +17,7 @@ import {
 const submitApplication = async (formData) => {
   try {
     const response = await fetch(
-      "http://localhost:5000/api/applications/createnew",
+      "http://10.1.12.40:5000/api/applications/createnew",
       {
         method: "POST",
         body: formData,
@@ -51,7 +51,7 @@ const submitApplication = async (formData) => {
 const submitAcademic = async (academy) => {
   console.log(academy);
   console.log("academy api", academy.application_id);
-  const response = await fetch("http://localhost:5000/api/academic/", {
+  const response = await fetch("http://10.1.12.40:5000/api/academic/", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -68,7 +68,7 @@ const submitAcademic = async (academy) => {
 // function to handle application api
 const submitExprience = async (workexperience) => {
   console.log(workexperience);
-  const response = await fetch("http://localhost:5000/api/exprience", {
+  const response = await fetch("http://10.1.12.40:5000/api/exprience", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

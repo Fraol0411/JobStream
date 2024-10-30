@@ -10,8 +10,8 @@ import { useUser } from "../../UserContext";
 // Fetch job data from the backend
 const fetchJobs = async (title) => {
   const url = title
-    ? `http://localhost:5000/api/jobs/byname/${title}`
-    : "http://localhost:5000/api/jobs/alljobs";
+    ? `http://10.1.12.40:5000/api/jobs/byname/${title}`
+    : "http://10.1.12.40:5000/api/jobs/alljobs";
 
   const res = await fetch(url);
   if (!res.ok) {
