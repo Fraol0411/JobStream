@@ -56,7 +56,7 @@ const Progress = (jobId) => {
   const location = useLocation()
   const { applicant } = location.state || {} // Get the applicant from the state
 
-  const [activeButton, setActiveButton] = useState(null)
+  const [activeButton, setActiveButton] = useState(null) // Track the clicked button
 
   console.log('from params', applicant.job_id)
 
@@ -208,8 +208,9 @@ const Progress = (jobId) => {
                 <CButton
                   onClick={handleProcessFurther}
                   type="submit"
-                  color={activeButton === 'process' ? 'danger' : 'primary'} // Red if active, blue if not
+                  color={activeButton === 'process' ? 'danger' : 'primary'}
                   style={{ marginRight: '10px' }}
+                  disabled={activeButton === 'remove'} // Disable if 'Remove' is clicked
                 >
                   Process Further
                 </CButton>
@@ -217,17 +218,20 @@ const Progress = (jobId) => {
                 <CButton
                   onClick={handleRemoveApplicant}
                   type="submit"
-                  color={activeButton === 'remove' ? 'danger' : 'primary'} // Red if active, blue if not
+                  color={activeButton === 'remove' ? 'danger' : 'primary'}
                   style={{ marginRight: '10px' }}
+                  disabled={activeButton === 'process'} // Disable if 'Process Further' is clicked
                 >
                   Remove from applicant list
                 </CButton>
               </CListGroupItem>
+
               <CButton
                 type="submit"
                 color="primary"
                 style={{ marginRight: '10px' }}
                 onClick={handlenavigate}
+                disabled={!activeButton} // Disable if neither 'Process Further' nor 'Remove' is clicked
               >
                 Back to applicant list
               </CButton>

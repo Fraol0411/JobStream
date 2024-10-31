@@ -215,18 +215,24 @@ export default function LoginForm() {
               <i className="fas fa-file"></i>
               <label htmlFor="">Applicant</label>
               <select
-                value={registerData.applicantType}
+                value={registerData.applyfor} // Set the initial value to "" in the state
                 onChange={(e) =>
                   setRegisterData({ ...registerData, applyfor: e.target.value })
                 }
               >
-                {/* <option value="" disabled>Select an option</option> */}
-                <option value="">Select from below</option>
+                <option
+                  value=""
+                  disabled
+                  style={{ color: "gray", backgroundColor: "blue" }}
+                >
+                  Select from below
+                </option>
                 <option value="Fresh Graduate">Fresh Graduate</option>
                 <option value="External applicant">External Applicant</option>
                 <option value="Awash staff">Awash Staff</option>
               </select>
             </div>
+
             <input
               type="submit"
               value="Sign Up"

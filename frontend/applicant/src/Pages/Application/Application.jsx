@@ -160,18 +160,50 @@ export default function Application() {
 
   // Add the current work experience to the list and reset the fields
   const addWorkExperience = () => {
+    const { company, position, from_date, to_date } = workexperience;
+
+    // Check if any fields are empty
+    if (!company || !position || !from_date || !to_date) {
+      setMessageexp("Please fill in all fields.");
+      return; // Stop function execution if fields are empty
+    }
+
+    // If all fields are filled, proceed with submission
     submitExprience(workexperience);
-    setWorkexperience({ company: "", position: "", from: "", to: "" });
-    setMessageexp("work exprience added succesfully | add more(optional)");
+    setWorkexperience({
+      company: "",
+      position: "",
+      from_date: "",
+      to_date: "",
+    });
+    setMessageexp("Work experience added successfully | add more (optional)");
   };
 
   // Add the current academic background to the list and reset the fields
   const addAcademicBackground = () => {
-    submitAcademic(academy);
-    setAcademy({ university: "", completedYear: "", certificate: "" });
-    setMessageacc(
-      "accademic background added succesfully | add more(optional)"
-    );
+    const { highestlevel, university, completed_year, cgpa, field } = academy;
+
+    if (
+      !highestlevel.trim() ||
+      !university.trim() ||
+      !completed_year.trim() ||
+      !cgpa.trim() ||
+      !field.trim()
+    ) {
+      setMessageacc("Enter all fields");
+    } else {
+      submitAcademic(academy);
+      setAcademy({
+        highestlevel: " ",
+        university: " ",
+        completed_year: " ",
+        cgpa: " ",
+        field: " ",
+      });
+      setMessageacc(
+        "Academic background added successfully | Add more (optional)"
+      );
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -475,8 +507,8 @@ export default function Application() {
               fullWidth
               required
               label="CGPA"
-              type="number"
-              step="0.01"
+              // type="number"
+              inputProps={{ step: "0.01", min: "0", max: "4" }} // Customize step and limits
               id="cgpa"
               name="cgpa"
               value={academy.cgpa}
