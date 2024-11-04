@@ -129,7 +129,6 @@ const ExpandMore = styled((props) => {
 export default function Jobcard({
   id,
   title,
-  department,
   dutystation,
   description,
   requirements,
@@ -138,10 +137,11 @@ export default function Jobcard({
   created_by,
   salary,
   qualification,
-  responsibilities,
   deadline,
   contact,
-  benefits,
+  age,
+  req_no,
+  termof_emp,
 }) {
   const [expanded, setExpanded] = React.useState(false);
 
@@ -193,8 +193,8 @@ export default function Jobcard({
       />
       <CardContent>
         <Typography variant="body2" sx={{ color: "text.secondary" }}>
-          <p>job description</p>
-          {description}
+          <p>Educational Qualification Required</p>
+          {requirements}
         </Typography>
       </CardContent>
       <CardActions disableSpacing>
@@ -223,34 +223,39 @@ export default function Jobcard({
       <Collapse in={expanded} timeout="auto" unmountOnExit>
         <CardContent>
           <Typography style={{ fontWeight: "bolder" }} sx={{ marginBottom: 1 }}>
-            Requirments:
-          </Typography>
-          <Typography sx={{ marginBottom: 3 }}>{requirements}</Typography>
-
-          <Typography style={{ fontWeight: "bolder" }} sx={{ marginBottom: 1 }}>
-            Qualifications:
+            Work Exprience:
           </Typography>
           <Typography sx={{ marginBottom: 3 }}>{qualification}</Typography>
 
           <Typography style={{ fontWeight: "bolder" }} sx={{ marginBottom: 1 }}>
-            Responsibilities:
+            Required Number:
           </Typography>
-          <Typography sx={{ marginBottom: 3 }}>{responsibilities}</Typography>
+          <Typography sx={{ marginBottom: 3 }}>{req_no}</Typography>
 
           <Typography style={{ fontWeight: "bolder" }} sx={{ marginBottom: 1 }}>
-            Salary:
+            Skills and Attributes:
+          </Typography>
+          <Typography sx={{ marginBottom: 3 }}>{description}</Typography>
+
+          <Typography style={{ fontWeight: "bolder" }} sx={{ marginBottom: 1 }}>
+            Term of Employment:
+          </Typography>
+          <Typography sx={{ marginBottom: 3 }}>{termof_emp}</Typography>
+
+          <Typography style={{ fontWeight: "bolder" }} sx={{ marginBottom: 1 }}>
+            Salary and Benefits:
           </Typography>
           <Typography sx={{ marginBottom: 3 }}>{salary}</Typography>
 
           <Typography style={{ fontWeight: "bolder" }} sx={{ marginBottom: 1 }}>
-            Benefits:
+            Age:
           </Typography>
-          <Typography sx={{ marginBottom: 3 }}>{benefits}</Typography>
+          <Typography sx={{ marginBottom: 3 }}>{age}</Typography>
 
           <Typography style={{ fontWeight: "bolder" }} sx={{ marginBottom: 1 }}>
-            Contact Information:
+            Place of Work:
           </Typography>
-          <Typography sx={{ marginBottom: 3 }}>{contact}</Typography>
+          <Typography sx={{ marginBottom: 3 }}>{dutystation}</Typography>
 
           <Typography style={{ fontWeight: "bolder" }} sx={{ marginBottom: 1 }}>
             Application Deadline:

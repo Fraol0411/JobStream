@@ -201,7 +201,7 @@ const Progress = (jobId) => {
                     ))}
                   </ul>
                 ) : (
-                  'No experience data available'
+                  'No Prior experience '
                 )}
               </CListGroupItem>
               <CListGroupItem>

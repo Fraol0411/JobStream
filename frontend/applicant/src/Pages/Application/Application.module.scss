@@ -180,6 +180,20 @@
   width: 600px;
 }
 
+.disabledButton {
+  background-color: #7db1ff; /* Light blue background for disabled */
+  color: rgba(255, 255, 255, 0.856); /* Faded text color */
+  filter: blur(1px); /* Apply blur effect */
+  cursor: not-allowed;
+}
+
+.disabledButtonn {
+  background-color: #ffce72; /* Light blue background for disabled */
+  color: rgba(255, 255, 255, 0.856); /* Faded text color */
+  filter: blur(1px); /* Apply blur effect */
+  cursor: not-allowed;
+}
+
 .formGroup {
   position: relative;
 }

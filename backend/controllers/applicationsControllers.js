@@ -12,16 +12,16 @@
 
 //     try {
 //         await createApplication(
-//             job_id, 
-//             applicant_id, 
-//             firstname, 
-//             middlename, 
-//             lastname, 
-//             phone, 
-//             email, 
-//             cover_letter, 
-//             resume, 
-//             handwritten_letter, 
+//             job_id,
+//             applicant_id,
+//             firstname,
+//             middlename,
+//             lastname,
+//             phone,
+//             email,
+//             cover_letter,
+//             resume,
+//             handwritten_letter,
 //             status
 //         );
 //         res.status(201).json({ message: 'Application submitted successfully' });
@@ -30,8 +30,6 @@
 //         res.status(500).json({ message: 'Server error while submitting application' });
 //     }
 // };
-
-
 
 // //get applications with job id
 // export const getapplicationByid = async(req,res) =>{
@@ -51,75 +49,105 @@
 
 ////-----------------------------------////
 
-
-
 // Creating new applications
 
-import { application } from 'express';
-import { createApplication, getapplicationwithID, updateApplicationStatusInDB } from '../models/applicationsModels.js';
+import { application } from "express";
+import {
+  createApplication,
+  getapplicationwithID,
+  updateApplicationStatusInDB,
+} from "../models/applicationsModels.js";
 
 export const createNewApplication = async (req, res) => {
-    const { job_id, applicant_id, firstname, middlename, lastname, phone, email, status } = req.body;
- 
-    console.log("Files received:", req.files);
-    console.log("Request body:", req.body);
- 
-    // Ensure files are correctly processed with null checks
-    const cover_letter = req.files?.cover_letter ? req.files.cover_letter[0].path : null;
-    const resume = req.files?.resume ? req.files.resume[0].path : null;
-    const handwritten_letter = req.files?.handwritten_letter ? req.files.handwritten_letter[0].path : null;
- 
-    try {
-       // Validate if required fields are present
-       if (!job_id || !applicant_id || !firstname || !middlename || !lastname || !phone || !email) {
-          return res.status(400).json({ message: 'All required fields must be filled.' });
-       }
- 
-       console.log("Is there a cover letter");
- 
-       // Insert the application into the database and return the new application details
-       const application = await createApplication(
-          job_id, 
-          applicant_id, 
-          firstname, 
-          middlename, 
-          lastname, 
-          phone, 
-          email, 
-          cover_letter, 
-          resume, 
-          handwritten_letter, 
-          status
-       );
- 
-       // Return the newly created application data as response
-          res.status(201).json({
-          message: 'Application submitted successfully',
-          application: application  // Send the newly created application details
-       });
-      console.log(application)
-    } catch (error) {
-       console.error('Error submitting application:', error);
-       res.status(500).json({ message: 'Server error while submitting application' });
-    }
- };
- 
+  const {
+    job_id,
+    applicant_id,
+    firstname,
+    middlename,
+    lastname,
+    phone,
+    email,
+    status,
+    age,
+  } = req.body;
 
+  console.log("Files received:", req.files);
+  console.log("Request body:", req.body);
+
+  // Ensure files are correctly processed with null checks
+  const cover_letter = req.files?.cover_letter
+    ? req.files.cover_letter[0].path
+    : null;
+  const resume = req.files?.resume ? req.files.resume[0].path : null;
+  const handwritten_letter = req.files?.handwritten_letter
+    ? req.files.handwritten_letter[0].path
+    : null;
+
+  try {
+    // Validate if required fields are present
+    if (
+      !job_id ||
+      !applicant_id ||
+      !firstname ||
+      !middlename ||
+      !lastname ||
+      !phone ||
+      !email ||
+      !age
+    ) {
+      return res
+        .status(400)
+        .json({ message: "All required fields must be filled." });
+    }
+
+    console.log("Is there a cover letter");
+
+    // Insert the application into the database and return the new application details
+    const application = await createApplication(
+      job_id,
+      applicant_id,
+      firstname,
+      middlename,
+      lastname,
+      phone,
+      email,
+      cover_letter,
+      resume,
+      handwritten_letter,
+      status,
+      age
+    );
+
+    // Return the newly created application data as response
+    res.status(201).json({
+      message: "Application submitted successfully",
+      application: application, // Send the newly created application details
+    });
+    console.log(application);
+  } catch (error) {
+    console.error("Error submitting application:", error);
+    res
+      .status(500)
+      .json({ message: "Server error while submitting application" });
+  }
+};
 
 // Get applications with job ID
 export const getapplicationByid = async (req, res) => {
-    const { id } = req.params; // Extract ID from request parameters
+  const { id } = req.params; // Extract ID from request parameters
 
-    try {
-        const application = await getapplicationwithID(id); // Call the model function
-        if (!application) {
-            return res.status(404).json({ message: 'Application not found' });
-        }
-        res.status(200).json(application); // Return the application object
-    } catch (error) {
-        console.error("Error fetching application:", error);
-        res.status(500).json({ message: 'Server error during fetching the application' });
+  try {
+    const application = await getapplicationwithID(id); // Call the model function
+    if (!application) {
+      return res.status(404).json({ message: "Application not found" });
     }
+    res.status(200).json(application); // Return the application object
+  } catch (error) {
+    console.error("Error fetching application:", error);
+    res
+      .status(500)
+      .json({ message: "Server error during fetching the application" });
+  }
 };
 
 // //get applications with job id
@@ -138,34 +166,38 @@ export const getapplicationByid = async (req, res) => {
 //    }
 // }
 
-
 // Controller for updating application status
 export const updateApplicationStatus = async (req, res) => {
-    const { application_id } = req.params; // Extract application ID from request parameters
-    const { status } = req.body;           // Extract status from the request body
+  const { application_id } = req.params; // Extract application ID from request parameters
+  const { status } = req.body; // Extract status from the request body
 
-    try {
-        // Validate if the status is provided
-        if (!status) {
-            return res.status(400).json({ message: 'Status is required.' });
-        }
-
-        // Update the application status in the database
-        const updatedApplication = await updateApplicationStatusInDB(application_id, status);
-        
-        console.log('here ??',updatedApplication )
-        // If the application is not found
-        if (!updatedApplication) {
-            return res.status(404).json({ message: 'Application not found.' });
-        }
-
-        // Send success response with the updated application details
-        res.status(200).json({
-            message: 'Application status updated successfully',
-            application: updatedApplication,
-        });
-    } catch (error) {
-        console.error('Error updating application status:', error);
-        res.status(500).json({ message: 'Server error while updating application status' });
+  try {
+    // Validate if the status is provided
+    if (!status) {
+      return res.status(400).json({ message: "Status is required." });
     }
+
+    // Update the application status in the database
+    const updatedApplication = await updateApplicationStatusInDB(
+      application_id,
+      status
+    );
+
+    console.log("here ??", updatedApplication);
+    // If the application is not found
+    if (!updatedApplication) {
+      return res.status(404).json({ message: "Application not found." });
+    }
+
+    // Send success response with the updated application details
+    res.status(200).json({
+      message: "Application status updated successfully",
+      application: updatedApplication,
+    });
+  } catch (error) {
+    console.error("Error updating application status:", error);
+    res
+      .status(500)
+      .json({ message: "Server error while updating application status" });
+  }
 };

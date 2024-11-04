@@ -61,7 +61,6 @@ export default function Joblist() {
               <Jobcard
                 id={job.job_id}
                 title={job.title}
-                department={job.department}
                 dutystation={job.dutystation}
                 description={job.description}
                 requirements={job.requirements}
@@ -70,10 +69,11 @@ export default function Joblist() {
                 created_by={job.created_by}
                 salary={job.salary}
                 qualification={job.qualification}
-                responsibilities={job.responsibilities}
                 deadline={job.deadline}
                 contact={job.contact}
-                benefits={job.benefits}
+                age={job.age}
+                req_no={job.req_no}
+                termof_emp={job.termof_emp}
               />
             ))}
           </div>

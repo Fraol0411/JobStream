@@ -11,21 +11,22 @@ import {
   CButton,
   CForm,
   CFormTextarea,
+  CFormSelect,
 } from '@coreui/react'
 
 const Accordion = () => {
   const [jobDetails, setJobDetails] = useState({
     title: '',
-    department: '',
     dutystation: '',
     description: '',
     requirements: '',
     salary: '',
     qualification: '',
-    responsibilities: '',
     deadline: '',
     contact: '',
-    benefits: '',
+    age: '',
+    req_no: '',
+    termof_emp: '',
   })
 
   console.log(jobDetails)
@@ -60,16 +61,16 @@ const Accordion = () => {
         // Optionally, reset the form or provide feedback to the user
         setJobDetails({
           title: '',
-          department: '',
           dutystation: '',
           description: '',
           requirements: '',
-          qualifications: '',
-          responsibilities: '',
-          skills: '',
-          benefits: '',
-          contact: '',
+          salary: '',
+          qualification: '',
           deadline: '',
+          contact: '',
+          age: '',
+          req_no: '',
+          termof_emp: '',
         })
       } else {
         console.error('Failed to create job:', response.statusText)
@@ -100,20 +101,105 @@ const Accordion = () => {
                     onChange={handleChange}
                   />
                 </CCol>
-                <CCol md={6}>
-                  <CFormLabel htmlFor="department">Department</CFormLabel>
-                  <CFormInput
-                    type="text"
-                    id="department"
-                    placeholder="Enter department"
-                    value={jobDetails.department}
+              </CRow>
+
+              <CRow className="mt-3">
+                <CCol md={12}>
+                  <CFormLabel htmlFor="requirements">Educational qualification Required</CFormLabel>
+                  <CFormTextarea
+                    id="requirements"
+                    rows="4"
+                    placeholder="Enter Educational qualification Required"
+                    value={jobDetails.requirements}
                     onChange={handleChange}
                   />
                 </CCol>
               </CRow>
+
+              <CRow className="mt-3">
+                <CCol md={12}>
+                  <CFormLabel htmlFor="qualifications">Work Exprience</CFormLabel>
+                  <CFormTextarea
+                    id="qualification"
+                    rows="4"
+                    placeholder="Enter Work Exprience"
+                    value={jobDetails.qualification}
+                    onChange={handleChange}
+                  />
+                </CCol>
+              </CRow>
+
+              <CRow className="mt-3">
+                <CCol md={12}>
+                  <CFormLabel htmlFor="description">Skills and Attributes</CFormLabel>
+                  <CFormTextarea
+                    id="description"
+                    rows="4"
+                    placeholder="Enter Skills and Attributes"
+                    value={jobDetails.description}
+                    onChange={handleChange}
+                  />
+                </CCol>
+              </CRow>
+
+              <CRow className="mt-3">
+                <CCol md={12}>
+                  <CFormLabel htmlFor="skills">Salary And Benefits</CFormLabel>
+                  <CFormTextarea
+                    id="salary"
+                    rows="4"
+                    placeholder="Enter Salary And Benefits"
+                    value={jobDetails.salary}
+                    onChange={handleChange}
+                  />
+                </CCol>
+              </CRow>
+
+              <CRow className="mt-3">
+                <CCol md={12}>
+                  <CFormLabel htmlFor="skills">Required Number</CFormLabel>
+                  <CFormInput
+                    id="req_no"
+                    type="text"
+                    placeholder="Enter Required Number"
+                    value={jobDetails.req_no}
+                    onChange={handleChange}
+                  />
+                </CCol>
+              </CRow>
+
+              <CRow className="mt-3">
+                <CCol md={12}>
+                  <CFormLabel htmlFor="termOfEmployment">Term of Employment</CFormLabel>
+                  <CFormSelect
+                    id="termof_emp"
+                    value={jobDetails.termof_emp}
+                    onChange={handleChange}
+                  >
+                    <option value="">Select Term of Employment</option>
+                    <option value="Full-time">Full-time</option>
+                    <option value="Part-time">Part-time</option>
+                    <option value="Contract">Contract</option>
+                  </CFormSelect>
+                </CCol>
+              </CRow>
+
+              <CRow className="mt-3">
+                <CCol md={12}>
+                  <CFormLabel htmlFor="skills">Age</CFormLabel>
+                  <CFormInput
+                    type="text"
+                    id="age"
+                    placeholder="Enter Age"
+                    value={jobDetails.age}
+                    onChange={handleChange}
+                  />
+                </CCol>
+              </CRow>
+
               <CRow className="mt-3">
                 <CCol md={6}>
-                  <CFormLabel htmlFor="dutystation">Duty Station</CFormLabel>
+                  <CFormLabel htmlFor="dutystation">Place of Work</CFormLabel>
                   <CFormInput
                     type="text"
                     id="dutystation"
@@ -123,78 +209,7 @@ const Accordion = () => {
                   />
                 </CCol>
               </CRow>
-              <CRow className="mt-3">
-                <CCol md={12}>
-                  <CFormLabel htmlFor="description">Job Description</CFormLabel>
-                  <CFormTextarea
-                    id="description"
-                    rows="4"
-                    placeholder="Enter job description"
-                    value={jobDetails.description}
-                    onChange={handleChange}
-                  />
-                </CCol>
-              </CRow>
-              <CRow className="mt-3">
-                <CCol md={12}>
-                  <CFormLabel htmlFor="requirements">Job Requirements</CFormLabel>
-                  <CFormTextarea
-                    id="requirements"
-                    rows="4"
-                    placeholder="Enter job requirements"
-                    value={jobDetails.requirements}
-                    onChange={handleChange}
-                  />
-                </CCol>
-              </CRow>
-              <CRow className="mt-3">
-                <CCol md={12}>
-                  <CFormLabel htmlFor="qualifications">Job Qualifications</CFormLabel>
-                  <CFormTextarea
-                    id="qualification"
-                    rows="4"
-                    placeholder="Enter job qualifications"
-                    value={jobDetails.qualification}
-                    onChange={handleChange}
-                  />
-                </CCol>
-              </CRow>
-              <CRow className="mt-3">
-                <CCol md={12}>
-                  <CFormLabel htmlFor="responsibilities">Job Responsibilities</CFormLabel>
-                  <CFormTextarea
-                    id="responsibilities"
-                    rows="4"
-                    placeholder="Enter job responsibilities"
-                    value={jobDetails.responsibilities}
-                    onChange={handleChange}
-                  />
-                </CCol>
-              </CRow>
-              <CRow className="mt-3">
-                <CCol md={12}>
-                  <CFormLabel htmlFor="skills">Salary</CFormLabel>
-                  <CFormInput
-                    type="text"
-                    id="salary"
-                    placeholder="Enter benefits"
-                    value={jobDetails.salary}
-                    onChange={handleChange}
-                  />
-                </CCol>
-              </CRow>
-              <CRow className="mt-3">
-                <CCol md={6}>
-                  <CFormLabel htmlFor="benefits">Benefits</CFormLabel>
-                  <CFormInput
-                    type="text"
-                    id="benefits"
-                    placeholder="Enter benefits"
-                    value={jobDetails.benefits}
-                    onChange={handleChange}
-                  />
-                </CCol>
-              </CRow>
+
               <CRow className="mt-3">
                 <CCol md={6}>
                   <CFormLabel htmlFor="contact">Contact Information</CFormLabel>

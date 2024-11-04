@@ -31,26 +31,23 @@ const submitApplication = async (formData) => {
 
     // Parse the JSON response body
     const data = await response.json();
-    console.log("Response Data:", data); // This will log the response data
 
     // Destructure application_id from the response data
     const {
       application: { application_id },
     } = data;
-    console.log("Application ID:", application_id); // Log the application_id
 
     // You can now use the application_id for further logic
     return application_id; // Return the application_id for further use
   } catch (error) {
-    console.error("Error:", error);
     throw error; // Re-throw the error for further handling
   }
 };
 
 // function to handle application api
 const submitAcademic = async (academy) => {
-  console.log(academy);
-  console.log("academy api", academy.application_id);
+  console.log(">>>>", academy);
+
   const response = await fetch("http://10.1.12.40:5000/api/academic/", {
     method: "POST",
     headers: {
@@ -67,7 +64,6 @@ const submitAcademic = async (academy) => {
 
 // function to handle application api
 const submitExprience = async (workexperience) => {
-  console.log(workexperience);
   const response = await fetch("http://10.1.12.40:5000/api/exprience", {
     method: "POST",
     headers: {
@@ -86,10 +82,15 @@ const submitExprience = async (workexperience) => {
 export default function Application() {
   const navigate = useNavigate();
   const { user } = useUser();
-  console.log("usr from context", user);
+
   const [message, setMessage] = useState("");
   const [messageacc, setMessageacc] = useState("");
   const [messageexp, setMessageexp] = useState("");
+
+  //button managment
+  const [isPersonalDetailsAdded, setIsPersonalDetailsAdded] = useState(false);
+  const [isAcademicBackgroundAdded, setIsAcademicBackgroundAdded] =
+    useState(false);
 
   // Get the id from the URL
   const { id } = useParams();
@@ -118,6 +119,7 @@ export default function Application() {
   const [resume, setResume] = useState("");
   const [handwritten_letter, setHandwritten_letter] = useState("");
   const [status, setStatus] = useState("submitted");
+  const [age, setAge] = useState("");
 
   const [workexperience, setWorkexperience] = useState({
     application_id: "",
@@ -135,10 +137,6 @@ export default function Application() {
     cgpa: "",
     field: "",
   });
-
-  console.log(workexperience);
-
-  console.log(academy);
 
   // Handler for academic background changes
   const handleAcademicChange = (e) => {
@@ -203,6 +201,7 @@ export default function Application() {
       setMessageacc(
         "Academic background added successfully | Add more (optional)"
       );
+      setIsAcademicBackgroundAdded(true);
     }
   };
 
@@ -219,7 +218,8 @@ export default function Application() {
       !email ||
       !cover_letter ||
       !resume ||
-      !handwritten_letter
+      !handwritten_letter ||
+      !age
     ) {
       setMessage("Please fill out all required fields."); // Set an error message
       return; // Stop execution if any required field is missing
@@ -235,6 +235,7 @@ export default function Application() {
     formData.append("lastname", lastname);
     formData.append("phone", phone);
     formData.append("email", email);
+    formData.append("age", age);
 
     // Append the files (assuming they're File objects)
     formData.append("cover_letter", cover_letter);
@@ -248,16 +249,13 @@ export default function Application() {
       // Call submitApplication with formData
       const application_id = await submitApplication(formData);
 
-      console.log(
-        "Application submitted successfully. Application ID:",
-        application_id
-      ); // Log the application ID
-
       setMessage("personal detail added succesfully");
 
       // Update the work experience and academy states with the new application_id
       setWorkexperience((prev) => ({ ...prev, application_id }));
       setAcademy((prev) => ({ ...prev, application_id }));
+
+      setIsPersonalDetailsAdded(!isPersonalDetailsAdded);
     } catch (error) {
       console.error("Error submitting the application:", error);
     }
@@ -380,9 +378,28 @@ export default function Application() {
                   onChange={(e) => setPhone(e.target.value)}
                   required
                 />
+
                 <div
                   className={`${styles.mandatoryIndicator} ${
                     phone ? styles.filled : ""
+                  }`}
+                ></div>
+              </div>
+
+              <div className={styles.formGroup}>
+                <TextField
+                  label="Enter Your Age"
+                  type="number"
+                  variant="outlined"
+                  fullWidth
+                  value={age}
+                  onChange={(e) => setAge(e.target.age)}
+                  required
+                />
+
+                <div
+                  className={`${styles.mandatoryIndicator} ${
+                    age ? styles.filled : ""
                   }`}
                 ></div>
               </div>
@@ -507,8 +524,7 @@ export default function Application() {
               fullWidth
               required
               label="CGPA"
-              // type="number"
-              inputProps={{ step: "0.01", min: "0", max: "4" }} // Customize step and limits
+              type="number"
               id="cgpa"
               name="cgpa"
               value={academy.cgpa}
@@ -531,8 +547,11 @@ export default function Application() {
           <p>{messageacc}</p>
           <button
             type="button"
-            className={styles.submitButton}
+            className={`${styles.submitButton} ${
+              !isPersonalDetailsAdded && styles.disabledButton
+            }`}
             onClick={addAcademicBackground}
+            disabled={!isPersonalDetailsAdded}
           >
             Add Academic Background
           </button>
@@ -611,9 +630,12 @@ export default function Application() {
 
       {/* Submit Button */}
       <button
-        className={styles.submitfinalButton}
+        className={`${styles.submitfinalButton} ${
+          !isAcademicBackgroundAdded && styles.disabledButtonn
+        }`}
         onClick={handlePopup}
         type="submit"
+        disabled={!(isPersonalDetailsAdded && isAcademicBackgroundAdded)}
       >
         Submit Application
       </button>

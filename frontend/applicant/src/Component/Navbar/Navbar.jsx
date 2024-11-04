@@ -89,9 +89,12 @@ export default function Navbar() {
     if (navRef.current.classList.contains("responsive_nav")) {
       navRef.current.classList.remove("responsive_nav");
     }
+
     if (searchTitle.trim()) {
-      // Navigate to Joblist page with searchTerm as query parameter
-      navigate(`/joblist?title=${encodeURIComponent(searchTitle)}`);
+      // Navigate to Joblist page with searchTerm as query parameter and force reload
+      window.location.href = `/joblist?title=${encodeURIComponent(
+        searchTitle
+      )}`;
     }
   };
 

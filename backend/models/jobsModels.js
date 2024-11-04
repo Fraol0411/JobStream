@@ -5,7 +5,6 @@ import { connectDB } from "../config/db.js";
 //Create NEw job in  the database
 export const CreateJobs = async (
   title,
-  department,
   dutystation,
   description,
   requirements,
@@ -14,22 +13,23 @@ export const CreateJobs = async (
   created_by,
   salary,
   qualification,
-  responsibilities,
   deadline,
   contact,
-  benefits
+  age,
+  req_no,
+  termof_emp
 ) => {
   try {
     const pool = await connectDB();
     const query = `
-            INSERT INTO Jobs (title, department, dutystation, description, requirements, jobtype, status, created_by, salary, qualification, responsibilities, deadline, contact, benefits)
-            VALUES (@title, @department, @dutystation, @description, @requirements, @jobtype, @status, @created_by, @salary, @qualification, @responsibilities, @deadline, @contact, @benefits)
+            INSERT INTO Jobs (title, dutystation, description, requirements, jobtype, status, created_by, salary, qualification,  deadline, contact, age, req_no, termof_emp)
+            VALUES (@title, @dutystation, @description, @requirements, @jobtype, @status, @created_by, @salary, @qualification,  @deadline, @contact, @age, @req_no, @termof_emp)
         `;
 
     return await pool
       .request()
       .input("title", sql.VarChar(100), title)
-      .input("department", sql.VarChar(100), department) // Adjusted length to 100
+
       .input("dutystation", sql.VarChar(100), dutystation)
       .input("description", sql.Text, description) // Use TEXT for larger descriptions
       .input("requirements", sql.Text, requirements) // Use TEXT for larger requirements
@@ -38,10 +38,14 @@ export const CreateJobs = async (
       .input("created_by", sql.Int, created_by) // No need for length with INT
       .input("salary", sql.VarChar(200), salary) // Use DECIMAL for salary
       .input("qualification", sql.VarChar(100), qualification) // Adjusted length to 100
-      .input("responsibilities", sql.Text, responsibilities) // Use TEXT for larger text
+
       .input("deadline", sql.DateTime, deadline) // Use DATETIME for deadline
       .input("contact", sql.VarChar(100), contact) // Adjusted length to 100
-      .input("benefits", sql.Text, benefits) // Use TEXT for larger text
+
+      .input("req_no", sql.Int, req_no) // Adjusted length to 100
+      .input("termof_emp", sql.VarChar(255), termof_emp) // Adjusted length to 100
+      .input("age", sql.VarChar(255), age) // Adjusted length to 100
+
       .query(query);
   } catch (error) {
     console.error("Error creating a job", error);
