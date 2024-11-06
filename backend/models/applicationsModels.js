@@ -9,11 +9,11 @@ export const createApplication = async (
   lastname,
   phone,
   email,
-  age,
   cover_letter,
   resume,
   handwritten_letter,
-  status
+  status,
+  age
 ) => {
   try {
     const pool = await connectDB();
@@ -34,7 +34,6 @@ export const createApplication = async (
       .input("middlename", sql.VarChar(100), middlename)
       .input("lastname", sql.VarChar(100), lastname)
       .input("phone", sql.VarChar(100), phone)
-      .input("email", sql.VarChar(100), email)
       .input("email", sql.VarChar(100), email)
       .input("cover_letter", sql.VarChar(255), cover_letter)
       .input("resume", sql.VarChar(255), resume)

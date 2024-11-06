@@ -38,3 +38,36 @@ export const getAcademicByApplicationId = async (application_id) => {
 
   return result.recordset;
 };
+
+// Retrieve academic background by application_id
+export const getHIghestlevelofeducation = async () => {
+  const pool = await connectDB();
+  const query = `
+    SELECT * FROM level_of_education;
+  `;
+  const result = await pool.request().query(query);
+
+  return result.recordset;
+};
+
+// Retrieve academic background by application_id
+export const getInstitutionplace = async () => {
+  const pool = await connectDB();
+  const query = `
+    SELECT * FROM institutions;
+  `;
+  const result = await pool.request().query(query);
+
+  return result.recordset;
+};
+
+// Retrieve academic background by application_id
+export const getFieldofStudystudied = async () => {
+  const pool = await connectDB();
+  const query = `
+    SELECT * FROM fields_of_study;
+  `;
+  const result = await pool.request().query(query);
+
+  return result.recordset;
+};
