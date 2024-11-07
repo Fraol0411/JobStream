@@ -12,6 +12,7 @@ import {
   InputLabel,
   Select,
   Box,
+  Button,
 } from "@mui/material";
 
 // function to handle application api
@@ -94,6 +95,62 @@ const fetchFieldsOfStudy = async () => {
   );
   if (!response.ok) {
     throw new Error("Failed to fetch fields of study");
+  }
+  return response.json();
+};
+
+// post new academic states
+
+const insertHighestLevel = async (level) => {
+  const response = await fetch(
+    "http://10.1.12.40:5000/api/academic/highest/level",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ level }), // Sending level as the body
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error("Failed to insert highest level of education");
+  }
+  return response.json();
+};
+
+const insertInstitution = async (institutionName, institutionType) => {
+  const response = await fetch(
+    "http://10.1.12.40:5000/api/academic/institution/type",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ institutionName, institutionType }), // Sending both institutionName and institutionType
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error("Failed to insert institution");
+  }
+  return response.json();
+};
+
+const insertFieldOfStudy = async (fieldName) => {
+  const response = await fetch(
+    "http://10.1.12.40:5000/api/academic/field/study",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ fieldName }), // Sending field name as the body
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error("Failed to insert field of study");
   }
   return response.json();
 };
@@ -234,6 +291,7 @@ export default function Application() {
     }
   };
 
+  // Called when custom input (Other) is completed
   const handleCustomInputChange = (e, type) => {
     const value = e.target.value;
 
@@ -248,6 +306,21 @@ export default function Application() {
       setAcademy((prev) => ({ ...prev, field: value }));
     }
   };
+
+  // Trigger this when the user finishes typing and submits the custom "Other" input
+  const handleSubmitOther = (type) => {
+    if (type === "highestlevel" && customEducationLevel) {
+      console.log("Submitting highest level:", customEducationLevel);
+      insertHighestLevel(customEducationLevel);
+    } else if (type === "university" && customUniversity) {
+      console.log("Submitting university:", customUniversity);
+      insertInstitution(customUniversity, "government");
+    } else if (type === "field" && customFieldOfStudy) {
+      console.log("Submitting field of study:", customFieldOfStudy);
+      insertFieldOfStudy(customFieldOfStudy);
+    }
+  };
+
   /***************************/
 
   /***********************/
@@ -342,9 +415,9 @@ export default function Application() {
       !lastname ||
       !phone ||
       !email ||
-      !cover_letter ||
-      !resume ||
-      !handwritten_letter ||
+      // !cover_letter ||
+      // !resume ||
+      // !handwritten_letter ||
       !age
     ) {
       setMessage("Please fill out all required fields."); // Set an error message
@@ -603,7 +676,6 @@ export default function Application() {
         <fieldset className={styles.fieldforacademy}>
           <legend>Academic Background</legend>
           <div className={styles.formGroup}>
-            {/* Highest Level of Education */}
             <div>
               {/* Highest Level of Education */}
               <FormControl fullWidth required sx={{ marginBottom: 2 }}>
@@ -630,14 +702,19 @@ export default function Application() {
                 </Select>
               </FormControl>
               {isOtherEducationLevel && (
-                <TextField
-                  fullWidth
-                  required
-                  label="Specify Other Education Level"
-                  value={customEducationLevel}
-                  onChange={(e) => handleCustomInputChange(e, "highestlevel")}
-                  sx={{ marginBottom: 2 }}
-                />
+                <>
+                  <TextField
+                    fullWidth
+                    required
+                    label="Specify Other Education Level"
+                    value={customEducationLevel}
+                    onChange={(e) => handleCustomInputChange(e, "highestlevel")}
+                    sx={{ marginBottom: 2 }}
+                  />
+                  <Button onClick={() => handleSubmitOther("highestlevel")}>
+                    Submit Custom Level
+                  </Button>
+                </>
               )}
 
               {/* University */}
@@ -666,14 +743,19 @@ export default function Application() {
                 </Select>
               </FormControl>
               {isOtherUniversity && (
-                <TextField
-                  fullWidth
-                  required
-                  label="Specify Other University"
-                  value={customUniversity}
-                  onChange={(e) => handleCustomInputChange(e, "university")}
-                  sx={{ marginBottom: 2 }}
-                />
+                <>
+                  <TextField
+                    fullWidth
+                    required
+                    label="Specify Other University"
+                    value={customUniversity}
+                    onChange={(e) => handleCustomInputChange(e, "university")}
+                    sx={{ marginBottom: 2 }}
+                  />
+                  <Button onClick={() => handleSubmitOther("university")}>
+                    Submit Custom University
+                  </Button>
+                </>
               )}
 
               {/* Field of Study */}
@@ -699,14 +781,19 @@ export default function Application() {
                 </Select>
               </FormControl>
               {isOtherFieldOfStudy && (
-                <TextField
-                  fullWidth
-                  required
-                  label="Specify Other Field of Study"
-                  value={customFieldOfStudy}
-                  onChange={(e) => handleCustomInputChange(e, "field")}
-                  sx={{ marginBottom: 2 }}
-                />
+                <>
+                  <TextField
+                    fullWidth
+                    required
+                    label="Specify Other Field of Study"
+                    value={customFieldOfStudy}
+                    onChange={(e) => handleCustomInputChange(e, "field")}
+                    sx={{ marginBottom: 2 }}
+                  />
+                  <Button onClick={() => handleSubmitOther("field")}>
+                    Submit Custom Field of Study
+                  </Button>
+                </>
               )}
             </div>
 

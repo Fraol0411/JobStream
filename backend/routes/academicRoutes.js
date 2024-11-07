@@ -1,5 +1,8 @@
 import express from "express";
 import {
+  addFieldOfStudy,
+  addHighestLevel,
+  addInstitution,
   createAcademicEntry,
   getAcademicBackground,
   getFieldofStudy,
@@ -23,5 +26,14 @@ router.get("/institution/type", getInstitution);
 
 // fetch highestlevelof edication
 router.get("/field/study", getFieldofStudy);
+
+// insert highestlevelof edication
+router.post("/highest/level", addHighestLevel);
+
+// insert highestlevelof edication
+router.post("/institution/type", addInstitution);
+
+// insert highestlevelof edication
+router.post("/field/study", addFieldOfStudy);
 
 export default router;

@@ -71,3 +71,46 @@ export const getFieldofStudystudied = async () => {
 
   return result.recordset;
 };
+
+// Insert new highest level of education
+export const addHighestLevelOfEducation = async (level) => {
+  const pool = await connectDB();
+  const query = `
+    INSERT INTO level_of_education (level)
+    VALUES (@level);
+  `;
+  const result = await pool.request().input("level", level).query(query);
+
+  return result.rowsAffected[0] > 0; // Returns true if insertion was successful
+};
+
+// Insert new institution
+export const addnewInstitution = async (institutionName, institutionType) => {
+  console.log("Institution Name:", institutionName, "Type:", institutionType);
+  const pool = await connectDB();
+
+  const query = `
+    INSERT INTO institutions (institution_name, type)
+    VALUES (@institution_name, @type);
+  `;
+
+  const result = await pool
+    .request()
+    .input("institution_name", institutionName)
+    .input("type", institutionType)
+    .query(query);
+
+  return result.rowsAffected[0] > 0; // Returns true if insertion was successful
+};
+
+// Insert new field of study
+export const addnewFieldOfStudy = async (fieldName) => {
+  const pool = await connectDB();
+  const query = `
+    INSERT INTO fields_of_study (field)
+    VALUES (@field);
+  `;
+  const result = await pool.request().input("field", fieldName).query(query);
+
+  return result.rowsAffected[0] > 0; // Returns true if insertion was successful
+};
