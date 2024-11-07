@@ -101,36 +101,32 @@ const fetchFieldsOfStudy = async () => {
 // application below //
 export default function Application() {
   const navigate = useNavigate();
-  const { user } = useUser();
 
+  //context
+  const { user } = useUser();
+  const { setApplicationId } = useUser();
+  //context
+
+  //usestate
   const [message, setMessage] = useState("");
   const [messageacc, setMessageacc] = useState("");
   const [messageexp, setMessageexp] = useState("");
-
-  const { applicationId, setApplicationId } = useUser();
-
-  const [isOtherSelected, setIsOtherSelected] = useState(false);
+  const [isOtherEducationLevel, setIsOtherEducationLevel] = useState(false);
+  const [isOtherUniversity, setIsOtherUniversity] = useState(false);
+  const [isOtherFieldOfStudy, setIsOtherFieldOfStudy] = useState(false);
   const [customEducationLevel, setCustomEducationLevel] = useState("");
+  const [customUniversity, setCustomUniversity] = useState("");
+  const [customFieldOfStudy, setCustomFieldOfStudy] = useState("");
+  //usestate
+
   //button managment
   const [isPersonalDetailsAdded, setIsPersonalDetailsAdded] = useState(false);
   const [isAcademicBackgroundAdded, setIsAcademicBackgroundAdded] =
     useState(false);
+  //button managment
 
   // Get the id from the URL
   const { id } = useParams();
-
-  // suscesful popup page
-  const [showPopup, setShowPopup] = useState(false);
-
-  const handleViewDetailClick = () => {
-    submitApplication();
-    setShowPopup(true); // Show the popup when button is clicked
-  };
-
-  const handleClosePopup = () => {
-    setShowPopup(false); // Hide the popup when close is clicked
-    navigate("/joblist");
-  };
 
   const [job_id, setJob_id] = useState(id);
   const [applicant_id, setApplicant_id] = useState(user.user_id);
@@ -145,8 +141,18 @@ export default function Application() {
   const [status, setStatus] = useState("submitted");
   const [age, setAge] = useState();
 
+  // suscesful popup page
+  const [showPopup, setShowPopup] = useState(false);
+  const handleClosePopup = () => {
+    setShowPopup(false); // Hide the popup when close is clicked
+    navigate("/joblist");
+  };
+
+  /**************** */
+  const { application_id } = useUser(); // Access application_id from UserContext
+
   const [workexperience, setWorkexperience] = useState({
-    application_id: applicationId,
+    application_id: null,
     company: null,
     position: "",
     from_date: "",
@@ -154,13 +160,14 @@ export default function Application() {
   });
 
   const [academy, setAcademy] = useState({
-    application_id: applicationId,
+    application_id: null,
     highestlevel: "",
-    university: "ggggagagagaga",
+    university: "",
     completed_year: "",
     cgpa: "",
     field: "",
   });
+  /**************** */
 
   /**************/
   // for dropdowm menu
@@ -201,24 +208,47 @@ export default function Application() {
   }
   /**********************/
 
-  const handleSelectChange = (event) => {
-    const selectedValue = event.target.value;
-    setIsOtherSelected(selectedValue === "Other");
+  /***************************/
 
-    if (selectedValue !== "Other") {
-      // Update academy's highestlevel directly with the selected dropdown value
-      setAcademy((prev) => ({ ...prev, highestlevel: selectedValue }));
-      setCustomEducationLevel(""); // Clear custom level if another option is selected
+  const handleSelectChange = (e, type) => {
+    const value = e.target.value;
+
+    if (type === "highestlevel") {
+      setIsOtherEducationLevel(value === "Other");
+      setAcademy((prev) => ({
+        ...prev,
+        highestlevel: value === "Other" ? customEducationLevel : value,
+      }));
+    } else if (type === "university") {
+      setIsOtherUniversity(value === "Other");
+      setAcademy((prev) => ({
+        ...prev,
+        university: value === "Other" ? customUniversity : value,
+      }));
+    } else if (type === "field") {
+      setIsOtherFieldOfStudy(value === "Other");
+      setAcademy((prev) => ({
+        ...prev,
+        field: value === "Other" ? customFieldOfStudy : value,
+      }));
     }
   };
 
-  const handleCustomLevelChange = (event) => {
-    const newCustomValue = event.target.value;
-    setCustomEducationLevel(newCustomValue);
+  const handleCustomInputChange = (e, type) => {
+    const value = e.target.value;
 
-    // Update academy's highestlevel with the custom input
-    setAcademy((prev) => ({ ...prev, highestlevel: newCustomValue }));
+    if (type === "highestlevel") {
+      setCustomEducationLevel(value);
+      setAcademy((prev) => ({ ...prev, highestlevel: value }));
+    } else if (type === "university") {
+      setCustomUniversity(value);
+      setAcademy((prev) => ({ ...prev, university: value }));
+    } else if (type === "field") {
+      setCustomFieldOfStudy(value);
+      setAcademy((prev) => ({ ...prev, field: value }));
+    }
   };
+  /***************************/
 
   /***********************/
   // Handler for academic and exprience changes
@@ -238,14 +268,17 @@ export default function Application() {
     }));
   };
 
+  /********************* */
   const addWorkExperience = () => {
-    const { company, position, from_date, to_date } = workexperience;
+    const { application_id, company, position, from_date, to_date } =
+      workexperience;
     if (!company || !position || !from_date || !to_date) {
       setMessageexp("Please fill in all fields.");
       return;
     }
     submitExprience(workexperience);
     setWorkexperience({
+      application_id: application_id,
       company: "",
       position: "",
       from_date: "",
@@ -253,7 +286,10 @@ export default function Application() {
     });
     setMessageexp("Work experience added successfully | add more (optional)");
   };
+  /********************* */
 
+  /********************* */
+  // Function to add academic background
   const addAcademicBackground = () => {
     const {
       application_id,
@@ -263,6 +299,8 @@ export default function Application() {
       cgpa,
       field,
     } = academy;
+
+    // Ensure all fields are filled out
     if (
       !highestlevel.trim() ||
       !university.trim() ||
@@ -271,20 +309,26 @@ export default function Application() {
       !field.trim()
     ) {
       setMessageacc("Enter all fields");
-    } else {
-      submitAcademic(academy);
-      setAcademy({
-        highestlevel: " ",
-        university: " ",
-        completed_year: " ",
-        cgpa: " ",
-        field: " ",
-      });
-      setMessageacc(
-        "Academic background added successfully | Add more (optional)"
-      );
-      setIsAcademicBackgroundAdded(true);
+      return;
     }
+
+    // Submit the academic background
+    submitAcademic(academy);
+
+    // Reset the academic fields
+    setAcademy({
+      application_id: application_id, // Retain the application ID
+      highestlevel: "",
+      university: "",
+      completed_year: "",
+      cgpa: "",
+      field: "",
+    });
+
+    setMessageacc(
+      "Academic background added successfully | Add more (optional)"
+    );
+    setIsAcademicBackgroundAdded(true);
   };
   /***********************/
 
@@ -324,16 +368,20 @@ export default function Application() {
 
     try {
       const newApplicationId = await submitApplication(formData);
+      setApplicationId(newApplicationId); // Save to context
 
-      setApplicationId(newApplicationId);
-      setMessage("personal detail added succesfully");
-      // Update the work experience and academy states with the new application_id
+      setAcademy((prev) => ({
+        ...prev,
+        application_id: newApplicationId,
+      }));
+      setMessage("Personal details added successfully");
+      setIsPersonalDetailsAdded(!isPersonalDetailsAdded);
+
+      // /************* */
       setWorkexperience((prev) => ({
         ...prev,
-        application_id: applicationId,
+        application_id: newApplicationId,
       }));
-      setAcademy((prev) => ({ ...prev, application_id: newApplicationId }));
-      setIsPersonalDetailsAdded(!isPersonalDetailsAdded);
     } catch (error) {
       console.error("Error submitting the application:", error);
     }
@@ -375,7 +423,7 @@ export default function Application() {
 
   console.log(" academic", academy);
   console.log("work exprience", workexperience);
-  console.log("permanent id", applicationId);
+  console.log("permanent id", application_id);
 
   return (
     <div className={styles.applicationContainer}>
@@ -557,6 +605,7 @@ export default function Application() {
           <div className={styles.formGroup}>
             {/* Highest Level of Education */}
             <div>
+              {/* Highest Level of Education */}
               <FormControl fullWidth required sx={{ marginBottom: 2 }}>
                 <InputLabel id="highestlevel-label">
                   Highest Level of Education
@@ -565,9 +614,9 @@ export default function Application() {
                   labelId="highestlevel-label"
                   id="highestlevel"
                   name="highestlevel"
-                  value={isOtherSelected ? "Other" : academy.highestlevel}
+                  value={isOtherEducationLevel ? "Other" : academy.highestlevel}
                   label="Highest Level of Education"
-                  onChange={handleSelectChange}
+                  onChange={(e) => handleSelectChange(e, "highestlevel")}
                 >
                   <MenuItem value="">
                     <em>Select</em>
@@ -580,41 +629,86 @@ export default function Application() {
                   <MenuItem value="Other">Other</MenuItem>
                 </Select>
               </FormControl>
-
-              {/* Show custom input field if "Other" is selected */}
-              {isOtherSelected && (
+              {isOtherEducationLevel && (
                 <TextField
                   fullWidth
                   required
                   label="Specify Other Education Level"
                   value={customEducationLevel}
-                  onChange={handleCustomLevelChange}
+                  onChange={(e) => handleCustomInputChange(e, "highestlevel")}
+                  sx={{ marginBottom: 2 }}
+                />
+              )}
+
+              {/* University */}
+              <FormControl fullWidth required sx={{ marginBottom: 2 }}>
+                <InputLabel id="university-label">Institution</InputLabel>
+                <Select
+                  labelId="university-label"
+                  id="university"
+                  name="university"
+                  value={isOtherUniversity ? "Other" : academy.university}
+                  label="University"
+                  onChange={(e) => handleSelectChange(e, "university")}
+                >
+                  <MenuItem value="">
+                    <em>Select</em>
+                  </MenuItem>
+                  {institutionsResult.data?.map((university) => (
+                    <MenuItem
+                      key={university.id}
+                      value={university.institution_name}
+                    >
+                      {university.institution_name}
+                    </MenuItem>
+                  ))}
+                  <MenuItem value="Other">Other</MenuItem>
+                </Select>
+              </FormControl>
+              {isOtherUniversity && (
+                <TextField
+                  fullWidth
+                  required
+                  label="Specify Other University"
+                  value={customUniversity}
+                  onChange={(e) => handleCustomInputChange(e, "university")}
+                  sx={{ marginBottom: 2 }}
+                />
+              )}
+
+              {/* Field of Study */}
+              <FormControl fullWidth required sx={{ marginBottom: 2 }}>
+                <InputLabel id="field-label">Field of Study</InputLabel>
+                <Select
+                  labelId="field-label"
+                  id="field"
+                  name="field"
+                  value={isOtherFieldOfStudy ? "Other" : academy.field}
+                  label="Field of Study"
+                  onChange={(e) => handleSelectChange(e, "field")}
+                >
+                  <MenuItem value="">
+                    <em>Select</em>
+                  </MenuItem>
+                  {fieldsOfStudyResult.data?.map((field) => (
+                    <MenuItem key={field.id} value={field.field}>
+                      {field.field}
+                    </MenuItem>
+                  ))}
+                  <MenuItem value="Other">Other</MenuItem>
+                </Select>
+              </FormControl>
+              {isOtherFieldOfStudy && (
+                <TextField
+                  fullWidth
+                  required
+                  label="Specify Other Field of Study"
+                  value={customFieldOfStudy}
+                  onChange={(e) => handleCustomInputChange(e, "field")}
                   sx={{ marginBottom: 2 }}
                 />
               )}
             </div>
-
-            {/* University */}
-            <FormControl fullWidth required sx={{ marginBottom: 2 }}>
-              <InputLabel id="highestlevel-label">University</InputLabel>
-              <Select
-                labelId="University-label"
-                id="university"
-                name="university"
-                value={academy.university}
-                label="University"
-                onChange={handleAcademicChange}
-              >
-                <MenuItem value="">
-                  <em>Select</em>
-                </MenuItem>
-                {institutionsResult.data?.map((level) => (
-                  <MenuItem key={level.id} value={level.institution_name}>
-                    {level.institution_name}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
 
             {/* Completed Year */}
             <TextField
@@ -641,28 +735,6 @@ export default function Application() {
               onChange={handleAcademicChange}
               margin="normal"
             />
-
-            {/* Field of Study */}
-            <FormControl fullWidth required sx={{ marginBottom: 2 }}>
-              <InputLabel id="highestlevel-label">Field of Study</InputLabel>
-              <Select
-                labelId="Field of Study"
-                id="field"
-                name="field"
-                value={academy.field}
-                label="field"
-                onChange={handleAcademicChange}
-              >
-                <MenuItem value="">
-                  <em>Select</em>
-                </MenuItem>
-                {fieldsOfStudyResult.data?.map((level) => (
-                  <MenuItem key={level.id} value={level.field}>
-                    {level.field}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
           </div>
           <p>{messageacc}</p>
           <button
