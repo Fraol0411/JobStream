@@ -273,9 +273,7 @@ const ListGroups = () => {
       },
       {
         Header: 'Age',
-        accessor: (applicant) => {
-          applicant.age
-        },
+        accessor: 'age', // Assuming 'age' is directly available in the data
         sortType: 'basic',
       },
     ],
