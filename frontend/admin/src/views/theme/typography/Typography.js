@@ -14,6 +14,7 @@ import {
   CTableBody,
   CTableDataCell,
   CBadge,
+  CButton,
 } from '@coreui/react'
 import { rgbToHex } from '@coreui/utils'
 import { useNavigate } from 'react-router-dom' // Import useNavigate from react-router-dom
@@ -86,6 +87,29 @@ const activeJobs = async () => {
   }
 }
 
+const closeJob = async (jobId) => {
+  console.log('iddddddddd ', jobId)
+  try {
+    const response = await fetch(`http://10.1.12.40:5000/api/jobs/reupdate/${jobId}`, {
+      // Corrected URL
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ id: jobId }), // Sending the jobId in the body
+    })
+
+    if (response.ok) {
+      console.log('Job status updated to closed')
+      // Optionally refetch job data or update the UI to reflect the change
+    } else {
+      console.error('Failed to update job status')
+    }
+  } catch (error) {
+    console.error('Error:', error)
+  }
+}
+
 const Colors = () => {
   const navigate = useNavigate() // Initialize useNavigate
 
@@ -112,7 +136,8 @@ const Colors = () => {
 
   console.log('Job data:', data) // Make sure this logs the data after successful fetch
 
-  const filteredData = data.filter((item) => new Date(item.deadline) < currentDate)
+  const filteredDataa = data.filter((item) => new Date(item.deadline) < currentDate)
+  const filteredData = data.filter((item) => item.status === 'closed')
   console.log('filterdata', filteredData)
 
   // Function to handle row click
@@ -121,6 +146,16 @@ const Colors = () => {
     console.log(job_id)
     // Add sourceComponent to the URL as a query parameter
     navigate(`/base/list-groups?job_id=${job_id}&source=${sourceComponent}`)
+  }
+
+  const handleButtonClick = async (jobId) => {
+    console.log('Button clicked for job ID:', jobId)
+
+    // Call closeJob to update status
+    await closeJob(jobId) // Wait for closeJob to complete
+
+    // Reload the page after the job status is updated
+    window.location.reload() // Refresh the page
   }
 
   return (
@@ -133,10 +168,10 @@ const Colors = () => {
             <CTableHead>
               <CTableRow>
                 <CTableHeaderCell scope="col">Job Title</CTableHeaderCell>
-                <CTableHeaderCell scope="col">Department</CTableHeaderCell>
-                <CTableHeaderCell scope="col">Description</CTableHeaderCell>
-                <CTableHeaderCell scope="col">Location</CTableHeaderCell>
-                <CTableHeaderCell scope="col">Status</CTableHeaderCell>
+                <CTableHeaderCell scope="col">Job Type</CTableHeaderCell>
+                <CTableHeaderCell scope="col">Created By</CTableHeaderCell>
+                <CTableHeaderCell scope="col">Deadline</CTableHeaderCell>
+                <CTableHeaderCell scope="col">Action</CTableHeaderCell>
               </CTableRow>
             </CTableHead>
             <CTableBody>
@@ -147,13 +182,28 @@ const Colors = () => {
                   style={{ cursor: 'pointer' }}
                 >
                   <CTableDataCell>{vacancy.title}</CTableDataCell>
-                  <CTableDataCell>{vacancy.department}</CTableDataCell>
-                  <CTableDataCell>{vacancy.description}</CTableDataCell>
-                  <CTableDataCell>{vacancy.dutystation}</CTableDataCell>
+                  <CTableDataCell>{vacancy.jobtype}</CTableDataCell>
+                  <CTableDataCell>{vacancy.created_by}</CTableDataCell>
                   <CTableDataCell>
-                    <CBadge style={{ backgroundColor: 'white', color: 'black' }}>
-                      {vacancy.status}
-                    </CBadge>
+                    {
+                      // Format the SQL date string to a readable format
+                      new Intl.DateTimeFormat('en-US', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric',
+                      }).format(new Date(vacancy.deadline))
+                    }
+                  </CTableDataCell>
+                  <CTableDataCell>
+                    <CButton
+                      style={{ backgroundColor: 'gray' }}
+                      onClick={(e) => {
+                        e.stopPropagation() // Prevents triggering the row's onClick
+                        handleButtonClick(vacancy.job_id) // Custom button handler
+                      }}
+                    >
+                      Reactive
+                    </CButton>
                   </CTableDataCell>
                 </CTableRow>
               ))}

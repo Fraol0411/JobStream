@@ -54,6 +54,7 @@
 import { application } from "express";
 import {
   createApplication,
+  getApplicantsByJobId,
   getapplicationwithID,
   updateApplicationStatusInDB,
 } from "../models/applicationsModels.js";
@@ -199,5 +200,24 @@ export const updateApplicationStatus = async (req, res) => {
     res
       .status(500)
       .json({ message: "Server error while updating application status" });
+  }
+};
+
+// controller for executing stored procedure
+export const getApplicantDetails = async (req, res) => {
+  const { jobId } = req.params; // Extract jobId from URL parameter
+
+  try {
+    const applicants = await getApplicantsByJobId(jobId);
+    if (!applicants || applicants.length === 0) {
+      return res
+        .status(404)
+        .json({ message: "No applicants found for this job" });
+    }
+    // Return the applicants' data as JSON
+    res.json(applicants);
+  } catch (error) {
+    console.error("Error fetching applicants:", error);
+    res.status(500).json({ message: "Error fetching applicants" });
   }
 };

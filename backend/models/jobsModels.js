@@ -35,7 +35,7 @@ export const CreateJobs = async (
       .input("requirements", sql.Text, requirements) // Use TEXT for larger requirements
       .input("jobtype", sql.VarChar(100), jobtype)
       .input("status", sql.VarChar(10), status) // Adjusted length to 10 to fit active/closed
-      .input("created_by", sql.Int, created_by) // No need for length with INT
+      .input("created_by", sql.VarChar(255), created_by) // No need for length with INT
       .input("salary", sql.VarChar(200), salary) // Use DECIMAL for salary
       .input("qualification", sql.VarChar(100), qualification) // Adjusted length to 100
 
@@ -139,5 +139,53 @@ export const getjobwithTYPE = async (type) => {
   } catch (error) {
     console.error("Error fetching jobs by type:", error);
     throw error;
+  }
+};
+
+// Update job status by job_id
+export const updateJobStatusToClosed = async (job_id) => {
+  try {
+    const pool = await connectDB(); // Make sure this connects to your DB
+    const result = await pool
+      .request()
+      .input("job_id", sql.Int, job_id) // Assuming job_id is an integer
+      .input("status", sql.VarChar, "closed") // Set the status to "closed"
+      .query("UPDATE Jobs SET status = @status WHERE job_id = @job_id"); // Ensure 'status' and 'job_id' are correct column names
+
+    // Check if any rows were updated
+    if (result.rowsAffected[0] === 0) {
+      console.log("No job found with the given job_id");
+      return false; // Return false to indicate no rows were updated
+    }
+
+    console.log("Job status updated to closed successfully");
+    return true; // Return true to indicate success
+  } catch (error) {
+    console.error("Error updating job status:", error);
+    throw error; // Re-throw error for further handling
+  }
+};
+
+// Update job status by job_id
+export const updateJobStatusToOpen = async (job_id) => {
+  try {
+    const pool = await connectDB(); // Make sure this connects to your DB
+    const result = await pool
+      .request()
+      .input("job_id", sql.Int, job_id) // Assuming job_id is an integer
+      .input("status", sql.VarChar, "active") // Set the status to "closed"
+      .query("UPDATE Jobs SET status = @status WHERE job_id = @job_id"); // Ensure 'status' and 'job_id' are correct column names
+
+    // Check if any rows were updated
+    if (result.rowsAffected[0] === 0) {
+      console.log("No job found with the given job_id");
+      return false; // Return false to indicate no rows were updated
+    }
+
+    console.log("Job status updated to closed successfully");
+    return true; // Return true to indicate success
+  } catch (error) {
+    console.error("Error updating job status:", error);
+    throw error; // Re-throw error for further handling
   }
 };

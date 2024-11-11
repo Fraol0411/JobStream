@@ -4,6 +4,8 @@ import {
   getjobwithID,
   getjobwithNAME,
   getjobwithTYPE,
+  updateJobStatusToClosed,
+  updateJobStatusToOpen,
 } from "../models/jobsModels.js";
 
 // Handle Jobs Creation
@@ -106,5 +108,49 @@ export const getjobBytype = async (req, res) => {
   } catch (error) {
     console.error("Error fetching job:", error);
     res.status(500).json({ message: "Server error during fetching the job" });
+  }
+};
+
+//update controller
+export const closeJobPosting = async (req, res) => {
+  const { id } = req.params;
+  console.log(id);
+
+  try {
+    // Call the model function to update the job status
+    const success = await updateJobStatusToClosed(id);
+
+    if (success) {
+      res
+        .status(200)
+        .json({ message: "Job status updated to closed successfully." });
+    } else {
+      res.status(404).json({ message: "No job found with the given job_id." });
+    }
+  } catch (error) {
+    console.error("Error in closeJobPosting controller:", error);
+    res.status(500).json({ message: "Internal server error." });
+  }
+};
+
+//open controller
+export const openJobPosting = async (req, res) => {
+  const { id } = req.params;
+  console.log(id);
+
+  try {
+    // Call the model function to update the job status
+    const success = await updateJobStatusToOpen(id);
+
+    if (success) {
+      res
+        .status(200)
+        .json({ message: "Job status updated to closed successfully." });
+    } else {
+      res.status(404).json({ message: "No job found with the given job_id." });
+    }
+  } catch (error) {
+    console.error("Error in closeJobPosting controller:", error);
+    res.status(500).json({ message: "Internal server error." });
   }
 };

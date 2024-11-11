@@ -93,3 +93,26 @@ export const updateApplicationStatusInDB = async (application_id, status) => {
     throw error;
   }
 };
+
+// Function to execute the stored procedure
+export const getApplicantsByJobId = async (jobId) => {
+  try {
+    const pool = await connectDB();
+
+    const query = `
+      EXEC dbo.GetApplicantDetailsByJobId @JobId = @jobId;
+    `;
+
+    // Execute the query and return the result
+    const result = await pool
+      .request()
+      .input("jobId", sql.Int, jobId)
+      .query(query);
+
+    // Return the applicants' details
+    return result.recordset; // Assuming it returns an array of applicants' data
+  } catch (error) {
+    console.error("Error fetching applicants:", error);
+    throw error;
+  }
+};

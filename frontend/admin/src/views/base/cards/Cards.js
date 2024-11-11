@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useUser } from '../../../../../applicant/src/UserContext'
+import { useUser } from '../../../UserContext'
 import {
   CCard,
   CCardBody,
@@ -29,6 +29,8 @@ const Accordion = () => {
     termof_emp: '',
   })
 
+  const { user } = useUser()
+  console.log('admin name', user.username)
   console.log(jobDetails)
 
   const handleChange = (e) => {
@@ -43,7 +45,7 @@ const Accordion = () => {
       ...jobDetails,
       jobtype: 'Fresh Graduate', // Set default job type
       status: 'active', // Assuming you want to set the status as active by default
-      created_by: 5012, // Set the creator's user ID (you may want to fetch this dynamically)
+      created_by: user.username, // Set the creator's user ID (you may want to fetch this dynamically)
     }
 
     try {
@@ -226,7 +228,7 @@ const Accordion = () => {
                 <CCol md={6}>
                   <CFormLabel htmlFor="deadline">Application Deadline</CFormLabel>
                   <CFormInput
-                    type="text"
+                    type="date" // Changed type to "date" to show calendar
                     id="deadline"
                     placeholder="Enter application deadline"
                     value={jobDetails.deadline}
@@ -234,6 +236,7 @@ const Accordion = () => {
                   />
                 </CCol>
               </CRow>
+
               <CRow className="mt-3">
                 <CCol md={12} className="text-end">
                   <CButton type="submit" color="primary">
