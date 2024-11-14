@@ -20,6 +20,7 @@ import { rgbToHex } from '@coreui/utils'
 import { useNavigate } from 'react-router-dom' // Import useNavigate from react-router-dom
 import { CircleLoader } from 'react-spinners'
 import { useQuery } from '@tanstack/react-query'
+import { useUser } from '../../../UserContext'
 
 const ThemeView = () => {
   const [color, setColor] = useState('rgb(255, 255, 255)')

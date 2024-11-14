@@ -12,8 +12,11 @@ import {
   CFormTextarea,
   CFormSelect,
 } from '@coreui/react'
+import { useUser } from '../../../UserContext'
 
 const Accordion = () => {
+  const { user } = useUser()
+  const [message, setMessage] = useState(null)
   const [jobDetails, setJobDetails] = useState({
     title: '',
     dutystation: '',
@@ -40,7 +43,7 @@ const Accordion = () => {
       ...jobDetails,
       jobtype: 'External Applicant', // Set default job type
       status: 'active', // Assuming you want to set the status as active by default
-      created_by: 5012, // Set the creator's user ID (you may want to fetch this dynamically)
+      created_by: user.username, // Set the creator's user ID (you may want to fetch this dynamically)
     }
 
     try {
@@ -54,7 +57,8 @@ const Accordion = () => {
 
       if (response.ok) {
         const data = await response.json()
-        console.log('Job created successfully:', data)
+        console.log('Job created successfully:', data.message)
+        setMessage(data.message)
         // Optionally, reset the form or provide feedback to the user
         setJobDetails({
           title: '',
@@ -221,7 +225,7 @@ const Accordion = () => {
                 <CCol md={6}>
                   <CFormLabel htmlFor="deadline">Application Deadline</CFormLabel>
                   <CFormInput
-                    type="text"
+                    type="date" // Changed type to "date" to show calendar
                     id="deadline"
                     placeholder="Enter application deadline"
                     value={jobDetails.deadline}
@@ -231,6 +235,10 @@ const Accordion = () => {
               </CRow>
               <CRow className="mt-3">
                 <CCol md={12} className="text-end">
+                  {message && (
+                    <div className={`message ${response.ok ? 'success' : 'error'}`}>{message}</div>
+                  )}
+
                   <CButton type="submit" color="primary">
                     Post Job
                   </CButton>

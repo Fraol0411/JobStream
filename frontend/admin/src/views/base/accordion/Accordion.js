@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useUser } from '../../../../../applicant/src/UserContext'
+
 import {
   CCard,
   CCardBody,
@@ -13,8 +13,10 @@ import {
   CFormTextarea,
   CFormSelect,
 } from '@coreui/react'
+import { useUser } from '../../../UserContext'
 
 const Accordion = () => {
+  const { user } = useUser()
   const [jobDetails, setJobDetails] = useState({
     title: '',
     dutystation: '',
@@ -45,7 +47,7 @@ const Accordion = () => {
       ...jobDetails,
       jobtype: 'Awash Staff', // Set default job type
       status: 'active', // Assuming you want to set the status as active by default
-      created_by: 5012, // Set the creator's user ID (you may want to fetch this dynamically)
+      created_by: user.username, // Set the creator's user ID (you may want to fetch this dynamically)
     }
     console.log(jobData)
 
@@ -103,7 +105,6 @@ const Accordion = () => {
                   />
                 </CCol>
               </CRow>
-
               <CRow className="mt-3">
                 <CCol md={12}>
                   <CFormLabel htmlFor="requirements">Educational qualification Required</CFormLabel>
@@ -116,7 +117,6 @@ const Accordion = () => {
                   />
                 </CCol>
               </CRow>
-
               <CRow className="mt-3">
                 <CCol md={12}>
                   <CFormLabel htmlFor="qualifications">Work Exprience</CFormLabel>
@@ -129,7 +129,6 @@ const Accordion = () => {
                   />
                 </CCol>
               </CRow>
-
               <CRow className="mt-3">
                 <CCol md={12}>
                   <CFormLabel htmlFor="description">Skills and Attributes</CFormLabel>
@@ -142,7 +141,6 @@ const Accordion = () => {
                   />
                 </CCol>
               </CRow>
-
               <CRow className="mt-3">
                 <CCol md={12}>
                   <CFormLabel htmlFor="skills">Salary And Benefits</CFormLabel>
@@ -155,7 +153,6 @@ const Accordion = () => {
                   />
                 </CCol>
               </CRow>
-
               <CRow className="mt-3">
                 <CCol md={12}>
                   <CFormLabel htmlFor="skills">Required Number</CFormLabel>
@@ -168,7 +165,6 @@ const Accordion = () => {
                   />
                 </CCol>
               </CRow>
-
               <CRow className="mt-3">
                 <CCol md={12}>
                   <CFormLabel htmlFor="termOfEmployment">Term of Employment</CFormLabel>
@@ -184,7 +180,6 @@ const Accordion = () => {
                   </CFormSelect>
                 </CCol>
               </CRow>
-
               <CRow className="mt-3">
                 <CCol md={12}>
                   <CFormLabel htmlFor="skills">Age</CFormLabel>
@@ -197,7 +192,6 @@ const Accordion = () => {
                   />
                 </CCol>
               </CRow>
-
               <CRow className="mt-3">
                 <CCol md={6}>
                   <CFormLabel htmlFor="dutystation">Place of Work</CFormLabel>
@@ -210,7 +204,6 @@ const Accordion = () => {
                   />
                 </CCol>
               </CRow>
-
               <CRow className="mt-3">
                 <CCol md={6}>
                   <CFormLabel htmlFor="contact">Contact Information</CFormLabel>
@@ -227,7 +220,7 @@ const Accordion = () => {
                 <CCol md={6}>
                   <CFormLabel htmlFor="deadline">Application Deadline</CFormLabel>
                   <CFormInput
-                    type="text"
+                    type="date" // Changed type to "date" to show calendar
                     id="deadline"
                     placeholder="Enter application deadline"
                     value={jobDetails.deadline}
@@ -235,6 +228,7 @@ const Accordion = () => {
                   />
                 </CCol>
               </CRow>
+
               <CRow className="mt-3">
                 <CCol md={12} className="text-end">
                   <CButton type="submit" color="primary">

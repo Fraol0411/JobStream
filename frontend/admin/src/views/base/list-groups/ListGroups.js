@@ -645,48 +645,68 @@ const ListGroups = () => {
             {/* Render filter section only if sourceComponent is not "closed" */}
             {sourceComponent !== 'closed' && (
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '20px', marginBottom: '20px' }}>
-                <div>
-                  <label>Filter by Age (below):</label>
-                  <input type="number" onChange={(e) => setFilter('age', Number(e.target.value))} />
-                </div>
-
-                <div>
-                  <label>Filter by Field of Study:</label>
-                  <input
-                    type="number"
-                    onChange={(e) =>
-                      setFilter('age', e.target.value ? Number(e.target.value) : undefined)
-                    }
-                  />
-                </div>
-                <div>
-                  <label>Filter by Experience (Years):</label>
-                  <input
-                    type="number"
-                    onChange={(e) => setFilter('total_experience_years', e.target.value)}
-                  />
-                </div>
-                <div>
-                  <label>Filter by GPA:</label>
-                  <input type="number" onChange={(e) => setFilter('cgpa', e.target.value)} />
-                </div>
-                <div>
-                  <label>Filter by Institution:</label>
-                  <input type="text" onChange={(e) => setFilter('university', e.target.value)} />
-                </div>
-                <div>
-                  <label>Filter by Year of Graduation:</label>
-                  <input
-                    type="number"
-                    onChange={(e) => setFilter('completed_year', e.target.value)}
-                  />
-                </div>
-                <div>
-                  <label>Filter by Institution Type:</label>
-                  <input
-                    type="text"
-                    onChange={(e) => setFilter('university_type', e.target.value)}
-                  />
+                <div
+                  style={{
+                    display: 'flex',
+                    flexWrap: 'wrap',
+                    gap: '20px',
+                    marginBottom: '20px',
+                    backgroundColor: '#f9f9f9', // Light background for the entire section
+                    padding: '20px', // Padding for the entire filter container
+                    borderRadius: '8px', // Rounded corners
+                    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', // Soft shadow for depth
+                  }}
+                >
+                  {[
+                    { label: 'Filter by Age (below):', filter: 'age' },
+                    { label: 'Filter by Field of Study:', filter: 'field_of_study' },
+                    { label: 'Filter by Experience (Years):', filter: 'total_experience_years' },
+                    { label: 'Filter by GPA:', filter: 'cgpa' },
+                    { label: 'Filter by Institution:', filter: 'university' },
+                    { label: 'Filter by Year of Graduation:', filter: 'completed_year' },
+                    { label: 'Filter by Institution Type:', filter: 'university_type' },
+                  ].map(({ label, filter }, index) => (
+                    <div
+                      key={index}
+                      style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'flex-start',
+                        padding: '10px',
+                        backgroundColor: '#ffffff', // White background for each filter block
+                        borderRadius: '6px',
+                        boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+                        minWidth: '200px',
+                      }}
+                    >
+                      <label style={{ fontSize: '14px', color: '#333', marginBottom: '5px' }}>
+                        {label}
+                      </label>
+                      <input
+                        type="text"
+                        onChange={(e) =>
+                          setFilter(
+                            filter,
+                            e.target.value
+                              ? filter === 'age' ||
+                                filter === 'total_experience_years' ||
+                                filter === 'completed_year' ||
+                                filter === 'cgpa'
+                                ? Number(e.target.value)
+                                : e.target.value
+                              : undefined,
+                          )
+                        }
+                        style={{
+                          width: '100%',
+                          padding: '8px',
+                          fontSize: '14px',
+                          borderRadius: '4px',
+                          border: '1px solid #ccc',
+                        }}
+                      />
+                    </div>
+                  ))}
                 </div>
               </div>
             )}
