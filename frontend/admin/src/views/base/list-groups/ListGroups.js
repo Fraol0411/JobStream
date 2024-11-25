@@ -527,6 +527,8 @@ const ListGroups = () => {
           : data.filter((applicant) => applicant.status === 'submitted')
 
       setApplicants(submittedApplicants)
+
+      console.log('applicabts data list ', submittedApplicants)
     } catch (error) {
       setError(error.message)
     } finally {
@@ -555,9 +557,10 @@ const ListGroups = () => {
       Phone: row.original.phone,
       Email: row.original.email,
       Age: row.original.age,
+      Gender: row.original.gender,
       'Experience (Years)': row.original.total_experience_years,
       'Field of Study': row.original.field,
-      Institution: row.original.university,
+      Institution: row.original.university,32
       CGPA: row.original.cgpa,
       'Year of Graduation': row.original.completed_year,
       'Institution Type': row.original.university_type,
@@ -592,6 +595,7 @@ const ListGroups = () => {
         Cell: ({ value }) => new Date(value).toLocaleDateString(),
       },
       { Header: 'Age', accessor: 'age', filter: filterLessThan },
+      { Header: 'Gender', accessor: 'gender' },
       {
         Header: 'Experience (Years)',
         accessor: 'total_experience_years',
@@ -659,6 +663,7 @@ const ListGroups = () => {
                 >
                   {[
                     { label: 'Filter by Age (below):', filter: 'age' },
+                    { label: 'Filter by gender:', filter: 'gender' },
                     { label: 'Filter by Field of Study:', filter: 'field_of_study' },
                     { label: 'Filter by Experience (Years):', filter: 'total_experience_years' },
                     { label: 'Filter by GPA:', filter: 'cgpa' },
@@ -689,6 +694,7 @@ const ListGroups = () => {
                             filter,
                             e.target.value
                               ? filter === 'age' ||
+                                filter === 'sex' ||
                                 filter === 'total_experience_years' ||
                                 filter === 'completed_year' ||
                                 filter === 'cgpa'

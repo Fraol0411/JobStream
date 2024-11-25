@@ -70,6 +70,7 @@ export const createNewApplication = async (req, res) => {
     email,
     status,
     age,
+    gender,
   } = req.body;
 
   console.log("Files received:", req.files);
@@ -94,7 +95,8 @@ export const createNewApplication = async (req, res) => {
       !lastname ||
       !phone ||
       !email ||
-      !age
+      !age ||
+      !gender
     ) {
       return res
         .status(400)
@@ -116,7 +118,8 @@ export const createNewApplication = async (req, res) => {
       resume,
       handwritten_letter,
       status,
-      age
+      age,
+      gender
     );
 
     // Return the newly created application data as response

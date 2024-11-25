@@ -13,6 +13,8 @@ import {
   Select,
   Box,
   Button,
+  FormControlLabel,
+  Checkbox,
 } from "@mui/material";
 
 // function to handle application api
@@ -172,8 +174,11 @@ export default function Application() {
   const [isOtherUniversity, setIsOtherUniversity] = useState(false);
   const [isOtherFieldOfStudy, setIsOtherFieldOfStudy] = useState(false);
   const [customEducationLevel, setCustomEducationLevel] = useState("");
-  const [customUniversity, setCustomUniversity] = useState("");
+  const [customUniversity, setCustomUniversity] = useState({
+    newunv: "",
+  });
   const [customFieldOfStudy, setCustomFieldOfStudy] = useState("");
+  const [customUniversityType, setCustomUniversityType] = useState("");
   //usestate
 
   //button managment
@@ -197,6 +202,7 @@ export default function Application() {
   const [handwritten_letter, setHandwritten_letter] = useState("");
   const [status, setStatus] = useState("submitted");
   const [age, setAge] = useState();
+  const [gender, setGender] = useState();
 
   // suscesful popup page
   const [showPopup, setShowPopup] = useState(false);
@@ -270,6 +276,8 @@ export default function Application() {
   const handleSelectChange = (e, type) => {
     const value = e.target.value;
 
+    console.log("value here ", value);
+
     if (type === "highestlevel") {
       setIsOtherEducationLevel(value === "Other");
       setAcademy((prev) => ({
@@ -277,7 +285,9 @@ export default function Application() {
         highestlevel: value === "Other" ? customEducationLevel : value,
       }));
     } else if (type === "university") {
-      setIsOtherUniversity(value === "Other");
+      if (value === "Other") {
+        setIsOtherUniversity("display");
+      }
       setAcademy((prev) => ({
         ...prev,
         university: value === "Other" ? customUniversity : value,
@@ -299,7 +309,10 @@ export default function Application() {
       setCustomEducationLevel(value);
       setAcademy((prev) => ({ ...prev, highestlevel: value }));
     } else if (type === "university") {
-      setCustomUniversity(value);
+      setCustomUniversity((prev) => ({
+        ...prev,
+        newunv: value,
+      }));
       setAcademy((prev) => ({ ...prev, university: value }));
     } else if (type === "field") {
       setCustomFieldOfStudy(value);
@@ -312,12 +325,15 @@ export default function Application() {
     if (type === "highestlevel" && customEducationLevel) {
       console.log("Submitting highest level:", customEducationLevel);
       insertHighestLevel(customEducationLevel);
+      setIsOtherEducationLevel(false);
     } else if (type === "university" && customUniversity) {
       console.log("Submitting university:", customUniversity);
-      insertInstitution(customUniversity, "government");
+      insertInstitution(customUniversity.newunv, customUniversityType);
+      setIsOtherUniversity("ndisplay");
     } else if (type === "field" && customFieldOfStudy) {
       console.log("Submitting field of study:", customFieldOfStudy);
       insertFieldOfStudy(customFieldOfStudy);
+      setIsOtherFieldOfStudy(false);
     }
   };
 
@@ -415,9 +431,9 @@ export default function Application() {
       !lastname ||
       !phone ||
       !email ||
-      // !cover_letter ||
-      // !resume ||
-      // !handwritten_letter ||
+      !cover_letter ||
+      !resume ||
+      !handwritten_letter ||
       !age
     ) {
       setMessage("Please fill out all required fields."); // Set an error message
@@ -438,6 +454,7 @@ export default function Application() {
     formData.append("handwritten_letter", handwritten_letter);
     formData.append("status", status);
     formData.append("age", age);
+    formData.append("gender", gender);
 
     try {
       const newApplicationId = await submitApplication(formData);
@@ -497,6 +514,9 @@ export default function Application() {
   console.log(" academic", academy);
   console.log("work exprience", workexperience);
   console.log("permanent id", application_id);
+  console.log("is other univesity ", isOtherUniversity);
+  console.log("custom universyt ", customUniversity.newunv);
+  console.log("custom universyt state ", isOtherUniversity === "ndisplay");
 
   return (
     <div className={styles.applicationContainer}>
@@ -608,6 +628,27 @@ export default function Application() {
                   }`}
                 ></div>
               </div>
+
+              <div className={styles.formGroup}>
+                <TextField
+                  select
+                  label="Select Your Gender"
+                  variant="outlined"
+                  fullWidth
+                  value={gender}
+                  onChange={(e) => setGender(e.target.value)}
+                  required
+                >
+                  <MenuItem value="Male">Male</MenuItem>
+                  <MenuItem value="Female">Female</MenuItem>
+                </TextField>
+
+                <div
+                  className={`${styles.mandatoryIndicator} ${
+                    gender ? styles.filled : ""
+                  }`}
+                ></div>
+              </div>
             </fieldset>
 
             {/* Resume and Cover Letter */}
@@ -661,7 +702,7 @@ export default function Application() {
               </div>
             </fieldset>
           </div>
-          <p>{message}</p>
+          <p style={{}}>{message}</p>
 
           <button
             className={styles.submitButton}
@@ -686,7 +727,12 @@ export default function Application() {
                   labelId="highestlevel-label"
                   id="highestlevel"
                   name="highestlevel"
-                  value={isOtherEducationLevel ? "Other" : academy.highestlevel}
+                  // value={isOtherEducationLevel ? "Other" : academy.highestlevel}
+                  value={
+                    isOtherEducationLevel
+                      ? customEducationLevel
+                      : academy.highestlevel
+                  }
                   label="Highest Level of Education"
                   onChange={(e) => handleSelectChange(e, "highestlevel")}
                 >
@@ -724,7 +770,11 @@ export default function Application() {
                   labelId="university-label"
                   id="university"
                   name="university"
-                  value={isOtherUniversity ? "Other" : academy.university}
+                  value={
+                    isOtherUniversity === "ndisplay"
+                      ? customUniversity.newunv
+                      : academy.university
+                  }
                   label="University"
                   onChange={(e) => handleSelectChange(e, "university")}
                 >
@@ -742,16 +792,48 @@ export default function Application() {
                   <MenuItem value="Other">Other</MenuItem>
                 </Select>
               </FormControl>
-              {isOtherUniversity && (
+              {isOtherUniversity === "display" && (
                 <>
                   <TextField
                     fullWidth
                     required
                     label="Specify Other University"
-                    value={customUniversity}
+                    value={customUniversity.newunv}
                     onChange={(e) => handleCustomInputChange(e, "university")}
                     sx={{ marginBottom: 2 }}
                   />
+
+                  {/* Checkbox Group for Government or Private Selection */}
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      marginBottom: "16px",
+                    }}
+                  >
+                    <label style={{ marginRight: "10px" }}>Select Type:</label>
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          checked={customUniversityType === "Government"}
+                          onChange={(e) =>
+                            setCustomUniversityType("Government")
+                          }
+                        />
+                      }
+                      label="Government"
+                    />
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          checked={customUniversityType === "Private"}
+                          onChange={(e) => setCustomUniversityType("Private")}
+                        />
+                      }
+                      label="Private"
+                    />
+                  </div>
+
                   <Button onClick={() => handleSubmitOther("university")}>
                     Submit Custom University
                   </Button>
@@ -823,7 +905,9 @@ export default function Application() {
               margin="normal"
             />
           </div>
-          <p>{messageacc}</p>
+
+          <p style={{}}>{messageacc}</p>
+
           <button
             type="button"
             className={`${styles.submitButton} ${
@@ -895,7 +979,7 @@ export default function Application() {
                 shrink: true,
               }}
             />
-            <p>{messageexp}</p>
+            <p style={{}}>{messageexp}</p>
             <button
               type="button"
               className={styles.submitButton}

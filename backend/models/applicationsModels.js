@@ -13,16 +13,17 @@ export const createApplication = async (
   resume,
   handwritten_letter,
   status,
-  age
+  age,
+  gender
 ) => {
   try {
     const pool = await connectDB();
     const query = `
             INSERT INTO Applications 
-            (job_id, applicant_id, firstname, middlename, lastname, phone, email, cover_letter, resume, handwritten_letter, status,age) 
+            (job_id, applicant_id, firstname, middlename, lastname, phone, email, cover_letter, resume, handwritten_letter, status,age,gender) 
             OUTPUT INSERTED.*
             VALUES 
-            (@job_id, @applicant_id, @firstname, @middlename, @lastname, @phone, @email, @cover_letter, @resume, @handwritten_letter, @status,@age);
+            (@job_id, @applicant_id, @firstname, @middlename, @lastname, @phone, @email, @cover_letter, @resume, @handwritten_letter, @status,@age,@gender);
         `;
 
     // Executing the query with input parameters and returning the inserted record
@@ -40,6 +41,7 @@ export const createApplication = async (
       .input("handwritten_letter", sql.VarChar(255), handwritten_letter)
       .input("status", sql.VarChar(100), status)
       .input("age", sql.Int, age)
+      .input("gender", sql.VarChar(255), gender)
       .query(query);
 
     // Return the newly inserted application

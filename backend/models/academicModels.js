@@ -43,7 +43,7 @@ export const getAcademicByApplicationId = async (application_id) => {
 export const getHIghestlevelofeducation = async () => {
   const pool = await connectDB();
   const query = `
-    SELECT * FROM level_of_education;
+    SELECT * FROM level_of_education where status = 1;
   `;
   const result = await pool.request().query(query);
 
@@ -54,7 +54,7 @@ export const getHIghestlevelofeducation = async () => {
 export const getInstitutionplace = async () => {
   const pool = await connectDB();
   const query = `
-    SELECT * FROM institutions;
+    SELECT * FROM institutions where status = 1;
   `;
   const result = await pool.request().query(query);
 
@@ -65,7 +65,7 @@ export const getInstitutionplace = async () => {
 export const getFieldofStudystudied = async () => {
   const pool = await connectDB();
   const query = `
-    SELECT * FROM fields_of_study;
+    SELECT * FROM fields_of_study where status = 1;
   `;
   const result = await pool.request().query(query);
 
