@@ -4,8 +4,10 @@ import {
   getjobwithID,
   getjobwithNAME,
   getjobwithTYPE,
+  reupdateJobsApplicants,
   updateJobStatusToClosed,
   updateJobStatusToOpen,
+  updateJobStatusToRemove,
 } from "../models/jobsModels.js";
 
 // Handle Jobs Creation
@@ -141,6 +143,48 @@ export const openJobPosting = async (req, res) => {
   try {
     // Call the model function to update the job status
     const success = await updateJobStatusToOpen(id);
+
+    if (success) {
+      res
+        .status(200)
+        .json({ message: "Job status updated to closed successfully." });
+    } else {
+      res.status(404).json({ message: "No job found with the given job_id." });
+    }
+  } catch (error) {
+    console.error("Error in closeJobPosting controller:", error);
+    res.status(500).json({ message: "Internal server error." });
+  }
+};
+
+export const removeJobPosting = async (req, res) => {
+  const { id } = req.params;
+  console.log(id);
+
+  try {
+    // Call the model function to update the job status
+    const success = await updateJobStatusToRemove(id);
+
+    if (success) {
+      res
+        .status(200)
+        .json({ message: "Job status updated to closed successfully." });
+    } else {
+      res.status(404).json({ message: "No job found with the given job_id." });
+    }
+  } catch (error) {
+    console.error("Error in closeJobPosting controller:", error);
+    res.status(500).json({ message: "Internal server error." });
+  }
+};
+
+export const reupdatejobapplicants = async (req, res) => {
+  const { id } = req.params;
+  console.log(id);
+
+  try {
+    // Call the model function to update the job status
+    const success = await reupdateJobsApplicants(id);
 
     if (success) {
       res

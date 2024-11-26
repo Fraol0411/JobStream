@@ -7,6 +7,8 @@ import {
   getjobByname,
   getjobBytype,
   openJobPosting,
+  removeJobPosting,
+  reupdatejobapplicants,
 } from "../controllers/jobsControllers.js";
 
 const router = express.Router();
@@ -20,5 +22,7 @@ router.get("/withtype/:type", getjobBytype);
 // Update a job by ID
 router.put("/update/:id", closeJobPosting);
 router.put("/reupdate/:id", openJobPosting);
+router.put("/remove/:id", removeJobPosting);
+router.put("/reupdateapplicants/:id", reupdatejobapplicants);
 
 export default router;

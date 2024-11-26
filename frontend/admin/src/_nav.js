@@ -88,14 +88,14 @@ const _nav = [
       },
       {
         component: CNavItem,
-        name: 'Validation',
-        to: '/404',
+        name: 'Record List',
+        to: '/pages/recordlist',
       },
-      // {
-      //   component: CNavItem,
-      //   name: 'Error 500',
-      //   to: '/500',
-      // },
+      {
+        component: CNavItem,
+        name: 'Validation',
+        to: '/pages/validation',
+      },
     ],
   },
   // {

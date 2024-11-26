@@ -4,26 +4,22 @@ const Dashboard = React.lazy(() => import('./views/dashboard/Dashboard'))
 const Colors = React.lazy(() => import('./views/theme/colors/Colors'))
 const Typography = React.lazy(() => import('./views/theme/typography/Typography'))
 
-
 // Base
 const Accordion = React.lazy(() => import('./views/base/accordion/Accordion'))
 const Breadcrumbs = React.lazy(() => import('./views/base/breadcrumbs/Breadcrumbs'))
 const Cards = React.lazy(() => import('./views/base/cards/Cards'))
 const ListGroups = React.lazy(() => import('./views/base/list-groups/ListGroups'))
 const Progress = React.lazy(() => import('./views/base/progress/Progress'))
+const Recordlist = React.lazy(() => import('./views/pages/recordlist/Recordlist'))
+const Validation = React.lazy(() => import('./views/pages/validation/Validation'))
 
 // Buttons
 
-
 //Forms
-
-
 
 // Icons
 
-
 // Notifications
-
 
 const Widgets = React.lazy(() => import('./views/widgets/Widgets'))
 
@@ -40,6 +36,8 @@ const routes = [
   { path: '/base/list-groups', name: 'List Groups', element: ListGroups },
   { path: '/base/progress', name: 'Progress', element: Progress },
   { path: '/widgets', name: 'Widgets', element: Widgets },
+  { path: '/pages/recordlist', name: 'recordlist', element: Recordlist },
+  { path: '/pages/validation', name: 'validation', element: Validation },
 ]
 
 export default routes

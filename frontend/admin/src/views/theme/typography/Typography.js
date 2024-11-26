@@ -110,6 +110,29 @@ const closeJob = async (jobId) => {
   }
 }
 
+const removeJob = async (jobId) => {
+  console.log('iddddddddd ', jobId)
+  try {
+    const response = await fetch(`http://10.1.12.40:5000/api/jobs/remove/${jobId}`, {
+      // Corrected URL
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ id: jobId }), // Sending the jobId in the body
+    })
+
+    if (response.ok) {
+      console.log('Job status updated to closed')
+      // Optionally refetch job data or update the UI to reflect the change
+    } else {
+      console.error('Failed to update job status')
+    }
+  } catch (error) {
+    console.error('Error:', error)
+  }
+}
+
 const Colors = () => {
   const navigate = useNavigate() // Initialize useNavigate
 
@@ -158,6 +181,16 @@ const Colors = () => {
     window.location.reload() // Refresh the page
   }
 
+  const handleButtonClick2 = async (jobId) => {
+    console.log('Button clicked for job ID:', jobId)
+
+    // Call closeJob to update status
+    await removeJob(jobId) // Wait for closeJob to complete
+
+    // Reload the page after the job status is updated
+    window.location.reload() // Refresh the page
+  }
+
   return (
     <>
       <CCard className="mb-4">
@@ -196,13 +229,22 @@ const Colors = () => {
                   </CTableDataCell>
                   <CTableDataCell>
                     <CButton
-                      style={{ backgroundColor: 'gray' }}
+                      style={{ backgroundColor: 'gray', marginRight: '2px' }}
                       onClick={(e) => {
                         e.stopPropagation() // Prevents triggering the row's onClick
                         handleButtonClick(vacancy.job_id) // Custom button handler
                       }}
                     >
                       Reactive
+                    </CButton>
+                    <CButton
+                      style={{ backgroundColor: 'gray' }}
+                      onClick={(e) => {
+                        e.stopPropagation() // Prevents triggering the row's onClick
+                        handleButtonClick2(vacancy.job_id) // Custom button handler
+                      }}
+                    >
+                      Remove
                     </CButton>
                   </CTableDataCell>
                 </CTableRow>

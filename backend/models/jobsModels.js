@@ -189,3 +189,81 @@ export const updateJobStatusToOpen = async (job_id) => {
     throw error; // Re-throw error for further handling
   }
 };
+// Update job status by job_id
+export const updateJobStatusToRemove = async (job_id) => {
+  try {
+    const pool = await connectDB(); // Make sure this connects to your DB
+    const result = await pool
+      .request()
+      .input("job_id", sql.Int, job_id) // Assuming job_id is an integer
+      .input("status", sql.VarChar, "removed") // Set the status to "closed"
+      .query("UPDATE Jobs SET status = @status WHERE job_id = @job_id"); // Ensure 'status' and 'job_id' are correct column names
+
+    // Check if any rows were updated
+    if (result.rowsAffected[0] === 0) {
+      console.log("No job found with the given job_id");
+      return false; // Return false to indicate no rows were updated
+    }
+
+    console.log("Job status updated to closed successfully");
+    return true; // Return true to indicate success
+  } catch (error) {
+    console.error("Error updating job status:", error);
+    throw error; // Re-throw error for further handling
+  }
+};
+
+export const reupdateJobsApplicants = async (job_id) => {
+  try {
+    const pool = await connectDB(); // Connect to the database
+
+    // Start a transaction to ensure both updates happen atomically
+    const transaction = new sql.Transaction(pool);
+    await transaction.begin();
+
+    try {
+      // Update the Jobs table to set the status to 'active'
+      const jobUpdateResult = await transaction
+        .request()
+        .input("job_id", sql.Int, job_id)
+        .query("UPDATE Jobs SET status = 'active' WHERE job_id = @job_id");
+
+      // Check if any rows were updated in the Jobs table
+      if (jobUpdateResult.rowsAffected[0] === 0) {
+        console.log("No job found with the given job_id");
+        await transaction.rollback(); // Rollback if no rows were updated
+        return false; // Return false to indicate no rows were updated
+      }
+
+      await transaction
+        .request()
+        .input("job_id", sql.Int, job_id)
+        .query(
+          "UPDATE Applications SET status = 'submitted' WHERE job_id = @job_id AND status <> 'further'"
+        );
+
+      await transaction
+        .request()
+        .input("job_id", sql.Int, job_id)
+        .query(
+          "UPDATE Applications SET status = 'rejected' WHERE job_id = @job_id AND status = 'further'"
+        );
+
+      // Commit the transaction after both updates are successful
+      await transaction.commit();
+      console.log(
+        "Job status updated to active and applications updated to submitted successfully"
+      );
+
+      return true; // Return true to indicate success
+    } catch (error) {
+      // Rollback the transaction in case of any error
+      await transaction.rollback();
+      console.error("Error during the transaction:", error);
+      throw error; // Re-throw error for further handling
+    }
+  } catch (error) {
+    console.error("Error updating job and applications:", error);
+    throw error; // Re-throw error for further handling
+  }
+};
