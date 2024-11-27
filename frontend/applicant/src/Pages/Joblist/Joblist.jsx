@@ -57,25 +57,28 @@ export default function Joblist() {
       <div className={styles.containerrr}>
         <div className={styles.jobcards}>
           <div className={styles.cardholder}>
-            {data.map((job) => (
-              <Jobcard
-                id={job.job_id}
-                title={job.title}
-                dutystation={job.dutystation}
-                description={job.description}
-                requirements={job.requirements}
-                jobtype={job.jobtype}
-                status={job.status}
-                created_by={job.created_by}
-                salary={job.salary}
-                qualification={job.qualification}
-                deadline={job.deadline}
-                contact={job.contact}
-                age={job.age}
-                req_no={job.req_no}
-                termof_emp={job.termof_emp}
-              />
-            ))}
+            {data
+              .filter((job) => job.jobtype === user.applyfor) // Filter jobs where jobtype matches user.applyfor
+              .map((job) => (
+                <Jobcard
+                  key={job.job_id} // Always add a unique key when mapping over elements
+                  id={job.job_id}
+                  title={job.title}
+                  dutystation={job.dutystation}
+                  description={job.description}
+                  requirements={job.requirements}
+                  jobtype={job.jobtype}
+                  status={job.status}
+                  created_by={job.created_by}
+                  salary={job.salary}
+                  qualification={job.qualification}
+                  deadline={job.deadline}
+                  contact={job.contact}
+                  age={job.age}
+                  req_no={job.req_no}
+                  termof_emp={job.termof_emp}
+                />
+              ))}
           </div>
         </div>
       </div>

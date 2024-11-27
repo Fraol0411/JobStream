@@ -921,74 +921,79 @@ export default function Application() {
         </fieldset>
 
         {/* Work Experience */}
-        <fieldset className={styles.fieldsetforwork}>
-          <legend>Work Experience</legend>
-          <div className={styles.formGroup}>
-            {/* Company Name */}
-            <TextField
-              fullWidth
-              required
-              label="Company Name"
-              id="company"
-              name="company"
-              value={workexperience.company}
-              onChange={handleExperienceChange}
-              margin="normal"
-            />
+        {user.applyfor !== "Fresh Graduate" && (
+          <fieldset className={styles.fieldsetforwork}>
+            <legend>Work Experience</legend>
+            <div className={styles.formGroup}>
+              {/* Company Name */}
+              <TextField
+                fullWidth
+                required
+                label="Company Name"
+                id="company"
+                name="company"
+                value={workexperience.company}
+                onChange={handleExperienceChange}
+                margin="normal"
+              />
 
-            {/* Position */}
-            <TextField
-              fullWidth
-              required
-              label="Position"
-              id="position"
-              name="position"
-              value={workexperience.position}
-              onChange={handleExperienceChange}
-              margin="normal"
-            />
+              {/* Position */}
+              <TextField
+                fullWidth
+                required
+                label="Position"
+                id="position"
+                name="position"
+                value={workexperience.position}
+                onChange={handleExperienceChange}
+                margin="normal"
+              />
 
-            {/* From Date */}
-            <TextField
-              fullWidth
-              required
-              label="From"
-              type="month"
-              id="from_date"
-              name="from_date"
-              value={workexperience.from_date}
-              onChange={handleExperienceChange}
-              margin="normal"
-              InputLabelProps={{
-                shrink: true,
-              }}
-            />
+              {/* From Date */}
+              <TextField
+                fullWidth
+                required
+                label="From"
+                type="month"
+                id="from_date"
+                name="from_date"
+                value={workexperience.from_date}
+                onChange={handleExperienceChange}
+                margin="normal"
+                InputLabelProps={{
+                  shrink: true,
+                }}
+              />
 
-            {/* To Date */}
-            <TextField
-              fullWidth
-              required
-              label="To"
-              type="month"
-              id="to_date"
-              name="to_date"
-              value={workexperience.to_date}
-              onChange={handleExperienceChange}
-              margin="normal"
-              InputLabelProps={{
-                shrink: true,
-              }}
-            />
-            <p style={{}}>{messageexp}</p>
-            <button
-              type="button"
-              className={styles.submitButton}
-              onClick={addWorkExperience}
-            >
-              Add Experience
-            </button>
-          </div>
-        </fieldset>
+              {/* To Date */}
+              <TextField
+                fullWidth
+                required
+                label="To"
+                type="month"
+                id="to_date"
+                name="to_date"
+                value={workexperience.to_date}
+                onChange={handleExperienceChange}
+                margin="normal"
+                InputLabelProps={{
+                  shrink: true,
+                }}
+              />
+              <p style={{}}>{messageexp}</p>
+              <button
+                type="button"
+                className={`${styles.submitButton} ${
+                  !isPersonalDetailsAdded && styles.disabledButton
+                }`}
+                onClick={addWorkExperience}
+                disabled={!isPersonalDetailsAdded}
+              >
+                Add Experience
+              </button>
+            </div>
+          </fieldset>
+        )}
       </form>
 
       {/* Submit Button */}

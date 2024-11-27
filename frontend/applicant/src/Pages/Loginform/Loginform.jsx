@@ -228,8 +228,8 @@ export default function LoginForm() {
                   Select from below
                 </option>
                 <option value="Fresh Graduate">Fresh Graduate</option>
-                <option value="External applicant">External Applicant</option>
-                <option value="Awash staff">Awash Staff</option>
+                <option value="External Applicant">External Applicant</option>
+                <option value="Awash Staff">Awash Staff</option>
               </select>
             </div>
 

@@ -15,11 +15,18 @@ import {
   CTableDataCell,
   CBadge,
   CButton,
+  CDropdownToggle,
+  CDropdown,
+  CDropdownMenu,
+  CDropdownItem,
+  CHeader,
+  CContainer,
+  CFormInput,
+  CFormCheck,
 } from '@coreui/react'
 import { rgbToHex } from '@coreui/utils'
 import { useNavigate } from 'react-router-dom' // Import useNavigate from react-router-dom
 import { CircleLoader } from 'react-spinners'
-import { useQuery } from '@tanstack/react-query'
 
 const ThemeView = () => {
   const [color, setColor] = useState('rgb(255, 255, 255)')
@@ -63,164 +70,381 @@ ThemeColor.propTypes = {
   className: PropTypes.string,
 }
 
-// Fetch job data from the backend
-const activeJobs = async () => {
-  try {
-    const res = await fetch('http://10.1.12.40:5000/api/jobs/alljobs')
-
-    // Log the entire response for debugging
-    console.log('Response: ', res)
-
-    // If response is not okay, log the error
-    if (!res.ok) {
-      console.error('Failed to fetch jobs', res.status)
-      throw new Error('Failed to fetch jobs')
-    }
-
-    // Ensure the response is JSON
-    const data = await res.json()
-    console.log('Fetched Data: ', data)
-    return data
-  } catch (error) {
-    console.error('Error fetching jobs: ', error)
-    throw error // Ensure React Query can handle this error
+const fetchEducationLevels = async () => {
+  const response = await fetch('http://10.1.12.40:5000/api/academic/highest/level')
+  if (!response.ok) {
+    throw new Error('Failed to fetch education levels')
   }
+  return response.json()
 }
 
-const closeJob = async (jobId) => {
-  console.log('iddddddddd ', jobId)
-  try {
-    const response = await fetch(`http://10.1.12.40:5000/api/jobs/reupdateapplicants/${jobId}`, {
-      // Corrected URL
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ id: jobId }), // Sending the jobId in the body
-    })
-
-    if (response.ok) {
-      console.log('Job status updated to closed')
-      // Optionally refetch job data or update the UI to reflect the change
-    } else {
-      console.error('Failed to update job status')
-    }
-  } catch (error) {
-    console.error('Error:', error)
+const fetchFieldsOfStudy = async () => {
+  const response = await fetch('http://10.1.12.40:5000/api/academic/field/study')
+  if (!response.ok) {
+    throw new Error('Failed to fetch fields of study')
   }
+
+  return response.json()
 }
 
 const Colors = () => {
-  const navigate = useNavigate() // Initialize useNavigate
+  const [university, setUniversity] = useState([])
+  const [field, setField] = useState([])
+  const [highest, setHighest] = useState([])
+  const [selectedItem, setSelectedItem] = useState('')
+  const [editing, setEditing] = useState(false)
+  const [editedValue, setEditedValue] = useState()
+  const [editingId, setEditingId] = useState(null)
+  const [type, setType] = useState()
 
-  const { data, error, isLoading } = useQuery({
-    queryKey: ['jobs'],
-    queryFn: activeJobs,
-    refetchOnWindowFocus: false, // Disable refetching on window focus
-  })
+  console.log('data', university)
+  console.log('data1', field)
+  console.log('data2', highest)
+  console.log('type', type)
 
-  const currentDate = new Date() // Get the current date
-
-  if (isLoading) {
-    return (
-      <div className="">
-        <CircleLoader size={105} color={'#123abc'} />
-        <p>Fetching available jobs...</p>
-      </div>
-    )
+  const handleItemClick = (item) => {
+    setSelectedItem(item)
   }
 
-  if (error) {
-    return <div>Error fetching jobs: {error.message}</div>
+  /********************************* */
+  const fetchInstitutions = async () => {
+    try {
+      const response = await fetch('http://10.1.12.40:5000/api/academic/institution0/type')
+      if (!response.ok) {
+        throw new Error('Failed to fetch institutions')
+      }
+
+      const data = await response.json() // Parse response to JSON
+      setUniversity(data) // Use the parsed data to set state
+    } catch (error) {
+      console.error('Error fetching institutions:', error)
+    }
   }
 
-  console.log('Job data:', data) // Make sure this logs the data after successful fetch
-
-  const filteredDataa = data.filter((item) => new Date(item.deadline) < currentDate)
-  const filteredData = data.filter((item) => item.status === 'removed')
-  console.log('filterdata', filteredData)
-
-  // Function to handle row click
-  // Function to handle row click and pass job_id to list-groups component
-  const handleRowClick = (job_id, sourceComponent) => {
-    console.log(job_id)
-    // Add sourceComponent to the URL as a query parameter
-    navigate(`/base/list-groups?job_id=${job_id}&source=${sourceComponent}`)
+  const fetchFieldsOfStudy = async () => {
+    try {
+      const response = await fetch('http://10.1.12.40:5000/api/academic/field0/study')
+      if (!response.ok) {
+        throw new Error('failed to fetch')
+      }
+      const data = await response.json()
+      setField(data)
+    } catch (error) {
+      console.log('error', error)
+    }
   }
 
-  const handleButtonClick = async (jobId) => {
-    console.log('Button clicked for job ID:', jobId)
+  const fetchEducationLevels = async () => {
+    try {
+      const response = await fetch('http://10.1.12.40:5000/api/academic/highest0/level')
+      if (!response.ok) {
+        throw new Error('failed to fetch')
+      }
+      const data = await response.json()
+      setHighest(data)
+    } catch (error) {
+      console.log('error', error)
+    }
+  }
 
-    // Call closeJob to update status
-    await closeJob(jobId) // Wait for closeJob to complete
+  const updateValidation = async (value, id) => {
+    console.log('editedf', value, id)
+    const jobId = id
+    if (selectedItem === 'field of study') {
+      try {
+        const response = await fetch(`http://10.1.12.40:5000/api/academic/updatefield/${jobId}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            id: jobId, // Sending the jobId
+            value: editedValue, // Sending the updated value
+          }),
+        })
 
-    // Reload the page after the job status is updated
-    window.location.reload() // Refresh the page
+        if (response.ok) {
+          console.log('Job field updated successfully')
+          // Optionally refetch the data or update the UI
+        } else {
+          console.error('Failed to update the job field')
+        }
+      } catch (error) {
+        console.error('Error:', error)
+      }
+    } else if (selectedItem === 'Institution') {
+      try {
+        const response = await fetch(
+          `http://10.1.12.40:5000/api/academic/updateinstitution/${jobId}`,
+          {
+            // Corrected URL
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              id: jobId,
+              value: editedValue,
+              value2: type,
+            }), // Sending the jobId in the body
+          },
+        )
+
+        if (response.ok) {
+          console.log('Job status updated to closed')
+          // Optionally refetch job data or update the UI to reflect the change
+        } else {
+          console.error('Failed to update job status')
+        }
+      } catch (error) {
+        console.error('Error:', error)
+      }
+    } else {
+      try {
+        const response = await fetch(`http://10.1.12.40:5000/api/academic/updatelevel/${jobId}`, {
+          // Corrected URL
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ id: jobId, value: editedValue }), // Sending the jobId in the body
+        })
+
+        if (response.ok) {
+          console.log('Job status updated to closed')
+          // Optionally refetch job data or update the UI to reflect the change
+        } else {
+          console.error('Failed to update job status')
+        }
+      } catch (error) {
+        console.error('Error:', error)
+      }
+    }
+  }
+
+  // Use useEffect to fetch data when the component mounts
+  useEffect(() => {
+    fetchInstitutions()
+    fetchEducationLevels()
+    fetchFieldsOfStudy()
+  }, [])
+
+  /*********************************** */
+
+  const handleEdit = (value, id) => {
+    setEditing(!editing)
+    setEditingId(id)
+  }
+
+  const handleupdate = async (id) => {
+    await updateValidation(editedValue, id) // Update the data on the backend
+    setEditing(!editing) // Toggle the editing state
+    fetchInstitutions()
+    fetchEducationLevels()
+    fetchFieldsOfStudy()
   }
 
   return (
     <>
       <CCard className="mb-4">
-        <CCardHeader>Active Vacancy List</CCardHeader>
-        <CCardBody>
-          {/* Table for listing job vacancies */}
-          <CTable align="middle" hover responsive>
-            <CTableHead>
-              <CTableRow>
-                <CTableHeaderCell scope="col">Job Title</CTableHeaderCell>
-                <CTableHeaderCell scope="col">Job Type</CTableHeaderCell>
-                <CTableHeaderCell scope="col">Created By</CTableHeaderCell>
-                <CTableHeaderCell scope="col">Created_at</CTableHeaderCell>
-                <CTableHeaderCell scope="col">Deadline</CTableHeaderCell>
-                <CTableHeaderCell scope="col">Action</CTableHeaderCell>
-              </CTableRow>
-            </CTableHead>
-            <CTableBody>
-              {filteredData.map((vacancy) => (
-                <CTableRow
-                  key={vacancy.id}
-                  // onClick={() => handleRowClick(vacancy.job_id, 'closed')}
-                  style={{ cursor: 'pointer' }}
-                >
-                  <CTableDataCell>{vacancy.title}</CTableDataCell>
-                  <CTableDataCell>{vacancy.jobtype}</CTableDataCell>
-                  <CTableDataCell>{vacancy.created_by}</CTableDataCell>
-                  <CTableDataCell>
-                    {
-                      // Format the SQL date string to a readable format
-                      new Intl.DateTimeFormat('en-US', {
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric',
-                      }).format(new Date(vacancy.created_at))
-                    }
-                  </CTableDataCell>
-                  <CTableDataCell>
-                    {
-                      // Format the SQL date string to a readable format
-                      new Intl.DateTimeFormat('en-US', {
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric',
-                      }).format(new Date(vacancy.deadline))
-                    }
-                  </CTableDataCell>
-                  <CTableDataCell>
-                    <CButton
-                      style={{ backgroundColor: 'gray', marginRight: '2px' }}
-                      onClick={(e) => {
-                        e.stopPropagation() // Prevents triggering the row's onClick
-                        handleButtonClick(vacancy.job_id) // Custom button handler
-                      }}
-                    >
-                      Reopen
-                    </CButton>
-                  </CTableDataCell>
+        <CCardHeader>Dropdown Data Correction page</CCardHeader>
+        <CContainer>
+          <CHeader className="mb-4">Selected: {selectedItem || 'None'} </CHeader>
+          <CDropdown>
+            <CDropdownToggle color="primary">Select an Institution</CDropdownToggle>
+            <CDropdownMenu>
+              <CDropdownItem onClick={() => handleItemClick('Institution')}>
+                Correct Institution
+              </CDropdownItem>
+              <CDropdownItem onClick={() => handleItemClick('highest level')}>
+                Correct Highest Level Of Education
+              </CDropdownItem>
+              <CDropdownItem onClick={() => handleItemClick('field of study')}>
+                Correct Field of Study
+              </CDropdownItem>
+            </CDropdownMenu>
+          </CDropdown>
+        </CContainer>
+
+        {/* Conditional rendering based on selectedItem */}
+        {selectedItem === 'Institution' && (
+          <CCardBody>
+            <CTable align="middle" hover responsive>
+              <CTableHead>
+                <CTableRow>
+                  <CTableHeaderCell scope="col">Institution Name</CTableHeaderCell>
+                  <CTableHeaderCell scope="col">Institution Type</CTableHeaderCell>
+                  <CTableHeaderCell scope="col">Update</CTableHeaderCell>
                 </CTableRow>
-              ))}
-            </CTableBody>
-          </CTable>
-        </CCardBody>
+              </CTableHead>
+              <CTableBody>
+                {university.map((data) => (
+                  <CTableRow key={data.id} style={{ cursor: 'pointer' }}>
+                    <CTableDataCell>{data.institution_name}</CTableDataCell>
+                    <CTableDataCell>
+                      {editingId == data.id ? (
+                        <>
+                          <CFormInput
+                            value={editingId === data.id ? editedValue : ''}
+                            onChange={(e) => {
+                              if (editingId === data.id) {
+                                setEditedValue(e.target.value)
+                              }
+                            }}
+                            placeholder={data.institution_name}
+                          />
+                          <div>
+                            <CFormCheck
+                              type="checkbox"
+                              id={`governmentCheckbox-${data.id}`} // Unique ID for each row
+                              label="Government"
+                              checked={type === 'Government'} // Check only if editing this row and type matches
+                              onChange={() => {
+                                setType('Government')
+                              }}
+                            />
+                            <CFormCheck
+                              type="checkbox"
+                              id={`privateCheckbox-${data.id}`} // Unique ID for each row
+                              label="Private"
+                              checked={type === 'Private'} // Check only if editing this row and type matches
+                              onChange={() => {
+                                setType('Private')
+                              }}
+                            />
+                          </div>
+                        </>
+                      ) : (
+                        <CButton
+                          style={{ backgroundColor: 'lightgray', marginRight: '6px' }}
+                          onClick={() => {
+                            handleEdit(data.field, data.id)
+                          }}
+                        >
+                          Edit
+                        </CButton>
+                      )}
+                    </CTableDataCell>
+                    <CTableDataCell>
+                      <CButton
+                        style={{ backgroundColor: 'gray', marginRight: '6px' }}
+                        onClick={() => {
+                          handleupdate(data.id)
+                        }}
+                      >
+                        Update
+                      </CButton>
+                    </CTableDataCell>
+                  </CTableRow>
+                ))}
+              </CTableBody>
+            </CTable>
+          </CCardBody>
+        )}
+
+        {selectedItem === 'highest level' && (
+          <CCardBody>
+            <CTable align="middle" hover responsive>
+              <CTableHead>
+                <CTableRow>
+                  <CTableHeaderCell scope="col">Highest Education Level</CTableHeaderCell>
+                  <CTableHeaderCell scope="col">Action</CTableHeaderCell>
+                </CTableRow>
+              </CTableHead>
+              <CTableBody>
+                {highest.map((data) => (
+                  <CTableRow key={data.id} style={{ cursor: 'pointer' }}>
+                    <CTableDataCell>{data.level}</CTableDataCell>
+                    <CTableDataCell>
+                      {editingId == data.id ? (
+                        <CFormInput
+                          value={editingId === data.id ? editedValue : ''}
+                          onChange={(e) => {
+                            if (editingId === data.id) {
+                              setEditedValue(e.target.value)
+                            }
+                          }}
+                          placeholder={data.level}
+                        />
+                      ) : (
+                        <CButton
+                          style={{ backgroundColor: 'lightgray', marginRight: '6px' }}
+                          onClick={() => {
+                            handleEdit(data.field, data.id)
+                          }}
+                        >
+                          Edit
+                        </CButton>
+                      )}
+                    </CTableDataCell>
+                    <CTableDataCell>
+                      <CButton
+                        style={{ backgroundColor: 'gray', marginRight: '6px' }}
+                        onClick={() => {
+                          handleupdate(data.id)
+                        }}
+                      >
+                        Update
+                      </CButton>
+                    </CTableDataCell>
+                  </CTableRow>
+                ))}
+              </CTableBody>
+            </CTable>
+          </CCardBody>
+        )}
+
+        {selectedItem === 'field of study' && (
+          <CCardBody>
+            <CTable align="middle" hover responsive>
+              <CTableHead>
+                <CTableRow>
+                  <CTableHeaderCell scope="col">Field of Study</CTableHeaderCell>
+                  <CTableHeaderCell scope="col">Action</CTableHeaderCell>
+                </CTableRow>
+              </CTableHead>
+              <CTableBody>
+                {field.map((data) => (
+                  <CTableRow key={data.id} style={{ cursor: 'pointer' }}>
+                    <CTableDataCell>{data.field}</CTableDataCell>
+                    <CTableDataCell>
+                      {editingId == data.id ? (
+                        <CFormInput
+                          value={editedValue}
+                          onChange={(e) => {
+                            if (editingId === data.id) {
+                              setEditedValue(e.target.value)
+                            }
+                          }}
+                          placeholder={data.field}
+                        />
+                      ) : (
+                        <CButton
+                          style={{ backgroundColor: 'lightgray', marginRight: '6px' }}
+                          onClick={() => {
+                            handleEdit(data.field, data.id)
+                          }}
+                        >
+                          Edit
+                        </CButton>
+                      )}
+                    </CTableDataCell>
+                    <CTableDataCell>
+                      <CButton
+                        style={{ backgroundColor: 'gray', marginRight: '6px' }}
+                        onClick={() => {
+                          handleupdate(data.id)
+                        }}
+                      >
+                        Update
+                      </CButton>
+                    </CTableDataCell>
+                  </CTableRow>
+                ))}
+              </CTableBody>
+            </CTable>
+          </CCardBody>
+        )}
       </CCard>
     </>
   )

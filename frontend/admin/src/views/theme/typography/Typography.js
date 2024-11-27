@@ -88,7 +88,6 @@ const activeJobs = async () => {
 }
 
 const closeJob = async (jobId) => {
-  console.log('iddddddddd ', jobId)
   try {
     const response = await fetch(`http://10.1.12.40:5000/api/jobs/reupdate/${jobId}`, {
       // Corrected URL
