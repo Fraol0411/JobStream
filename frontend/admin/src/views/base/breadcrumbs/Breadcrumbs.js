@@ -17,6 +17,7 @@ import { useUser } from '../../../UserContext'
 const Accordion = () => {
   const { user } = useUser()
   const [message, setMessage] = useState(null)
+  const [posted, setPosted] = useState(false)
   const [jobDetails, setJobDetails] = useState({
     title: '',
     dutystation: '',
@@ -73,6 +74,7 @@ const Accordion = () => {
           req_no: '',
           termof_emp: '',
         })
+        setPosted(!posted)
       } else {
         console.error('Failed to create job:', response.statusText)
       }
@@ -98,6 +100,7 @@ const Accordion = () => {
                     placeholder="Enter job title"
                     value={jobDetails.title}
                     onChange={handleChange}
+                    required
                   />
                 </CCol>
               </CRow>
@@ -111,6 +114,7 @@ const Accordion = () => {
                     placeholder="Enter Educational qualification Required"
                     value={jobDetails.requirements}
                     onChange={handleChange}
+                    required
                   />
                 </CCol>
               </CRow>
@@ -124,6 +128,7 @@ const Accordion = () => {
                     placeholder="Enter Work Exprience"
                     value={jobDetails.qualification}
                     onChange={handleChange}
+                    required
                   />
                 </CCol>
               </CRow>
@@ -137,6 +142,7 @@ const Accordion = () => {
                     placeholder="Enter Skills and Attributes"
                     value={jobDetails.description}
                     onChange={handleChange}
+                    required
                   />
                 </CCol>
               </CRow>
@@ -150,6 +156,7 @@ const Accordion = () => {
                     placeholder="Enter Salary And Benefits"
                     value={jobDetails.salary}
                     onChange={handleChange}
+                    required
                   />
                 </CCol>
               </CRow>
@@ -163,6 +170,7 @@ const Accordion = () => {
                     placeholder="Enter Required Number"
                     value={jobDetails.req_no}
                     onChange={handleChange}
+                    required
                   />
                 </CCol>
               </CRow>
@@ -174,8 +182,10 @@ const Accordion = () => {
                     id="termof_emp"
                     value={jobDetails.termof_emp}
                     onChange={handleChange}
+                    required
                   >
                     <option value="">Select Term of Employment</option>
+                    <option value="Permanent">Permanent</option>
                     <option value="Full-time">Full-time</option>
                     <option value="Part-time">Part-time</option>
                     <option value="Contract">Contract</option>
@@ -192,6 +202,7 @@ const Accordion = () => {
                     placeholder="Enter Age"
                     value={jobDetails.age}
                     onChange={handleChange}
+                    required
                   />
                 </CCol>
               </CRow>
@@ -205,6 +216,7 @@ const Accordion = () => {
                     placeholder="Enter location"
                     value={jobDetails.dutystation}
                     onChange={handleChange}
+                    required
                   />
                 </CCol>
               </CRow>
@@ -218,6 +230,7 @@ const Accordion = () => {
                     placeholder="Enter contact information"
                     value={jobDetails.contact}
                     onChange={handleChange}
+                    required
                   />
                 </CCol>
               </CRow>
@@ -230,15 +243,13 @@ const Accordion = () => {
                     placeholder="Enter application deadline"
                     value={jobDetails.deadline}
                     onChange={handleChange}
+                    required
                   />
                 </CCol>
               </CRow>
               <CRow className="mt-3">
                 <CCol md={12} className="text-end">
-                  {message && (
-                    <div className={`message ${response.ok ? 'success' : 'error'}`}>{message}</div>
-                  )}
-
+                  {posted && <p>Job Posted successfully</p>}
                   <CButton type="submit" color="primary">
                     Post Job
                   </CButton>

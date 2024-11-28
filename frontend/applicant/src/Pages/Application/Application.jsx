@@ -174,9 +174,7 @@ export default function Application() {
   const [isOtherUniversity, setIsOtherUniversity] = useState(false);
   const [isOtherFieldOfStudy, setIsOtherFieldOfStudy] = useState(false);
   const [customEducationLevel, setCustomEducationLevel] = useState("");
-  const [customUniversity, setCustomUniversity] = useState({
-    newunv: "",
-  });
+  const [customUniversity, setCustomUniversity] = useState("");
   const [customFieldOfStudy, setCustomFieldOfStudy] = useState("");
   const [customUniversityType, setCustomUniversityType] = useState("");
   //usestate
@@ -285,9 +283,10 @@ export default function Application() {
         highestlevel: value === "Other" ? customEducationLevel : value,
       }));
     } else if (type === "university") {
-      if (value === "Other") {
-        setIsOtherUniversity("display");
-      }
+      // if (value === "Other") {
+      //   setIsOtherUniversity("display");
+      // }
+      setIsOtherUniversity(value === "Other");
       setAcademy((prev) => ({
         ...prev,
         university: value === "Other" ? customUniversity : value,
@@ -309,10 +308,11 @@ export default function Application() {
       setCustomEducationLevel(value);
       setAcademy((prev) => ({ ...prev, highestlevel: value }));
     } else if (type === "university") {
-      setCustomUniversity((prev) => ({
-        ...prev,
-        newunv: value,
-      }));
+      // setCustomUniversity((prev) => ({
+      //   ...prev,
+      //   newunv: value,
+      // }));
+      setCustomUniversity(value);
       setAcademy((prev) => ({ ...prev, university: value }));
     } else if (type === "field") {
       setCustomFieldOfStudy(value);
@@ -324,15 +324,50 @@ export default function Application() {
   const handleSubmitOther = (type) => {
     if (type === "highestlevel" && customEducationLevel) {
       console.log("Submitting highest level:", customEducationLevel);
+
+      // Insert the custom level (backend call or local logic)
       insertHighestLevel(customEducationLevel);
+
+      // Update the academy state with the new custom level
+      setAcademy((prev) => ({
+        ...prev,
+        highestlevel: customEducationLevel,
+      }));
+
+      // Reset the custom input field
+      setCustomEducationLevel("");
+
+      // Disable the custom input section
       setIsOtherEducationLevel(false);
     } else if (type === "university" && customUniversity) {
       console.log("Submitting university:", customUniversity);
-      insertInstitution(customUniversity.newunv, customUniversityType);
-      setIsOtherUniversity("ndisplay");
+
+      // Insert the custom university (backend call or local logic)
+      insertInstitution(customUniversity, customUniversityType);
+
+      // Update the academy state with the new custom university
+      setAcademy((prev) => ({
+        ...prev,
+        university: customUniversity,
+      }));
+
+      // Reset the custom input field
+      setCustomUniversity("");
+      setIsOtherUniversity(false);
     } else if (type === "field" && customFieldOfStudy) {
       console.log("Submitting field of study:", customFieldOfStudy);
+
+      // Insert the custom field of study (backend call or local logic)
       insertFieldOfStudy(customFieldOfStudy);
+
+      // Update the academy state with the new custom field
+      setAcademy((prev) => ({
+        ...prev,
+        field: customFieldOfStudy,
+      }));
+
+      // Reset the custom input field
+      setCustomFieldOfStudy("");
       setIsOtherFieldOfStudy(false);
     }
   };
@@ -515,500 +550,543 @@ export default function Application() {
   console.log("work exprience", workexperience);
   console.log("permanent id", application_id);
   console.log("is other univesity ", isOtherUniversity);
-  console.log("custom universyt ", customUniversity.newunv);
+  console.log("custom universyt ", customUniversity);
   console.log("custom universyt state ", isOtherUniversity === "ndisplay");
 
   return (
     <div className={styles.applicationContainer}>
-      <form className={styles.applicationForm}>
-        {/* personal information */}
-        <fieldset className={styles.personal}>
-          <div className={styles.personasub}>
-            <fieldset className={styles.fieldset}>
-              <legend>Personal Information</legend>
+      {user.role === "applicant" ? (
+        <>
+          <form className={styles.applicationForm}>
+            {/* personal information */}
+            <fieldset className={styles.personal}>
+              <div className={styles.personasub}>
+                <fieldset className={styles.fieldset}>
+                  <legend>Personal Information</legend>
 
-              <div className={styles.formGroup}>
-                <TextField
-                  label="First Name"
-                  variant="outlined"
-                  fullWidth
-                  value={firstname ?? ""}
-                  onChange={(e) => setFirstname(e.target.value)}
-                  required
-                  style={{ width: "340px" }}
-                />
-                <div
-                  className={`${styles.mandatoryIndicator} ${
-                    firstname ? styles.filled : ""
-                  }`}
-                ></div>
-              </div>
-
-              <div className={styles.formGroup}>
-                <TextField
-                  label="Middle Name"
-                  variant="outlined"
-                  fullWidth
-                  value={middlename ?? ""}
-                  onChange={(e) => setMiddlename(e.target.value)}
-                  required
-                />
-                <div
-                  className={`${styles.mandatoryIndicator} ${
-                    middlename ? styles.filled : ""
-                  }`}
-                ></div>
-              </div>
-
-              <div className={styles.formGroup}>
-                <TextField
-                  label="Last Name"
-                  variant="outlined"
-                  fullWidth
-                  value={lastname ?? ""}
-                  onChange={(e) => setLastname(e.target.value)}
-                  required
-                />
-                <div
-                  className={`${styles.mandatoryIndicator} ${
-                    lastname ? styles.filled : ""
-                  }`}
-                ></div>
-              </div>
-
-              <div className={styles.formGroup}>
-                <TextField
-                  label="Email"
-                  type="email"
-                  variant="outlined"
-                  fullWidth
-                  value={email ?? ""}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                />
-                <div
-                  className={`${styles.mandatoryIndicator} ${
-                    email ? styles.filled : ""
-                  }`}
-                ></div>
-              </div>
-
-              <div className={styles.formGroup}>
-                <TextField
-                  label="Phone Number"
-                  type="tel"
-                  variant="outlined"
-                  fullWidth
-                  value={phone ?? ""}
-                  onChange={(e) => setPhone(e.target.value)}
-                  required
-                />
-
-                <div
-                  className={`${styles.mandatoryIndicator} ${
-                    phone ? styles.filled : ""
-                  }`}
-                ></div>
-              </div>
-
-              <div className={styles.formGroup}>
-                <TextField
-                  label="Enter Your Age"
-                  type="number"
-                  variant="outlined"
-                  fullWidth
-                  value={age}
-                  onChange={(e) => setAge(e.target.value)}
-                  required
-                />
-
-                <div
-                  className={`${styles.mandatoryIndicator} ${
-                    age ? styles.filled : ""
-                  }`}
-                ></div>
-              </div>
-
-              <div className={styles.formGroup}>
-                <TextField
-                  select
-                  label="Select Your Gender"
-                  variant="outlined"
-                  fullWidth
-                  value={gender}
-                  onChange={(e) => setGender(e.target.value)}
-                  required
-                >
-                  <MenuItem value="Male">Male</MenuItem>
-                  <MenuItem value="Female">Female</MenuItem>
-                </TextField>
-
-                <div
-                  className={`${styles.mandatoryIndicator} ${
-                    gender ? styles.filled : ""
-                  }`}
-                ></div>
-              </div>
-            </fieldset>
-
-            {/* Resume and Cover Letter */}
-            <fieldset className={styles.fieldset}>
-              {/* Resume Upload */}
-              <div style={commonDivStyle}>
-                <label htmlFor="resume" style={commonLabelStyle}>
-                  Upload Resume (PDF or DOC)
-                </label>
-                <input
-                  type="file"
-                  id="resume"
-                  name="resume"
-                  accept=".pdf, .doc, .docx"
-                  onChange={(e) => setResume(e.target.files[0])}
-                  required
-                  style={commonInputStyle}
-                />
-              </div>
-
-              {/* Cover Letter Upload */}
-              <div style={commonDivStyle}>
-                <label htmlFor="coverletter" style={commonLabelStyle}>
-                  Upload Cover letter (PDF or DOC)
-                </label>
-                <input
-                  type="file"
-                  id="coverletter"
-                  name="coverletter"
-                  accept=".pdf, .doc, .docx"
-                  onChange={(e) => setCover_letter(e.target.files[0])}
-                  required
-                  style={commonInputStyle}
-                />
-              </div>
-
-              {/* Handwritten Letter Upload */}
-              <div style={commonDivStyle}>
-                <label htmlFor="handwritten" style={commonLabelStyle}>
-                  Upload Handwritten (PDF or DOC)
-                </label>
-                <input
-                  type="file"
-                  id="handwritten"
-                  name="handwritten"
-                  accept=".pdf, .doc, .docx"
-                  onChange={(e) => setHandwritten_letter(e.target.files[0])}
-                  required
-                  style={commonInputStyle}
-                />
-              </div>
-            </fieldset>
-          </div>
-          <p style={{}}>{message}</p>
-
-          <button
-            className={styles.submitButton}
-            onClick={handleSubmit}
-            type="submit"
-          >
-            Add Personal Details
-          </button>
-        </fieldset>
-
-        {/* Academic Background */}
-        <fieldset className={styles.fieldforacademy}>
-          <legend>Academic Background</legend>
-          <div className={styles.formGroup}>
-            <div>
-              {/* Highest Level of Education */}
-              <FormControl fullWidth required sx={{ marginBottom: 2 }}>
-                <InputLabel id="highestlevel-label">
-                  Highest Level of Education
-                </InputLabel>
-                <Select
-                  labelId="highestlevel-label"
-                  id="highestlevel"
-                  name="highestlevel"
-                  // value={isOtherEducationLevel ? "Other" : academy.highestlevel}
-                  value={
-                    isOtherEducationLevel
-                      ? customEducationLevel
-                      : academy.highestlevel
-                  }
-                  label="Highest Level of Education"
-                  onChange={(e) => handleSelectChange(e, "highestlevel")}
-                >
-                  <MenuItem value="">
-                    <em>Select</em>
-                  </MenuItem>
-                  {educationLevelsResult.data?.map((level) => (
-                    <MenuItem key={level.id} value={level.level}>
-                      {level.level}
-                    </MenuItem>
-                  ))}
-                  <MenuItem value="Other">Other</MenuItem>
-                </Select>
-              </FormControl>
-              {isOtherEducationLevel && (
-                <>
-                  <TextField
-                    fullWidth
-                    required
-                    label="Specify Other Education Level"
-                    value={customEducationLevel}
-                    onChange={(e) => handleCustomInputChange(e, "highestlevel")}
-                    sx={{ marginBottom: 2 }}
-                  />
-                  <Button onClick={() => handleSubmitOther("highestlevel")}>
-                    Submit Custom Level
-                  </Button>
-                </>
-              )}
-
-              {/* University */}
-              <FormControl fullWidth required sx={{ marginBottom: 2 }}>
-                <InputLabel id="university-label">Institution</InputLabel>
-                <Select
-                  labelId="university-label"
-                  id="university"
-                  name="university"
-                  value={
-                    isOtherUniversity === "ndisplay"
-                      ? customUniversity.newunv
-                      : academy.university
-                  }
-                  label="University"
-                  onChange={(e) => handleSelectChange(e, "university")}
-                >
-                  <MenuItem value="">
-                    <em>Select</em>
-                  </MenuItem>
-                  {institutionsResult.data?.map((university) => (
-                    <MenuItem
-                      key={university.id}
-                      value={university.institution_name}
-                    >
-                      {university.institution_name}
-                    </MenuItem>
-                  ))}
-                  <MenuItem value="Other">Other</MenuItem>
-                </Select>
-              </FormControl>
-              {isOtherUniversity === "display" && (
-                <>
-                  <TextField
-                    fullWidth
-                    required
-                    label="Specify Other University"
-                    value={customUniversity.newunv}
-                    onChange={(e) => handleCustomInputChange(e, "university")}
-                    sx={{ marginBottom: 2 }}
-                  />
-
-                  {/* Checkbox Group for Government or Private Selection */}
-                  <div
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      marginBottom: "16px",
-                    }}
-                  >
-                    <label style={{ marginRight: "10px" }}>Select Type:</label>
-                    <FormControlLabel
-                      control={
-                        <Checkbox
-                          checked={customUniversityType === "Government"}
-                          onChange={(e) =>
-                            setCustomUniversityType("Government")
-                          }
-                        />
-                      }
-                      label="Government"
+                  <div className={styles.formGroup}>
+                    <TextField
+                      label="First Name"
+                      variant="outlined"
+                      fullWidth
+                      value={firstname ?? ""}
+                      onChange={(e) => setFirstname(e.target.value)}
+                      required
+                      style={{ width: "340px" }}
                     />
-                    <FormControlLabel
-                      control={
-                        <Checkbox
-                          checked={customUniversityType === "Private"}
-                          onChange={(e) => setCustomUniversityType("Private")}
-                        />
-                      }
-                      label="Private"
+                    <div
+                      className={`${styles.mandatoryIndicator} ${
+                        firstname ? styles.filled : ""
+                      }`}
+                    ></div>
+                  </div>
+
+                  <div className={styles.formGroup}>
+                    <TextField
+                      label="Middle Name"
+                      variant="outlined"
+                      fullWidth
+                      value={middlename ?? ""}
+                      onChange={(e) => setMiddlename(e.target.value)}
+                      required
+                    />
+                    <div
+                      className={`${styles.mandatoryIndicator} ${
+                        middlename ? styles.filled : ""
+                      }`}
+                    ></div>
+                  </div>
+
+                  <div className={styles.formGroup}>
+                    <TextField
+                      label="Last Name"
+                      variant="outlined"
+                      fullWidth
+                      value={lastname ?? ""}
+                      onChange={(e) => setLastname(e.target.value)}
+                      required
+                    />
+                    <div
+                      className={`${styles.mandatoryIndicator} ${
+                        lastname ? styles.filled : ""
+                      }`}
+                    ></div>
+                  </div>
+
+                  <div className={styles.formGroup}>
+                    <TextField
+                      label="Email"
+                      type="email"
+                      variant="outlined"
+                      fullWidth
+                      value={email ?? ""}
+                      onChange={(e) => setEmail(e.target.value)}
+                      required
+                    />
+                    <div
+                      className={`${styles.mandatoryIndicator} ${
+                        email ? styles.filled : ""
+                      }`}
+                    ></div>
+                  </div>
+
+                  <div className={styles.formGroup}>
+                    <TextField
+                      label="Phone Number"
+                      type="tel"
+                      variant="outlined"
+                      fullWidth
+                      value={phone ?? ""}
+                      onChange={(e) => setPhone(e.target.value)}
+                      required
+                    />
+
+                    <div
+                      className={`${styles.mandatoryIndicator} ${
+                        phone ? styles.filled : ""
+                      }`}
+                    ></div>
+                  </div>
+
+                  <div className={styles.formGroup}>
+                    <TextField
+                      label="Enter Your Age"
+                      type="number"
+                      variant="outlined"
+                      fullWidth
+                      value={age}
+                      onChange={(e) => setAge(e.target.value)}
+                      required
+                    />
+
+                    <div
+                      className={`${styles.mandatoryIndicator} ${
+                        age ? styles.filled : ""
+                      }`}
+                    ></div>
+                  </div>
+
+                  <div className={styles.formGroup}>
+                    <TextField
+                      select
+                      label="Select Your Gender"
+                      variant="outlined"
+                      fullWidth
+                      value={gender}
+                      onChange={(e) => setGender(e.target.value)}
+                      required
+                    >
+                      <MenuItem value="Male">Male</MenuItem>
+                      <MenuItem value="Female">Female</MenuItem>
+                    </TextField>
+
+                    <div
+                      className={`${styles.mandatoryIndicator} ${
+                        gender ? styles.filled : ""
+                      }`}
+                    ></div>
+                  </div>
+                </fieldset>
+
+                {/* Resume and Cover Letter */}
+                <fieldset className={styles.fieldset}>
+                  {/* Resume Upload */}
+                  <div style={commonDivStyle}>
+                    <label htmlFor="resume" style={commonLabelStyle}>
+                      Upload Resume (PDF or DOC)
+                    </label>
+                    <input
+                      type="file"
+                      id="resume"
+                      name="resume"
+                      accept=".pdf, .doc, .docx"
+                      onChange={(e) => setResume(e.target.files[0])}
+                      required
+                      style={commonInputStyle}
                     />
                   </div>
 
-                  <Button onClick={() => handleSubmitOther("university")}>
-                    Submit Custom University
-                  </Button>
-                </>
-              )}
+                  {/* Cover Letter Upload */}
+                  <div style={commonDivStyle}>
+                    <label htmlFor="coverletter" style={commonLabelStyle}>
+                      Upload Cover letter (PDF or DOC)
+                    </label>
+                    <input
+                      type="file"
+                      id="coverletter"
+                      name="coverletter"
+                      accept=".pdf, .doc, .docx"
+                      onChange={(e) => setCover_letter(e.target.files[0])}
+                      required
+                      style={commonInputStyle}
+                    />
+                  </div>
 
-              {/* Field of Study */}
-              <FormControl fullWidth required sx={{ marginBottom: 2 }}>
-                <InputLabel id="field-label">Field of Study</InputLabel>
-                <Select
-                  labelId="field-label"
-                  id="field"
-                  name="field"
-                  value={isOtherFieldOfStudy ? "Other" : academy.field}
-                  label="Field of Study"
-                  onChange={(e) => handleSelectChange(e, "field")}
-                >
-                  <MenuItem value="">
-                    <em>Select</em>
-                  </MenuItem>
-                  {fieldsOfStudyResult.data?.map((field) => (
-                    <MenuItem key={field.id} value={field.field}>
-                      {field.field}
-                    </MenuItem>
-                  ))}
-                  <MenuItem value="Other">Other</MenuItem>
-                </Select>
-              </FormControl>
-              {isOtherFieldOfStudy && (
-                <>
-                  <TextField
-                    fullWidth
-                    required
-                    label="Specify Other Field of Study"
-                    value={customFieldOfStudy}
-                    onChange={(e) => handleCustomInputChange(e, "field")}
-                    sx={{ marginBottom: 2 }}
-                  />
-                  <Button onClick={() => handleSubmitOther("field")}>
-                    Submit Custom Field of Study
-                  </Button>
-                </>
-              )}
-            </div>
+                  {/* Handwritten Letter Upload */}
+                  <div style={commonDivStyle}>
+                    <label htmlFor="handwritten" style={commonLabelStyle}>
+                      Upload Handwritten (PDF or DOC)
+                    </label>
+                    <input
+                      type="file"
+                      id="handwritten"
+                      name="handwritten"
+                      accept=".pdf, .doc, .docx"
+                      onChange={(e) => setHandwritten_letter(e.target.files[0])}
+                      required
+                      style={commonInputStyle}
+                    />
+                  </div>
+                </fieldset>
+              </div>
+              <p style={{}}>{message}</p>
 
-            {/* Completed Year */}
-            <TextField
-              fullWidth
-              required
-              label="Completed Year"
-              type="number"
-              id="completed_year"
-              name="completed_year"
-              value={academy.completed_year}
-              onChange={handleAcademicChange}
-              margin="normal"
-            />
+              <button
+                className={styles.submitButton}
+                onClick={handleSubmit}
+                type="submit"
+              >
+                Add Personal Details
+              </button>
+            </fieldset>
 
-            {/* CGPA */}
-            <TextField
-              fullWidth
-              required
-              label="CGPA"
-              type="number"
-              id="cgpa"
-              name="cgpa"
-              value={academy.cgpa}
-              onChange={handleAcademicChange}
-              margin="normal"
-            />
-          </div>
+            {/* Academic Background */}
+            <fieldset className={styles.fieldforacademy}>
+              <legend>Academic Background</legend>
+              <div className={styles.formGroup}>
+                <div>
+                  {/* Highest Level of Education */}
+                  <FormControl fullWidth required sx={{ marginBottom: 2 }}>
+                    <InputLabel id="highestlevel-label">
+                      Highest Level of Education
+                    </InputLabel>
+                    <Select
+                      labelId="highestlevel-label"
+                      id="highestlevel"
+                      name="highestlevel"
+                      value={
+                        isOtherEducationLevel
+                          ? customEducationLevel
+                          : academy.highestlevel
+                      }
+                      label="Highest Level of Education"
+                      onChange={(e) => handleSelectChange(e, "highestlevel")}
+                    >
+                      <MenuItem value="">
+                        <em>Select</em>
+                      </MenuItem>
+                      {educationLevelsResult.data?.map((level) => (
+                        <MenuItem key={level.id} value={level.level}>
+                          {level.level}
+                        </MenuItem>
+                      ))}
+                      <MenuItem value="Other">Other</MenuItem>
+                      {/* Add the custom value dynamically to the dropdown */}
+                      {academy.highestlevel &&
+                        !educationLevelsResult.data?.find(
+                          (level) => level.level === academy.highestlevel
+                        ) && (
+                          <MenuItem value={academy.highestlevel}>
+                            {academy.highestlevel}
+                          </MenuItem>
+                        )}
+                    </Select>
+                  </FormControl>
+                  {isOtherEducationLevel && (
+                    <>
+                      <TextField
+                        fullWidth
+                        required
+                        label="Specify Other Education Level"
+                        value={customEducationLevel}
+                        onChange={(e) =>
+                          handleCustomInputChange(e, "highestlevel")
+                        }
+                        sx={{ marginBottom: 2 }}
+                      />
+                      <Button onClick={() => handleSubmitOther("highestlevel")}>
+                        Submit Custom Level
+                      </Button>
+                    </>
+                  )}
 
-          <p style={{}}>{messageacc}</p>
+                  {/* University */}
+                  <FormControl fullWidth required sx={{ marginBottom: 2 }}>
+                    <InputLabel id="university-label">Institution</InputLabel>
+                    <Select
+                      labelId="university-label"
+                      id="university"
+                      name="university"
+                      value={
+                        isOtherUniversity
+                          ? customUniversity
+                          : academy.university
+                      }
+                      label="University"
+                      onChange={(e) => handleSelectChange(e, "university")}
+                    >
+                      <MenuItem value="">
+                        <em>Select</em>
+                      </MenuItem>
+                      {institutionsResult.data?.map((university) => (
+                        <MenuItem
+                          key={university.id}
+                          value={university.institution_name}
+                        >
+                          {university.institution_name}
+                        </MenuItem>
+                      ))}
+                      <MenuItem value="Other">Other</MenuItem>
+                      {/* Add the custom value dynamically to the dropdown */}
+                      {academy.university &&
+                        !institutionsResult.data?.find(
+                          (university) =>
+                            university.institution_name === academy.university
+                        ) && (
+                          <MenuItem value={academy.university}>
+                            {academy.university}
+                          </MenuItem>
+                        )}
+                    </Select>
+                  </FormControl>
+                  {isOtherUniversity && (
+                    <>
+                      <TextField
+                        fullWidth
+                        required
+                        label="Specify Other University"
+                        value={customUniversity}
+                        onChange={(e) =>
+                          handleCustomInputChange(e, "university")
+                        }
+                        sx={{ marginBottom: 2 }}
+                      />
 
-          <button
-            type="button"
-            className={`${styles.submitButton} ${
-              !isPersonalDetailsAdded && styles.disabledButton
-            }`}
-            onClick={addAcademicBackground}
-            disabled={!isPersonalDetailsAdded}
-          >
-            Add Academic Background
-          </button>
-        </fieldset>
+                      {/* Checkbox Group for Government or Private Selection */}
+                      <div
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          marginBottom: "16px",
+                        }}
+                      >
+                        <label style={{ marginRight: "10px" }}>
+                          Select Type:
+                        </label>
+                        <FormControlLabel
+                          control={
+                            <Checkbox
+                              checked={customUniversityType === "Government"}
+                              onChange={(e) =>
+                                setCustomUniversityType("Government")
+                              }
+                            />
+                          }
+                          label="Government"
+                        />
+                        <FormControlLabel
+                          control={
+                            <Checkbox
+                              checked={customUniversityType === "Private"}
+                              onChange={(e) =>
+                                setCustomUniversityType("Private")
+                              }
+                            />
+                          }
+                          label="Private"
+                        />
+                      </div>
 
-        {/* Work Experience */}
-        {user.applyfor !== "Fresh Graduate" && (
-          <fieldset className={styles.fieldsetforwork}>
-            <legend>Work Experience</legend>
-            <div className={styles.formGroup}>
-              {/* Company Name */}
-              <TextField
-                fullWidth
-                required
-                label="Company Name"
-                id="company"
-                name="company"
-                value={workexperience.company}
-                onChange={handleExperienceChange}
-                margin="normal"
-              />
+                      <Button onClick={() => handleSubmitOther("university")}>
+                        Submit Custom University
+                      </Button>
+                    </>
+                  )}
 
-              {/* Position */}
-              <TextField
-                fullWidth
-                required
-                label="Position"
-                id="position"
-                name="position"
-                value={workexperience.position}
-                onChange={handleExperienceChange}
-                margin="normal"
-              />
+                  {/* Field of Study */}
+                  <FormControl fullWidth required sx={{ marginBottom: 2 }}>
+                    <InputLabel id="field-label">Field of Study</InputLabel>
+                    <Select
+                      labelId="field-label"
+                      id="field"
+                      name="field"
+                      value={
+                        isOtherFieldOfStudy ? customFieldOfStudy : academy.field
+                      }
+                      label="Field of Study"
+                      onChange={(e) => handleSelectChange(e, "field")}
+                    >
+                      <MenuItem value="">
+                        <em>Select</em>
+                      </MenuItem>
+                      {fieldsOfStudyResult.data?.map((field) => (
+                        <MenuItem key={field.id} value={field.field}>
+                          {field.field}
+                        </MenuItem>
+                      ))}
+                      <MenuItem value="Other">Other</MenuItem>
+                      {/* Add the custom value dynamically to the dropdown */}
+                      {academy.field &&
+                        !fieldsOfStudyResult.data?.find(
+                          (field) => field.field === academy.field
+                        ) && (
+                          <MenuItem value={academy.field}>
+                            {academy.field}
+                          </MenuItem>
+                        )}
+                    </Select>
+                  </FormControl>
+                  {isOtherFieldOfStudy && (
+                    <>
+                      <TextField
+                        fullWidth
+                        required
+                        label="Specify Other Field of Study"
+                        value={customFieldOfStudy}
+                        onChange={(e) => handleCustomInputChange(e, "field")}
+                        sx={{ marginBottom: 2 }}
+                      />
+                      <Button onClick={() => handleSubmitOther("field")}>
+                        Submit Custom Field of Study
+                      </Button>
+                    </>
+                  )}
+                </div>
 
-              {/* From Date */}
-              <TextField
-                fullWidth
-                required
-                label="From"
-                type="month"
-                id="from_date"
-                name="from_date"
-                value={workexperience.from_date}
-                onChange={handleExperienceChange}
-                margin="normal"
-                InputLabelProps={{
-                  shrink: true,
-                }}
-              />
+                {/* Completed Year */}
+                <TextField
+                  fullWidth
+                  required
+                  label="Completed Year"
+                  type="number"
+                  id="completed_year"
+                  name="completed_year"
+                  value={academy.completed_year}
+                  onChange={handleAcademicChange}
+                  margin="normal"
+                />
 
-              {/* To Date */}
-              <TextField
-                fullWidth
-                required
-                label="To"
-                type="month"
-                id="to_date"
-                name="to_date"
-                value={workexperience.to_date}
-                onChange={handleExperienceChange}
-                margin="normal"
-                InputLabelProps={{
-                  shrink: true,
-                }}
-              />
-              <p style={{}}>{messageexp}</p>
+                {/* CGPA */}
+                <TextField
+                  fullWidth
+                  required
+                  label="CGPA"
+                  type="number"
+                  id="cgpa"
+                  name="cgpa"
+                  value={academy.cgpa}
+                  onChange={handleAcademicChange}
+                  margin="normal"
+                />
+              </div>
+
+              <p style={{}}>{messageacc}</p>
+
               <button
                 type="button"
                 className={`${styles.submitButton} ${
                   !isPersonalDetailsAdded && styles.disabledButton
                 }`}
-                onClick={addWorkExperience}
+                onClick={addAcademicBackground}
                 disabled={!isPersonalDetailsAdded}
               >
-                Add Experience
+                Add Academic Background
               </button>
-            </div>
-          </fieldset>
-        )}
-      </form>
+            </fieldset>
 
-      {/* Submit Button */}
-      <button
-        className={`${styles.submitfinalButton} ${
-          !isAcademicBackgroundAdded && styles.disabledButtonn
-        }`}
-        onClick={handlePopup}
-        type="submit"
-        disabled={!(isPersonalDetailsAdded && isAcademicBackgroundAdded)}
-      >
-        Submit Application
-      </button>
+            {/* Work Experience */}
+            {user.applyfor !== "Fresh Graduate" && (
+              <fieldset className={styles.fieldsetforwork}>
+                <legend>Work Experience</legend>
+                <div className={styles.formGroup}>
+                  {/* Company Name */}
+                  <TextField
+                    fullWidth
+                    required
+                    label="Company Name"
+                    id="company"
+                    name="company"
+                    value={workexperience.company}
+                    onChange={handleExperienceChange}
+                    margin="normal"
+                  />
 
-      {showPopup && <Succespop onClose={handleClosePopup} />}
+                  {/* Position */}
+                  <TextField
+                    fullWidth
+                    required
+                    label="Position"
+                    id="position"
+                    name="position"
+                    value={workexperience.position}
+                    onChange={handleExperienceChange}
+                    margin="normal"
+                  />
+
+                  {/* From Date */}
+                  <TextField
+                    fullWidth
+                    required
+                    label="From"
+                    type="DATE"
+                    id="from_date"
+                    name="from_date"
+                    value={workexperience.from_date}
+                    onChange={handleExperienceChange}
+                    margin="normal"
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                  />
+
+                  {/* To Date */}
+                  <TextField
+                    fullWidth
+                    required
+                    label="To"
+                    type="DATE"
+                    id="to_date"
+                    name="to_date"
+                    value={workexperience.to_date}
+                    onChange={handleExperienceChange}
+                    margin="normal"
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                  />
+                  <p style={{}}>{messageexp}</p>
+                  <button
+                    type="button"
+                    className={`${styles.submitButton} ${
+                      !isPersonalDetailsAdded && styles.disabledButton
+                    }`}
+                    onClick={addWorkExperience}
+                    disabled={!isPersonalDetailsAdded}
+                  >
+                    Add Experience
+                  </button>
+                </div>
+              </fieldset>
+            )}
+          </form>
+
+          {/* Submit Button */}
+          <button
+            className={`${styles.submitfinalButton} ${
+              !isAcademicBackgroundAdded && styles.disabledButtonn
+            }`}
+            onClick={handlePopup}
+            type="submit"
+            disabled={!(isPersonalDetailsAdded && isAcademicBackgroundAdded)}
+          >
+            Submit Application
+          </button>
+
+          {showPopup && <Succespop onClose={handleClosePopup} />}
+        </>
+      ) : (
+        <>Only for applicant</>
+      )}
     </div>
   );
 }
