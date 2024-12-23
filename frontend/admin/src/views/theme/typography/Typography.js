@@ -1,6 +1,7 @@
 import React, { useEffect, useState, createRef } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL
 import {
   CRow,
   CCol,
@@ -66,7 +67,7 @@ ThemeColor.propTypes = {
 // Fetch job data from the backend
 const activeJobs = async () => {
   try {
-    const res = await fetch('http://10.1.12.40:5000/api/jobs/alljobs')
+    const res = await fetch(`${API_BASE_URL}/jobs/alljobs`)
 
     // Log the entire response for debugging
     console.log('Response: ', res)
@@ -89,7 +90,7 @@ const activeJobs = async () => {
 
 const closeJob = async (jobId) => {
   try {
-    const response = await fetch(`http://10.1.12.40:5000/api/jobs/reupdate/${jobId}`, {
+    const response = await fetch(`${API_BASE_URL}/jobs/reupdate/${jobId}`, {
       // Corrected URL
       method: 'PUT',
       headers: {
@@ -112,8 +113,9 @@ const closeJob = async (jobId) => {
 const removeJob = async (jobId) => {
   console.log('iddddddddd ', jobId)
   try {
-    const response = await fetch(`http://10.1.12.40:5000/api/jobs/remove/${jobId}`, {
+    const response = await fetch(`${API_BASE_URL}/jobs/remove/${jobId}`, {
       // Corrected URL
+
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',

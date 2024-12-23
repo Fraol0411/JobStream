@@ -4,6 +4,7 @@ import Succespop from "../../Component/Succespop/Succespop";
 import { useNavigate, useParams } from "react-router-dom";
 import { useUser } from "../../UserContext";
 import { useQueries, useQuery } from "react-query";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 import {
   TextField,
@@ -20,13 +21,10 @@ import {
 // function to handle application api
 const submitApplication = async (formData) => {
   try {
-    const response = await fetch(
-      "http://10.1.12.40:5000/api/applications/createnew",
-      {
-        method: "POST",
-        body: formData,
-      }
-    );
+    const response = await fetch(`${API_BASE_URL}/applications/createnew`, {
+      method: "POST",
+      body: formData,
+    });
     if (!response.ok) {
       throw new Error("Submitting failed");
     }
@@ -42,7 +40,7 @@ const submitApplication = async (formData) => {
 
 // function to handle application api
 const submitAcademic = async (academy) => {
-  const response = await fetch("http://10.1.12.40:5000/api/academic/", {
+  const response = await fetch(`${API_BASE_URL}/academic/`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -57,7 +55,7 @@ const submitAcademic = async (academy) => {
 
 // function to handle application api
 const submitExprience = async (workexperience) => {
-  const response = await fetch("http://10.1.12.40:5000/api/exprience", {
+  const response = await fetch(`${API_BASE_URL}/exprience`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -72,9 +70,7 @@ const submitExprience = async (workexperience) => {
 
 // Your fetch functions
 const fetchEducationLevels = async () => {
-  const response = await fetch(
-    "http://10.1.12.40:5000/api/academic/highest/level"
-  );
+  const response = await fetch(`${API_BASE_URL}/academic/highest/level`);
   if (!response.ok) {
     throw new Error("Failed to fetch education levels");
   }
@@ -82,9 +78,7 @@ const fetchEducationLevels = async () => {
 };
 
 const fetchInstitutions = async () => {
-  const response = await fetch(
-    "http://10.1.12.40:5000/api/academic/institution/type"
-  );
+  const response = await fetch(`${API_BASE_URL}/academic/institution/type`);
   if (!response.ok) {
     throw new Error("Failed to fetch institutions");
   }
@@ -92,9 +86,7 @@ const fetchInstitutions = async () => {
 };
 
 const fetchFieldsOfStudy = async () => {
-  const response = await fetch(
-    "http://10.1.12.40:5000/api/academic/field/study"
-  );
+  const response = await fetch(`${API_BASE_URL}/academic/field/study`);
   if (!response.ok) {
     throw new Error("Failed to fetch fields of study");
   }
@@ -104,16 +96,13 @@ const fetchFieldsOfStudy = async () => {
 // post new academic states
 
 const insertHighestLevel = async (level) => {
-  const response = await fetch(
-    "http://10.1.12.40:5000/api/academic/highest/level",
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ level }), // Sending level as the body
-    }
-  );
+  const response = await fetch(`${API_BASE_URL}/academic/highest/level`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ level }), // Sending level as the body
+  });
 
   if (!response.ok) {
     throw new Error("Failed to insert highest level of education");
@@ -122,16 +111,13 @@ const insertHighestLevel = async (level) => {
 };
 
 const insertInstitution = async (institutionName, institutionType) => {
-  const response = await fetch(
-    "http://10.1.12.40:5000/api/academic/institution/type",
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ institutionName, institutionType }), // Sending both institutionName and institutionType
-    }
-  );
+  const response = await fetch(`${API_BASE_URL}/academic/institution/type`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ institutionName, institutionType }), // Sending both institutionName and institutionType
+  });
 
   if (!response.ok) {
     throw new Error("Failed to insert institution");
@@ -140,16 +126,13 @@ const insertInstitution = async (institutionName, institutionType) => {
 };
 
 const insertFieldOfStudy = async (fieldName) => {
-  const response = await fetch(
-    "http://10.1.12.40:5000/api/academic/field/study",
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ fieldName }), // Sending field name as the body
-    }
-  );
+  const response = await fetch(`${API_BASE_URL}/academic/field/study`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ fieldName }), // Sending field name as the body
+  });
 
   if (!response.ok) {
     throw new Error("Failed to insert field of study");

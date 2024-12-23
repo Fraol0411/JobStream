@@ -1,6 +1,7 @@
 import React, { useEffect, useState, createRef } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL
 import {
   CRow,
   CCol,
@@ -71,7 +72,7 @@ ThemeColor.propTypes = {
 }
 
 const fetchEducationLevels = async () => {
-  const response = await fetch('http://10.1.12.40:5000/api/academic/highest/level')
+  const response = await fetch(`${API_BASE_URL}/academic/highest/level`)
   if (!response.ok) {
     throw new Error('Failed to fetch education levels')
   }
@@ -79,7 +80,7 @@ const fetchEducationLevels = async () => {
 }
 
 const fetchFieldsOfStudy = async () => {
-  const response = await fetch('http://10.1.12.40:5000/api/academic/field/study')
+  const response = await fetch(`${API_BASE_URL}/academic/field/study`)
   if (!response.ok) {
     throw new Error('Failed to fetch fields of study')
   }
@@ -109,7 +110,7 @@ const Colors = () => {
   /********************************* */
   const fetchInstitutions = async () => {
     try {
-      const response = await fetch('http://10.1.12.40:5000/api/academic/institution0/type')
+      const response = await fetch(`${API_BASE_URL}/academic/institution0/type`)
       if (!response.ok) {
         throw new Error('Failed to fetch institutions')
       }
@@ -123,7 +124,7 @@ const Colors = () => {
 
   const fetchFieldsOfStudy = async () => {
     try {
-      const response = await fetch('http://10.1.12.40:5000/api/academic/field0/study')
+      const response = await fetch(`${API_BASE_URL}/academic/field0/study`)
       if (!response.ok) {
         throw new Error('failed to fetch')
       }
@@ -136,7 +137,7 @@ const Colors = () => {
 
   const fetchEducationLevels = async () => {
     try {
-      const response = await fetch('http://10.1.12.40:5000/api/academic/highest0/level')
+      const response = await fetch(`${API_BASE_URL}/academic/highest0/level`)
       if (!response.ok) {
         throw new Error('failed to fetch')
       }
@@ -152,7 +153,7 @@ const Colors = () => {
     const jobId = id
     if (selectedItem === 'field of study') {
       try {
-        const response = await fetch(`http://10.1.12.40:5000/api/academic/updatefield/${jobId}`, {
+        const response = await fetch(`${API_BASE_URL}/academic/updatefield/${jobId}`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
@@ -174,21 +175,18 @@ const Colors = () => {
       }
     } else if (selectedItem === 'Institution') {
       try {
-        const response = await fetch(
-          `http://10.1.12.40:5000/api/academic/updateinstitution/${jobId}`,
-          {
-            // Corrected URL
-            method: 'PUT',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              id: jobId,
-              value: editedValue,
-              value2: type,
-            }), // Sending the jobId in the body
+        const response = await fetch(`${API_BASE_URL}/academic/updateinstitution/${jobId}`, {
+          // Corrected URL
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
           },
-        )
+          body: JSON.stringify({
+            id: jobId,
+            value: editedValue,
+            value2: type,
+          }), // Sending the jobId in the body
+        })
 
         if (response.ok) {
           console.log('Job status updated to closed')
@@ -201,7 +199,7 @@ const Colors = () => {
       }
     } else {
       try {
-        const response = await fetch(`http://10.1.12.40:5000/api/academic/updatelevel/${jobId}`, {
+        const response = await fetch(`${API_BASE_URL}/academic/updatelevel/${jobId}`, {
           // Corrected URL
           method: 'PUT',
           headers: {

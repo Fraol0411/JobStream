@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { useUser } from '../../../UserContext'
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL
 import {
   CCard,
   CCardBody,
@@ -50,7 +51,7 @@ const Accordion = () => {
     }
 
     try {
-      const response = await fetch('http://10.1.12.40:5000/api/jobs/createjobs', {
+      const response = await fetch(`${API_BASE_URL}/jobs/createjobs`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

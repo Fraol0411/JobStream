@@ -1,5 +1,5 @@
-import React from 'react';
-import { ClipLoader } from 'react-spinners'; // You can choose different spinners from react-spinners
+import React from "react";
+import { ClipLoader } from "react-spinners"; // You can choose different spinners from react-spinners
 
 export default function LoadingSpinner() {
   return (
@@ -11,9 +11,9 @@ export default function LoadingSpinner() {
 
 const styles = {
   loader: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: '100vh',
-  }
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    height: "100vh",
+  },
 };

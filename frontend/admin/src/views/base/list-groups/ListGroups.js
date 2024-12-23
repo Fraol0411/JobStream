@@ -302,6 +302,7 @@ import { CBadge, CButton, CCard, CCardBody, CCardHeader, CCol, CRow } from '@cor
 import { useNavigate, useLocation } from 'react-router-dom'
 import * as XLSX from 'xlsx'
 import { useTable, useSortBy, useFilters } from 'react-table'
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL
 
 const ListGroups = () => {
   const [applicants, setApplicants] = useState([])
@@ -319,7 +320,7 @@ const ListGroups = () => {
   // Fetching applications data
   const fetchApplications = async (jobId) => {
     try {
-      const response = await fetch(`http://10.1.12.40:5000/api/applications/${jobId}`)
+      const response = await fetch(`${API_BASE_URL}/applications/${jobId}`)
       if (response.status === 404) {
         setError('No applications found for this job')
         return

@@ -6,12 +6,13 @@ import { useQuery } from "react-query";
 import { ClimbingBoxLoader } from "react-spinners";
 import { CircleLoader } from "react-spinners";
 import { useUser } from "../../UserContext";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 // Fetch job data from the backend
 const fetchJobs = async (title) => {
   const url = title
-    ? `http://10.1.12.40:5000/api/jobs/byname/${title}`
-    : "http://10.1.12.40:5000/api/jobs/alljobs";
+    ? `${API_BASE_URL}/jobs/byname/${title}`
+    : `${API_BASE_URL}/jobs/alljobs`;
 
   const res = await fetch(url);
   if (!res.ok) {

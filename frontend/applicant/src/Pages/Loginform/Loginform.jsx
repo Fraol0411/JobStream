@@ -5,12 +5,14 @@ import { useMutation } from "react-query";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import styles from "./Login.module.scss";
 import { useUser } from "../../UserContext";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 // Function to handle login API request
 // 'http://localhost:5000/api/auth/login',
 
 const loginUser = async (loginData, setUser) => {
   try {
-    const response = await fetch("http://10.1.12.40:5000/api/auth/login", {
+    const response = await fetch(`${API_BASE_URL}/auth/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -42,7 +44,7 @@ const loginUser = async (loginData, setUser) => {
 
 // Function to handle registration API request
 const registerUser = async (registerData) => {
-  const response = await fetch("http://10.1.12.40:5000/api/auth/register", {
+  const response = await fetch(`${API_BASE_URL}/auth/register`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

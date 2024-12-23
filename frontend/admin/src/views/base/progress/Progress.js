@@ -11,10 +11,12 @@ import {
 } from '@coreui/react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL
+const API_BASE_FILEURL = import.meta.env.VITE_API_BASE_FILEURL
 
 // Function to fetch experience data
 const fetchExperience = async (applicationId) => {
-  const response = await fetch(`http://10.1.12.40:5000/api/exprience/${applicationId}`)
+  const response = await fetch(`${API_BASE_URL}/exprience/${applicationId}`)
 
   if (!response.ok) {
     throw new Error('Failed to fetch experience data')
@@ -25,7 +27,7 @@ const fetchExperience = async (applicationId) => {
 
 // Function to fetch academic data
 const fetchAcademic = async (applicationId) => {
-  const response = await fetch(`http://10.1.12.40:5000/api/academic/${applicationId}`)
+  const response = await fetch(`${API_BASE_URL}/academic/${applicationId}`)
 
   if (!response.ok) {
     throw new Error('Failed to fetch academic data')
@@ -36,7 +38,7 @@ const fetchAcademic = async (applicationId) => {
 
 // Function to update the application status (general-purpose function)
 const updateApplicationStatus = async (applicationId, status) => {
-  const response = await fetch(`http://10.1.12.40:5000/api/applications/${applicationId}/status`, {
+  const response = await fetch(`${API_BASE_URL}/applications/${applicationId}/status`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
@@ -105,9 +107,9 @@ const Progress = (jobId) => {
   const handwrittenLetterFileName = applicant.handwritten_letter.split('public/uploads/').pop()
 
   // Construct URLs for uploaded files
-  const resumePath = `http://10.1.12.40:5000/uploads/${resumeFileName}`
-  const coverLetterPath = `http://10.1.12.40:5000/uploads/${coverLetterFileName}`
-  const handwrittenLetterPath = `http://10.1.12.40:5000/uploads/${handwrittenLetterFileName}`
+  const resumePath = `${API_BASE_FILEURL}/${resumeFileName}`
+  const coverLetterPath = `${API_BASE_FILEURL}/${coverLetterFileName}`
+  const handwrittenLetterPath = `${API_BASE_FILEURL}${handwrittenLetterFileName}`
 
   console.log('Cleaned Resume File Name path:', resumePath)
 
