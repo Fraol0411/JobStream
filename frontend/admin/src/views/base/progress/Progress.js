@@ -105,9 +105,9 @@ const Progress = (jobId) => {
   const handwrittenLetterFileName = applicant.handwritten_letter.split('public/uploads/').pop()
 
   // Construct URLs for uploaded files
-  const resumePath = `http://localhost:5000/uploads/${resumeFileName}`
-  const coverLetterPath = `http://localhost:5000/uploads/${coverLetterFileName}`
-  const handwrittenLetterPath = `http://localhost:5000/uploads/${handwrittenLetterFileName}`
+  const resumePath = `http://10.1.12.40:5000/uploads/${resumeFileName}`
+  const coverLetterPath = `http://10.1.12.40:5000/uploads/${coverLetterFileName}`
+  const handwrittenLetterPath = `http://10.1.12.40:5000/uploads/${handwrittenLetterFileName}`
 
   console.log('Cleaned Resume File Name path:', resumePath)
 

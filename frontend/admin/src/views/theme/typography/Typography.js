@@ -243,7 +243,7 @@ const Colors = () => {
                         handleButtonClick2(vacancy.job_id) // Custom button handler
                       }}
                     >
-                      Remove
+                      Archive
                     </CButton>
                   </CTableDataCell>
                 </CTableRow>

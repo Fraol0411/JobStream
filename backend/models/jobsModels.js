@@ -239,15 +239,15 @@ export const reupdateJobsApplicants = async (job_id) => {
         .request()
         .input("job_id", sql.Int, job_id)
         .query(
-          "UPDATE Applications SET status = 'submitted' WHERE job_id = @job_id AND status <> 'further'"
+          "UPDATE Applications SET status = 'submitted' WHERE job_id = @job_id AND status = 'rejected' "
         );
 
-      await transaction
-        .request()
-        .input("job_id", sql.Int, job_id)
-        .query(
-          "UPDATE Applications SET status = 'rejected' WHERE job_id = @job_id AND status = 'further'"
-        );
+      // await transaction
+      //   .request()
+      //   .input("job_id", sql.Int, job_id)
+      //   .query(
+      //     "UPDATE Applications SET status = 'rejected' WHERE job_id = @job_id AND status = 'further'"
+      //   );
 
       // Commit the transaction after both updates are successful
       await transaction.commit();
