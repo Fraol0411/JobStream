@@ -1,7 +1,6 @@
 import sql from "mssql";
-import { connectDB } from "../config/db.js";
+import { connectDB } from "../config/pgdb.js";
 
-// Create a new academic background entry
 export const createAcademic = async (
   application_id,
   highestlevel,
@@ -10,260 +9,352 @@ export const createAcademic = async (
   completed_year,
   field
 ) => {
-  const pool = await connectDB();
-  const query = `
-    INSERT INTO AcademicBackground (application_id, highestlevel, university, cgpa, completed_year, field)
-    VALUES (@application_id, @highestlevel, @university, @cgpa, @completed_year, @field);
-  `;
-  return pool
-    .request()
-    .input("application_id", sql.Int, application_id)
-    .input("highestlevel", sql.VarChar(100), highestlevel)
-    .input("university", sql.VarChar(100), university)
-    .input("cgpa", sql.Decimal(4, 2), cgpa) // Change made here for floating-point values
-    .input("completed_year", sql.Int, completed_year)
-    .input("field", sql.VarChar(100), field)
-    .query(query);
+  const pool = await connectDB(); // Ensure a valid PostgreSQL connection
+  const client = await pool.connect(); // Get a client from the pool
+
+  try {
+    // Define the query to insert the academic background data
+    const query = `
+      INSERT INTO AcademicBackground (application_id, highestlevel, university, cgpa, completed_year, field)
+      VALUES ($1, $2, $3, $4, $5, $6)
+      RETURNING *;
+    `;
+
+    // Execute the query with the provided values
+    const result = await client.query(query, [
+      application_id,
+      highestlevel,
+      university,
+      cgpa,
+      completed_year,
+      field,
+    ]);
+
+    // Return the inserted academic background entry
+    return result.rows[0]; // Return the inserted row
+  } catch (error) {
+    console.error("Error creating academic background entry:", error);
+    throw error; // Re-throw error for further handling
+  } finally {
+    client.release(); // Release the client back to the pool
+  }
 };
-// Retrieve academic background by application_id
+
 export const getAcademicByApplicationId = async (application_id) => {
-  const pool = await connectDB();
-  const query = `
-    SELECT * FROM AcademicBackground WHERE application_id = @application_id;
-  `;
-  const result = await pool
-    .request()
-    .input("application_id", sql.Int, application_id)
-    .query(query);
+  const pool = await connectDB(); // Ensure a valid PostgreSQL connection
+  const client = await pool.connect(); // Get a client from the pool
 
-  return result.recordset;
+  try {
+    // Define the query to retrieve academic background by application_id
+    const query = `
+      SELECT * FROM AcademicBackground WHERE application_id = $1;
+    `;
+
+    // Execute the query with the provided application_id
+    const result = await client.query(query, [application_id]);
+
+    // Return the academic background data
+    return result.rows; // Return an array of rows
+  } catch (error) {
+    console.error(
+      "Error fetching academic background by application_id:",
+      error
+    );
+    throw error; // Re-throw error for further handling
+  } finally {
+    client.release(); // Release the client back to the pool
+  }
 };
 
-// Retrieve academic background by application_id
+// Retrieve highest level of education where status = 1
 export const getHIghestlevelofeducation = async () => {
-  const pool = await connectDB();
-  const query = `
-    SELECT * FROM level_of_education where status = 1;
-  `;
-  const result = await pool.request().query(query);
+  const pool = await connectDB(); // Ensure a valid PostgreSQL connection
+  const client = await pool.connect(); // Get a client from the pool
 
-  return result.recordset;
+  try {
+    const query = `
+      SELECT * FROM level_of_education WHERE status = $1;
+    `;
+
+    const result = await client.query(query, [1]);
+    return result.rows; // Return an array of rows
+  } catch (error) {
+    console.error("Error fetching highest level of education:", error);
+    throw error; // Re-throw error for further handling
+  } finally {
+    client.release(); // Release the client back to the pool
+  }
 };
 
+// Retrieve highest level of education where status = 0
 export const getHIghestlevelofeducation0 = async () => {
-  const pool = await connectDB();
-  const query = `
-    SELECT * FROM level_of_education where status = 0;
-  `;
-  const result = await pool.request().query(query);
+  const pool = await connectDB(); // Ensure a valid PostgreSQL connection
+  const client = await pool.connect(); // Get a client from the pool
 
-  return result.recordset;
+  try {
+    const query = `
+      SELECT * FROM level_of_education WHERE status = $1;
+    `;
+
+    const result = await client.query(query, [0]);
+    return result.rows; // Return an array of rows
+  } catch (error) {
+    console.error(
+      "Error fetching highest level of education (status 0):",
+      error
+    );
+    throw error; // Re-throw error for further handling
+  } finally {
+    client.release(); // Release the client back to the pool
+  }
 };
 
-// Retrieve academic background by application_id
+// Retrieve institutions where status = 1
 export const getInstitutionplace = async () => {
-  const pool = await connectDB();
-  const query = `
-    SELECT * FROM institutions where status = 1;
-  `;
-  const result = await pool.request().query(query);
+  const pool = await connectDB(); // Ensure a valid PostgreSQL connection
+  const client = await pool.connect(); // Get a client from the pool
 
-  return result.recordset;
+  try {
+    const query = `
+      SELECT * FROM institutions WHERE status = $1;
+    `;
+
+    const result = await client.query(query, [1]);
+    return result.rows; // Return an array of rows
+  } catch (error) {
+    console.error("Error fetching institution place:", error);
+    throw error; // Re-throw error for further handling
+  } finally {
+    client.release(); // Release the client back to the pool
+  }
 };
 
+// Retrieve institutions where status = 0
 export const getInstitutionplace0 = async () => {
-  const pool = await connectDB();
-  const query = `
-    SELECT * FROM institutions where status = 0;
-  `;
-  const result = await pool.request().query(query);
+  const pool = await connectDB(); // Ensure a valid PostgreSQL connection
+  const client = await pool.connect(); // Get a client from the pool
 
-  return result.recordset;
+  try {
+    const query = `
+      SELECT * FROM institutions WHERE status = $1;
+    `;
+
+    const result = await client.query(query, [0]);
+    return result.rows; // Return an array of rows
+  } catch (error) {
+    console.error("Error fetching institution place (status 0):", error);
+    throw error; // Re-throw error for further handling
+  } finally {
+    client.release(); // Release the client back to the pool
+  }
 };
 
-// Retrieve academic background by application_id
+// Retrieve fields of study where status = 1
 export const getFieldofStudystudied = async () => {
-  const pool = await connectDB();
-  const query = `
-    SELECT * FROM fields_of_study where status = 1;
-  `;
-  const result = await pool.request().query(query);
+  const pool = await connectDB(); // Ensure a valid PostgreSQL connection
+  const client = await pool.connect(); // Get a client from the pool
 
-  return result.recordset;
+  try {
+    const query = `
+      SELECT * FROM fields_of_study WHERE status = $1;
+    `;
+
+    const result = await client.query(query, [1]);
+    return result.rows; // Return an array of rows
+  } catch (error) {
+    console.error("Error fetching field of study:", error);
+    throw error; // Re-throw error for further handling
+  } finally {
+    client.release(); // Release the client back to the pool
+  }
 };
 
+// Retrieve fields of study where status = 0
 export const getFieldofStudystudied0 = async () => {
-  const pool = await connectDB();
-  const query = `
-    SELECT * FROM fields_of_study where status = 0;
-  `;
-  const result = await pool.request().query(query);
+  const pool = await connectDB(); // Ensure a valid PostgreSQL connection
+  const client = await pool.connect(); // Get a client from the pool
 
-  return result.recordset;
+  try {
+    const query = `
+      SELECT * FROM fields_of_study WHERE status = $1;
+    `;
+
+    const result = await client.query(query, [0]);
+    return result.rows; // Return an array of rows
+  } catch (error) {
+    console.error("Error fetching field of study (status 0):", error);
+    throw error; // Re-throw error for further handling
+  } finally {
+    client.release(); // Release the client back to the pool
+  }
 };
 
 // Insert new highest level of education
 export const addHighestLevelOfEducation = async (level) => {
-  const pool = await connectDB();
-  const query = `
-    INSERT INTO level_of_education (level)
-    VALUES (@level);
-  `;
-  const result = await pool.request().input("level", level).query(query);
+  const pool = await connectDB(); // Ensure a valid PostgreSQL connection
+  const client = await pool.connect(); // Get a client from the pool
 
-  return result.rowsAffected[0] > 0; // Returns true if insertion was successful
+  try {
+    const query = `
+      INSERT INTO level_of_education (level)
+      VALUES ($1);
+    `;
+    const result = await client.query(query, [level]);
+
+    return result.rowCount > 0; // Returns true if insertion was successful
+  } catch (error) {
+    console.error("Error adding highest level of education:", error);
+    throw error; // Re-throw error for further handling
+  } finally {
+    client.release(); // Release the client back to the pool
+  }
 };
 
-// Insert new institution
 export const addnewInstitution = async (institutionName, institutionType) => {
-  console.log("Institution Name:", institutionName, "Type:", institutionType);
-  const pool = await connectDB();
+  const pool = await connectDB(); // Ensure a valid PostgreSQL connection
+  const client = await pool.connect(); // Get a client from the pool
 
-  const query = `
-    INSERT INTO institutions (institution_name, type)
-    VALUES (@institution_name, @type);
-  `;
+  try {
+    console.log("Inserting:", { institutionName, institutionType }); // Debug inputs
 
-  const result = await pool
-    .request()
-    .input("institution_name", institutionName)
-    .input("type", institutionType)
-    .query(query);
+    const query = `
+      INSERT INTO institutions (institution_name, type)
+      VALUES ($1, $2)
+      RETURNING *; -- Optional: Return the inserted row for confirmation
+    `;
 
-  return result.rowsAffected[0] > 0; // Returns true if insertion was successful
+    const result = await client.query(query, [
+      institutionName,
+      institutionType,
+    ]);
+    console.log("Insert result:", result.rows); // Debug result
+
+    return result.rowCount > 0; // Returns true if insertion was successful
+  } catch (error) {
+    console.error("Error adding new institution:", error.message, error.stack);
+    throw error; // Re-throw error for further handling
+  } finally {
+    client.release(); // Release the client back to the pool
+  }
 };
 
 // Insert new field of study
 export const addnewFieldOfStudy = async (fieldName) => {
-  const pool = await connectDB();
-  const query = `
-    INSERT INTO fields_of_study (field)
-    VALUES (@field);
-  `;
-  const result = await pool.request().input("field", fieldName).query(query);
+  const pool = await connectDB(); // Ensure a valid PostgreSQL connection
+  const client = await pool.connect(); // Get a client from the pool
 
-  return result.rowsAffected[0] > 0; // Returns true if insertion was successful
+  try {
+    const query = `
+      INSERT INTO fields_of_study (field)
+      VALUES ($1);
+    `;
+    const result = await client.query(query, [fieldName]);
+
+    return result.rowCount > 0; // Returns true if insertion was successful
+  } catch (error) {
+    console.error("Error adding new field of study:", error);
+    throw error; // Re-throw error for further handling
+  } finally {
+    client.release(); // Release the client back to the pool
+  }
 };
 
-// update after validation value gotten
-
+// Update a field value in the fields_of_study table
 export const updateFieldValue = async (id, value) => {
+  const client = await connectDB(); // Ensure a valid PostgreSQL connection
+
   try {
-    const pool = await connectDB(); // Ensure this connects to your DB
+    let query = "UPDATE fields_of_study SET status = 1"; // Set status to 1
 
-    // Base query
-    let query = "UPDATE fields_of_study SET status = 1";
-
-    // Add the field update part only if value is not null
+    // Add field update part if value is provided
     if (value !== null && value !== undefined) {
-      query += ", field = @value";
+      query += ", field = $1"; // Use $1 for parameterized query
     }
 
-    query += " WHERE id = @id"; // Add the WHERE clause
+    query += " WHERE id = $2"; // Ensure the update applies to the specific record
 
-    const request = pool.request().input("id", sql.Int, id); // Always include the id
+    // Execute the query using the provided parameters
+    const result = await client.query(query, [value, id]);
 
-    // Add the value input only if value is not null
-    if (value !== null && value !== undefined) {
-      request.input("value", sql.VarChar, value);
-    }
-
-    const result = await request.query(query);
-
-    // Check if any rows were updated
-    if (result.rowsAffected[0] === 0) {
+    if (result.rowCount === 0) {
       console.log("No record found with the given id");
-      return false; // Return false to indicate no rows were updated
+      return false; // No update occurred
     }
 
     console.log("Record updated successfully");
-    return true; // Return true to indicate success
+    return true; // Update successful
   } catch (error) {
     console.error("Error updating record:", error);
     throw error; // Re-throw error for further handling
+  } finally {
+    client.release(); // Release the client back to the pool
   }
 };
 
 export const updateLevelValue = async (id, value) => {
+  const client = await connectDB(); // Ensure a valid PostgreSQL connection
+
   try {
-    const pool = await connectDB(); // Ensure this connects to your DB
+    let query = "UPDATE level_of_education SET status = 1"; // Set status to 1
 
-    // Base query
-    let query = "UPDATE level_of_education SET status = 1";
-
-    // Add the field update part only if value is not null
+    // Add level update part if value is provided
     if (value !== null && value !== undefined) {
-      query += ", level = @value";
+      query += ", level = $1"; // Use $1 for parameterized query
     }
 
-    query += " WHERE id = @id"; // Add the WHERE clause
+    query += " WHERE id = $2"; // Ensure the update applies to the specific record
 
-    const request = pool.request().input("id", sql.Int, id); // Always include the id
+    // Execute the query using the provided parameters
+    const result = await client.query(query, [value, id]);
 
-    // Add the value input only if value is not null
-    if (value !== null && value !== undefined) {
-      request.input("value", sql.VarChar, value);
-    }
-
-    const result = await request.query(query);
-
-    // Check if any rows were updated
-    if (result.rowsAffected[0] === 0) {
+    if (result.rowCount === 0) {
       console.log("No record found with the given id");
-      return false; // Return false to indicate no rows were updated
+      return false; // No update occurred
     }
 
     console.log("Record updated successfully");
-    return true; // Return true to indicate success
+    return true; // Update successful
   } catch (error) {
     console.error("Error updating record:", error);
     throw error; // Re-throw error for further handling
+  } finally {
+    client.release(); // Release the client back to the pool
   }
 };
 
+// Update an institution's value in the institutions table
 export const updateInstitutionValue = async (id, value, value2) => {
+  const client = await connectDB(); // Get a PostgreSQL client
+
   try {
-    const pool = await connectDB(); // Ensure this connects to your DB
+    let query = "UPDATE institutions SET status = 1"; // Set status to 1
 
-    // Base query
-    let query = "UPDATE institutions SET status = 1"; // Always set status to 1
-
-    // Add the institution_name update part only if value is not null
+    // Add institution_name update part if value is provided
     if (value !== null && value !== undefined) {
-      query += ", institution_name = @value";
+      query += ", institution_name = $1"; // Use $1 for parameterized query
     }
 
-    // Add the type update part only if value2 is not null
+    // Add type update part if value2 is provided
     if (value2 !== null && value2 !== undefined) {
-      query += ", type = @value2";
+      query += ", type = $2"; // Use $2 for parameterized query
     }
 
-    query += " WHERE id = @id"; // Add the WHERE clause
+    query += " WHERE id = $3"; // Ensure the update applies to the specific record
 
-    const request = pool.request().input("id", sql.Int, id); // Always include the id
+    // Execute the query using the provided parameters
+    const result = await client.query(query, [value, value2, id]);
 
-    // Add the value input only if value is not null
-    if (value !== null && value !== undefined) {
-      request.input("value", sql.VarChar, value); // Add value for institution_name
-    }
-
-    // Add the value2 input only if value2 is not null
-    if (value2 !== null && value2 !== undefined) {
-      request.input("value2", sql.VarChar, value2); // Add value2 for type
-    }
-
-    const result = await request.query(query);
-
-    // Check if any rows were updated
-    if (result.rowsAffected[0] === 0) {
+    if (result.rowCount === 0) {
       console.log("No record found with the given id");
-      return false; // Return false to indicate no rows were updated
+      return false; // No update occurred
     }
 
     console.log("Record updated successfully");
-    return true; // Return true to indicate success
+    return true; // Update successful
   } catch (error) {
     console.error("Error updating record:", error);
     throw error; // Re-throw error for further handling
+  } finally {
+    client.release(); // Release the client back to the pool
   }
 };

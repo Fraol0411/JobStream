@@ -1,5 +1,4 @@
-import sql from "mssql";
-import { connectDB } from "../config/db.js";
+import { connectDB } from "../config/pgdb.js";
 
 //Create NEw job in  the database
 //Create NEw job in  the database
@@ -20,46 +19,55 @@ export const CreateJobs = async (
   termof_emp
 ) => {
   try {
-    const pool = await connectDB();
+    const pool = await connectDB(); // Ensure this returns a PostgreSQL `pg.Pool` instance
     const query = `
-            INSERT INTO Jobs (title, dutystation, description, requirements, jobtype, status, created_by, salary, qualification,  deadline, contact, age, req_no, termof_emp)
-            VALUES (@title, @dutystation, @description, @requirements, @jobtype, @status, @created_by, @salary, @qualification,  @deadline, @contact, @age, @req_no, @termof_emp)
-        `;
+      INSERT INTO Jobs (
+        title, dutystation, description, requirements, jobtype, status,
+        created_by, salary, qualification, deadline, contact, age, req_no, termof_emp
+      ) VALUES (
+        $1, $2, $3, $4, $5, $6,
+        $7, $8, $9, $10, $11, $12, $13, $14
+      ) RETURNING *;
+    `;
 
-    return await pool
-      .request()
-      .input("title", sql.VarChar(100), title)
+    const values = [
+      title,
+      dutystation,
+      description,
+      requirements,
+      jobtype,
+      status,
+      created_by,
+      salary,
+      qualification,
+      deadline,
+      contact,
+      age,
+      req_no,
+      termof_emp,
+    ];
 
-      .input("dutystation", sql.VarChar(100), dutystation)
-      .input("description", sql.Text, description) // Use TEXT for larger descriptions
-      .input("requirements", sql.Text, requirements) // Use TEXT for larger requirements
-      .input("jobtype", sql.VarChar(100), jobtype)
-      .input("status", sql.VarChar(10), status) // Adjusted length to 10 to fit active/closed
-      .input("created_by", sql.VarChar(255), created_by) // No need for length with INT
-      .input("salary", sql.VarChar(200), salary) // Use DECIMAL for salary
-      .input("qualification", sql.VarChar(100), qualification) // Adjusted length to 100
+    const result = await pool.query(query, values);
 
-      .input("deadline", sql.DateTime, deadline) // Use DATETIME for deadline
-      .input("contact", sql.VarChar(100), contact) // Adjusted length to 100
-
-      .input("req_no", sql.Int, req_no) // Adjusted length to 100
-      .input("termof_emp", sql.VarChar(255), termof_emp) // Adjusted length to 100
-      .input("age", sql.VarChar(255), age) // Adjusted length to 100
-
-      .query(query);
+    return result.rows[0]; // Return the newly created job
   } catch (error) {
-    console.error("Error creating a job", error);
+    console.error("Error creating a job:", error);
     throw error;
   }
 };
 
-// Find all jobs
-
 export const getAllJobs = async () => {
   try {
     const pool = await connectDB();
-    const result = await pool.request().query("SELECT * FROM Jobs");
-    return result.recordset; // Use recordset to access the rows returned
+    console.log("Database connected successfully.");
+
+    const query = "SELECT * FROM Jobs";
+    const result = await pool.query(query);
+
+    console.log("Query executed successfully:", result);
+    console.log("Jobs list:", result.rows); // Log rows to verify content
+
+    return result.rows; // Return the rows
   } catch (error) {
     console.error("Error fetching jobs:", error);
     throw error;
@@ -69,12 +77,13 @@ export const getAllJobs = async () => {
 // Find a user by job-ID
 export const getjobwithID = async (job_id) => {
   try {
-    const pool = await connectDB();
-    const result = await pool
-      .request()
-      .input("job_id", sql.Int, job_id)
-      .query("SELECT * FROM Jobs WHERE job_id = @job_id");
-    return result.recordset[0]; // Return the job object
+    const pool = await connectDB(); // Ensure connectDB returns a PostgreSQL Pool instance
+
+    const query = "SELECT * FROM Jobs WHERE job_id = $1"; // Use parameterized query
+    const values = [job_id]; // Parameterized values
+
+    const result = await pool.query(query, values); // PostgreSQL's query method
+    return result.rows[0]; // Return the first job object (or undefined if not found)
   } catch (error) {
     console.error("Error fetching job by ID:", error);
     throw error;
@@ -103,18 +112,18 @@ export const getjobwithID = async (job_id) => {
 
 export const getjobwithNAME = async (title) => {
   try {
-    const pool = await connectDB(); // Make sure this returns a valid connection
-    const result = await pool
-      .request()
-      .input("title", sql.VarChar, `%${title}%`) // Add wildcards for partial matching
-      .query("SELECT * FROM Jobs WHERE title LIKE @title"); // Use LIKE for partial matching
+    const pool = await connectDB(); // Ensure this returns a valid PostgreSQL connection
+    const query = "SELECT * FROM Jobs WHERE title ILIKE $1"; // Use ILIKE for case-insensitive partial matching
+    const values = [`%${title}%`]; // Add wildcards for partial matching
 
-    if (result.recordset.length === 0) {
+    const result = await pool.query(query, values);
+
+    if (result.rows.length === 0) {
       console.log("No job found with the given name");
       return null; // No job found, return null or handle as needed
     }
 
-    return result.recordset; // Return the matching job records
+    return result.rows; // Return the matching job records
   } catch (error) {
     console.error("Error fetching job by name:", error);
     throw error;
@@ -124,18 +133,18 @@ export const getjobwithNAME = async (title) => {
 // Find a user by job-type
 export const getjobwithTYPE = async (type) => {
   try {
-    const pool = await connectDB(); // Make sure this returns a valid connection
-    const result = await pool
-      .request()
-      .input("type", sql.VarChar, type)
-      .query("SELECT * FROM Jobs WHERE jobtype = @type"); // Ensure 'jobtype' is the correct column name
+    const pool = await connectDB(); // Ensure this establishes a valid PostgreSQL connection
+    const query = "SELECT * FROM Jobs WHERE jobtype = $1"; // Parameterized query to prevent SQL injection
+    const values = [type]; // Parameters for the query
 
-    if (result.recordset.length === 0) {
+    const result = await pool.query(query, values);
+
+    if (result.rows.length === 0) {
       console.log("No job found with the given type");
-      return []; // Return an empty array instead of null to indicate no jobs found
+      return []; // Return an empty array to indicate no matching jobs
     }
 
-    return result.recordset; // Return the entire array of job objects if found
+    return result.rows; // Return all matching job objects
   } catch (error) {
     console.error("Error fetching jobs by type:", error);
     throw error;
@@ -145,15 +154,14 @@ export const getjobwithTYPE = async (type) => {
 // Update job status by job_id
 export const updateJobStatusToClosed = async (job_id) => {
   try {
-    const pool = await connectDB(); // Make sure this connects to your DB
-    const result = await pool
-      .request()
-      .input("job_id", sql.Int, job_id) // Assuming job_id is an integer
-      .input("status", sql.VarChar, "closed") // Set the status to "closed"
-      .query("UPDATE Jobs SET status = @status WHERE job_id = @job_id"); // Ensure 'status' and 'job_id' are correct column names
+    const pool = await connectDB(); // Ensure this establishes a valid PostgreSQL connection
+    const query = "UPDATE Jobs SET status = $1 WHERE job_id = $2 RETURNING *"; // Parameterized query to update job status
+    const values = ["closed", job_id]; // Parameters for the query
+
+    const result = await pool.query(query, values);
 
     // Check if any rows were updated
-    if (result.rowsAffected[0] === 0) {
+    if (result.rowCount === 0) {
       console.log("No job found with the given job_id");
       return false; // Return false to indicate no rows were updated
     }
@@ -163,107 +171,100 @@ export const updateJobStatusToClosed = async (job_id) => {
   } catch (error) {
     console.error("Error updating job status:", error);
     throw error; // Re-throw error for further handling
+  } finally {
+    pool.end(); // Close the pool when you're done
   }
 };
 
 // Update job status by job_id
 export const updateJobStatusToOpen = async (job_id) => {
   try {
-    const pool = await connectDB(); // Make sure this connects to your DB
-    const result = await pool
-      .request()
-      .input("job_id", sql.Int, job_id) // Assuming job_id is an integer
-      .input("status", sql.VarChar, "active") // Set the status to "closed"
-      .query("UPDATE Jobs SET status = @status WHERE job_id = @job_id"); // Ensure 'status' and 'job_id' are correct column names
+    const pool = await connectDB(); // Ensure this establishes a valid PostgreSQL connection
+    const query = "UPDATE Jobs SET status = $1 WHERE job_id = $2 RETURNING *"; // Parameterized query to update job status
+    const values = ["active", job_id]; // Parameters for the query
+
+    const result = await pool.query(query, values);
 
     // Check if any rows were updated
-    if (result.rowsAffected[0] === 0) {
+    if (result.rowCount === 0) {
       console.log("No job found with the given job_id");
       return false; // Return false to indicate no rows were updated
     }
 
-    console.log("Job status updated to closed successfully");
+    console.log("Job status updated to active successfully");
     return true; // Return true to indicate success
   } catch (error) {
     console.error("Error updating job status:", error);
     throw error; // Re-throw error for further handling
+  } finally {
+    pool.end(); // Close the pool when you're done
   }
 };
+
 // Update job status by job_id
 export const updateJobStatusToRemove = async (job_id) => {
   try {
-    const pool = await connectDB(); // Make sure this connects to your DB
-    const result = await pool
-      .request()
-      .input("job_id", sql.Int, job_id) // Assuming job_id is an integer
-      .input("status", sql.VarChar, "removed") // Set the status to "closed"
-      .query("UPDATE Jobs SET status = @status WHERE job_id = @job_id"); // Ensure 'status' and 'job_id' are correct column names
+    const pool = await connectDB(); // Ensure this establishes a valid PostgreSQL connection
+    const query = "UPDATE Jobs SET status = $1 WHERE job_id = $2 RETURNING *"; // Parameterized query to update job status
+    const values = ["removed", job_id]; // Parameters for the query
+
+    const result = await pool.query(query, values);
 
     // Check if any rows were updated
-    if (result.rowsAffected[0] === 0) {
+    if (result.rowCount === 0) {
       console.log("No job found with the given job_id");
       return false; // Return false to indicate no rows were updated
     }
 
-    console.log("Job status updated to closed successfully");
+    console.log("Job status updated to removed successfully");
     return true; // Return true to indicate success
   } catch (error) {
     console.error("Error updating job status:", error);
     throw error; // Re-throw error for further handling
+  } finally {
+    pool.end(); // Close the pool when you're done
   }
 };
 
 export const reupdateJobsApplicants = async (job_id) => {
+  const pool = await connectDB(); // Ensure this establishes a valid PostgreSQL connection
+  const client = await pool.connect(); // Get a client from the pool
+
   try {
-    const pool = await connectDB(); // Connect to the database
+    // Start a transaction
+    await client.query("BEGIN");
 
-    // Start a transaction to ensure both updates happen atomically
-    const transaction = new sql.Transaction(pool);
-    await transaction.begin();
+    // Update the Jobs table to set the status to 'active'
+    const jobUpdateResult = await client.query(
+      "UPDATE Jobs SET status = $1 WHERE job_id = $2 RETURNING *",
+      ["active", job_id]
+    );
 
-    try {
-      // Update the Jobs table to set the status to 'active'
-      const jobUpdateResult = await transaction
-        .request()
-        .input("job_id", sql.Int, job_id)
-        .query("UPDATE Jobs SET status = 'active' WHERE job_id = @job_id");
-
-      // Check if any rows were updated in the Jobs table
-      if (jobUpdateResult.rowsAffected[0] === 0) {
-        console.log("No job found with the given job_id");
-        await transaction.rollback(); // Rollback if no rows were updated
-        return false; // Return false to indicate no rows were updated
-      }
-
-      await transaction
-        .request()
-        .input("job_id", sql.Int, job_id)
-        .query(
-          "UPDATE Applications SET status = 'submitted' WHERE job_id = @job_id AND status = 'rejected' "
-        );
-
-      // await transaction
-      //   .request()
-      //   .input("job_id", sql.Int, job_id)
-      //   .query(
-      //     "UPDATE Applications SET status = 'rejected' WHERE job_id = @job_id AND status = 'further'"
-      //   );
-
-      // Commit the transaction after both updates are successful
-      await transaction.commit();
-      console.log(
-        "Job status updated to active and applications updated to submitted successfully"
-      );
-
-      return true; // Return true to indicate success
-    } catch (error) {
-      // Rollback the transaction in case of any error
-      await transaction.rollback();
-      console.error("Error during the transaction:", error);
-      throw error; // Re-throw error for further handling
+    // Check if any rows were updated in the Jobs table
+    if (jobUpdateResult.rowCount === 0) {
+      console.log("No job found with the given job_id");
+      await client.query("ROLLBACK"); // Rollback if no rows were updated
+      return false; // Return false to indicate no rows were updated
     }
+
+    // Update the Applications table to set status to 'submitted' for rejected applicants
+    await client.query(
+      "UPDATE Applications SET status = $1 WHERE job_id = $2 AND status = $3",
+      ["submitted", job_id, "rejected"]
+    );
+
+    // Commit the transaction after both updates are successful
+    await client.query("COMMIT");
+    console.log(
+      "Job status updated to active and applications updated to submitted successfully"
+    );
+    return true; // Return true to indicate success
   } catch (error) {
-    console.error("Error updating job and applications:", error);
+    // Rollback the transaction in case of any error
+    await client.query("ROLLBACK");
+    console.error("Error during the transaction:", error);
     throw error; // Re-throw error for further handling
+  } finally {
+    client.release(); // Release the client back to the pool
   }
 };

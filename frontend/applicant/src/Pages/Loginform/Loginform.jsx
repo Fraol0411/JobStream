@@ -68,8 +68,8 @@ export default function LoginForm() {
   const [loginData, setLoginData] = useState({ email: "", password: "" });
   const [registerData, setRegisterData] = useState({
     username: "",
-    password: "",
     email: "",
+    password: "",
     role: "applicant",
     applyfor: "",
   });
